@@ -73,9 +73,6 @@ class GameScene: SKScene {
 //  let player = SKSpriteNode(imageNamed: "player")
   
   override func didMove(to view: SKView) {
-    // 2
-    backgroundColor = SKColor.white
-    // 3
     
     
     func random() -> CGFloat {
@@ -85,6 +82,12 @@ class GameScene: SKScene {
     func random(min: CGFloat, max: CGFloat) -> CGFloat {
       return random() * (max - min) + min
     }
+    
+    //scene setup
+    self.backgroundColor = .black
+    self.scaleMode = .aspectFit
+    self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+    
     //create ball
     var ballGroup = BallGroup(gameScene: self)
     var createBallCounter = 0
@@ -96,7 +99,10 @@ class GameScene: SKScene {
     //add balls to scene
     ballGroup.addMemberstoScene()
     
-    print(ballGroup.members.count)
+
+    //physics setup
+    physicsWorld.gravity = .zero
+    physicsWorld.contactDelegate = self
     
     
 //    func addMonster() {
@@ -135,4 +141,8 @@ class GameScene: SKScene {
 //        ])
 //    ))
   }
+}
+
+extension GameScene: SKPhysicsContactDelegate {
+  
 }

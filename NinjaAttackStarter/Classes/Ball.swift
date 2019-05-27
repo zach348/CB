@@ -34,7 +34,14 @@ class Ball: SKSpriteNode {
   init(imageName: String) {
     let texture = SKTexture(imageNamed: imageName)
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
+    //physics setup
     self.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: texture.size().width, height: texture.size().height))
+    self.physicsBody?.isDynamic = true
+    self.physicsBody?.categoryBitMask = PhysicsCategory.ball
+    self.physicsBody?.contactTestBitMask = PhysicsCategory.ball
+    
+    self.physicsBody?.velocity = CGVector(dx: 10, dy: 20)
+    
   }
 
   required init?(coder aDecoder: NSCoder) {
