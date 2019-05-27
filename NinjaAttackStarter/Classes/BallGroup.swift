@@ -31,6 +31,7 @@ import SpriteKit
 
 struct BallGroup {
   var members = [Ball]()
+  
   var gameScene: GameScene
   
   init(gameScene: GameScene){

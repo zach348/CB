@@ -28,6 +28,13 @@
 
 import SpriteKit
 
+
+struct PhysicsCategory {
+  static let none      : UInt32 = 0
+  static let all       : UInt32 = UInt32.max
+  static let ball   : UInt32 = 0b1       // 1
+}
+
 func +(left: CGPoint, right: CGPoint) -> CGPoint {
   return CGPoint(x: left.x + right.x, y: left.y + right.y)
 }
@@ -63,7 +70,7 @@ extension CGPoint {
 
 class GameScene: SKScene {
   // 1
-  let player = SKSpriteNode(imageNamed: "player")
+//  let player = SKSpriteNode(imageNamed: "player")
   
   override func didMove(to view: SKView) {
     // 2
@@ -78,10 +85,18 @@ class GameScene: SKScene {
     func random(min: CGFloat, max: CGFloat) -> CGFloat {
       return random() * (max - min) + min
     }
-    
+    //create ball
     var ballGroup = BallGroup(gameScene: self)
-    ballGroup.createBall()
+    var createBallCounter = 0
+    //create balls
+    while createBallCounter < 10 {
+      ballGroup.createBall()
+      createBallCounter += 1
+    }
+    //add balls to scene
     ballGroup.addMemberstoScene()
+    
+    print(ballGroup.members.count)
     
     
 //    func addMonster() {
