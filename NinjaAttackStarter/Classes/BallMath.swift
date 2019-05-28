@@ -46,15 +46,14 @@ struct BallMath {
   }
   
   func standardDev(collection: [CGFloat]) -> CGFloat {
-    let collection = collection
+    let count = CGFloat(collection.count)
     let mean = self.mean(collection: collection)
     var variance = CGFloat(0)
     for num in collection {
       let squaredDiff = pow(num - mean, CGFloat(2))
       variance += squaredDiff
     }
-    
-    return sqrt(variance/CGFloat(collection.count))
+    return sqrt(variance/count)
   }
   
 }
