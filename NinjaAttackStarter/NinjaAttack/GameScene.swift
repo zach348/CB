@@ -99,6 +99,7 @@ class GameScene: SKScene {
     //add balls to scene
     ballGroup.addMemberstoScene()
     ballGroup.startMovement()
+    ballGroup.logStats()
     
 
     //physics setup

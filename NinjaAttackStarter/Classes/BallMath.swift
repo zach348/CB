@@ -29,51 +29,32 @@
 import Foundation
 import SpriteKit
 
-struct BallGroup {
-  var members = [Ball]()
+struct BallMath {
   var gameScene: GameScene
-  let math: BallMath
-  
+
   init(gameScene: GameScene){
     self.gameScene = gameScene
-    self.math = BallMath(gameScene: self.gameScene)
   }
   
-  mutating func createBall(){
-    let ball = Ball(imageName: "projectile")
-    self.members.append(ball)
-    ball.position = CGPoint(x: self.gameScene.size.width/2, y: self.gameScene.size.height/2)
-  }
-  
-  func addMemberstoScene(){
-    for ball in self.members {
-      self.gameScene.addChild(ball)
+  func mean(collection: [CGFloat]) -> CGFloat {
+    let count = CGFloat(collection.count)
+    var sum = CGFloat(0)
+    for num in collection {
+      sum += num
     }
+    return sum / count
   }
   
-  func startMovement(){
-    for ball in self.members {
-      let xVec = (CGFloat(arc4random_uniform(100)) / 50.0) * (CGFloat(arc4random_uniform(5)+1))
-      let yVec = (CGFloat(arc4random_uniform(100)) / 50.0) * (CGFloat(arc4random_uniform(5)+1))
-      let vector = CGVector(dx: xVec, dy: yVec)
-      ball.physicsBody?.applyImpulse(vector)
+  func standardDev(collection: [CGFloat]) -> CGFloat {
+    let collection = collection
+    let mean = self.mean(collection: collection)
+    var variance = CGFloat(0)
+    for num in collection {
+      let squaredDiff = pow(num - mean, CGFloat(2))
+      variance += squaredDiff
     }
+    
+    return sqrt(variance)
   }
   
-  func logStats(){
-    var speedCollection = [CGFloat]()
-    for ball in self.members{
-      speedCollection.append(ball.speed())
-      print("BALL STATS")
-      print("Dx: \(ball.physicsBody!.velocity.dx)")
-      print("Dy: \(ball.physicsBody!.velocity.dy)")
-      print("Speed: \(ball.speed())")
-    }
-    print("GROUP STATS")
-    print("Mean Speed: \(self.math.mean(collection: speedCollection))")
-    print("Speed SD: \(self.math.standardDev(collection: speedCollection))")
-
-  }
-
 }
-

@@ -37,6 +37,7 @@ class Ball: SKSpriteNode {
     //physics setup
     self.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: texture.size().width, height: texture.size().height))
     self.physicsBody?.isDynamic = true
+    self.physicsBody?.allowsRotation = false
     self.physicsBody?.friction = 0
     self.physicsBody?.linearDamping = 0
     self.physicsBody?.restitution = 1
@@ -46,5 +47,12 @@ class Ball: SKSpriteNode {
 
   required init?(coder aDecoder: NSCoder) {
     super.init(coder:aDecoder)
+  }
+  
+  func speed() -> CGFloat {
+    let aSq = pow(self.physicsBody!.velocity.dx,2.0)
+    let bSq = pow(self.physicsBody!.velocity.dy,2.0)
+    let cSq = aSq + bSq
+    return CGFloat(sqrt(Float(cSq)))
   }
 }
