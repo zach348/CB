@@ -84,7 +84,7 @@ class GameScene: SKScene {
     }
     
     //scene setup
-    self.backgroundColor = .black
+    self.backgroundColor = .white
     self.scaleMode = .aspectFit
     self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
     
@@ -92,12 +92,13 @@ class GameScene: SKScene {
     var ballGroup = BallGroup(gameScene: self)
     var createBallCounter = 0
     //create balls
-    while createBallCounter < 10 {
+    while createBallCounter < 15 {
       ballGroup.createBall()
       createBallCounter += 1
     }
     //add balls to scene
     ballGroup.addMemberstoScene()
+    ballGroup.startMovement()
     
 
     //physics setup

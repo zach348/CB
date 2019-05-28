@@ -37,11 +37,11 @@ class Ball: SKSpriteNode {
     //physics setup
     self.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: texture.size().width, height: texture.size().height))
     self.physicsBody?.isDynamic = true
-    self.physicsBody?.categoryBitMask = PhysicsCategory.ball
-    self.physicsBody?.contactTestBitMask = PhysicsCategory.ball
-    
-    self.physicsBody?.velocity = CGVector(dx: 10, dy: 20)
-    
+    self.physicsBody?.friction = 0
+    self.physicsBody?.linearDamping = 0
+    self.physicsBody?.restitution = 1
+//    self.physicsBody?.categoryBitMask = PhysicsCategory.ball
+//    self.physicsBody?.contactTestBitMask = PhysicsCategory.ball
   }
 
   required init?(coder aDecoder: NSCoder) {
