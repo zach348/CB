@@ -54,7 +54,7 @@ struct BallMath {
       variance += squaredDiff
     }
     
-    return sqrt(variance)
+    return sqrt(variance/CGFloat(collection.count))
   }
   
 }
