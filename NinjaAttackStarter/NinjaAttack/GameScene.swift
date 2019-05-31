@@ -71,6 +71,8 @@ extension CGPoint {
 class GameScene: SKScene {
   // 1
 //  let player = SKSpriteNode(imageNamed: "player")
+  var game:Game?
+  
   
   override func didMove(to view: SKView) {
     
@@ -83,57 +85,9 @@ class GameScene: SKScene {
       return random() * (max - min) + min
     }
     
-    //scene setup
-    self.backgroundColor = .white
-    self.scaleMode = .aspectFit
-    self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
-    
-    //create ball
-    var ballGroup = BallGroup(gameScene: self)
-    var createBallCounter = 0
-    //create balls
-    while createBallCounter < 15 {
-      ballGroup.createBall()
-      createBallCounter += 1
-    }
-    //add balls to scene
-    ballGroup.addMemberstoScene()
-    ballGroup.startMovement()
-    
-
-    //physics setup
-    physicsWorld.gravity = .zero
-    physicsWorld.contactDelegate = self
-    
-    
-//    func addMonster() {
-//
-//      // Create sprite
-//      let monster = SKSpriteNode(imageNamed: "monster")
-//
-//      // Determine where to spawn the monster along the Y axis
-//      let actualY = random(min: monster.size.height/2, max: size.height - monster.size.height/2)
-//
-//      // Position the monster slightly off-screen along the right edge,
-//      // and along a random position along the Y axis as calculated above
-//      monster.position = CGPoint(x: size.width + monster.size.width/2, y: actualY)
-//
-//      // Add the monster to the scene
-//      addChild(monster)
-//
-//      // Determine speed of the monster
-//      let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
-//
-//      // Create the actions
-//      let actionMove = SKAction.move(to: CGPoint(x: -monster.size.width/2, y: actualY),
-//                                     duration: TimeInterval(actualDuration))
-//      let actionMoveDone = SKAction.removeFromParent()
-//      monster.run(SKAction.sequence([actionMove, actionMoveDone]))
-//    }
-    
-
-    
-    
+    self.game = Game(gameScene: self)
+    game?.setupGame()
+    game?.startGame()
     
 //    run(SKAction.repeatForever(
 //      SKAction.sequence([
@@ -141,6 +95,10 @@ class GameScene: SKScene {
 //        SKAction.wait(forDuration: 1.0)
 //        ])
 //    ))
+  }
+  
+  override func update(_ currentTime: TimeInterval) {
+    Ball.logStats()
   }
 }
 

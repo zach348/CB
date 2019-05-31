@@ -29,35 +29,33 @@
 import Foundation
 import SpriteKit
 
-struct BallGroup {
-  var members = [Ball]()
-  
-  var gameScene: GameScene
-  
+class Game {
+  var gameScene:GameScene
   init(gameScene: GameScene){
     self.gameScene = gameScene
   }
   
-  mutating func createBall(){
-    let ball = Ball(imageName: "projectile")
-    self.members.append(ball)
-    ball.position = CGPoint(x: self.gameScene.size.width/2, y: self.gameScene.size.height/2)
+  func setupGame(){
+    gameScene.backgroundColor = .white
+    gameScene.scaleMode = .aspectFit
+    gameScene.physicsBody = SKPhysicsBody(edgeLoopFrom: gameScene.frame)
+    gameScene.physicsWorld.gravity = .zero
+    gameScene.physicsWorld.contactDelegate = gameScene
+    
+    Ball.createBalls(num: 15, game: self)
+    
+    self.addMemberstoScene(collection: Ball.members)
   }
   
-  func addMemberstoScene(){
-    for ball in self.members {
-      self.gameScene.addChild(ball)
+  func startGame(){
+    Ball.startMovement()
+  }
+  
+  func addMemberstoScene(collection: [SKSpriteNode]){
+    for sprite in collection{
+      gameScene.addChild(sprite)
     }
   }
   
-  func startMovement(){
-    for ball in self.members {
-      let xVec = (CGFloat(arc4random_uniform(100)) / 50.0) * CGFloat(arc4random_uniform(10))
-      let yVec = (CGFloat(arc4random_uniform(100)) / 50.0) * CGFloat(arc4random_uniform(10))
-      let vector = CGVector(dx: xVec, dy: yVec)
-      ball.physicsBody?.applyImpulse(vector)
-    }
-  }
-
+  
 }
-
