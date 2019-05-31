@@ -29,31 +29,6 @@
 import Foundation
 import SpriteKit
 
-struct BallMath {
-  var gameScene: GameScene
-
-  init(gameScene: GameScene){
-    self.gameScene = gameScene
-  }
-  
-  func mean(collection: [CGFloat]) -> CGFloat {
-    let count = CGFloat(collection.count)
-    var sum = CGFloat(0)
-    for num in collection {
-      sum += num
-    }
-    return sum / count
-  }
-  
-  func standardDev(collection: [CGFloat]) -> CGFloat {
-    let count = CGFloat(collection.count)
-    let mean = self.mean(collection: collection)
-    var variance = CGFloat(0)
-    for num in collection {
-      let squaredDiff = pow(num - mean, CGFloat(2))
-      variance += squaredDiff
-    }
-    return sqrt(variance/count)
-  }
+struct PhysicsMod {
   
 }

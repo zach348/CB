@@ -71,6 +71,8 @@ extension CGPoint {
 class GameScene: SKScene {
   // 1
 //  let player = SKSpriteNode(imageNamed: "player")
+  var game:Game?
+  
   
   override func didMove(to view: SKView) {
     
@@ -83,28 +85,9 @@ class GameScene: SKScene {
       return random() * (max - min) + min
     }
     
-    //scene setup
-    self.backgroundColor = .white
-    self.scaleMode = .aspectFit
-    self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
-    
-    //create ball
-    var ballGroup = BallGroup(gameScene: self)
-    var createBallCounter = 0
-    //create balls
-    while createBallCounter < 15 {
-      ballGroup.createBall()
-      createBallCounter += 1
-    }
-    //add balls to scene
-    ballGroup.addMemberstoScene()
-    ballGroup.startMovement()
-    ballGroup.logStats()
-    
-
-    //physics setup
-    physicsWorld.gravity = .zero
-    physicsWorld.contactDelegate = self
+    self.game = Game(gameScene: self)
+    game?.setupGame()
+    game?.startGame()
     
     
 //    func addMonster() {
@@ -131,7 +114,7 @@ class GameScene: SKScene {
 //      let actionMoveDone = SKAction.removeFromParent()
 //      monster.run(SKAction.sequence([actionMove, actionMoveDone]))
 //    }
-    
+
 
     
     
