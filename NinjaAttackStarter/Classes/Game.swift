@@ -49,7 +49,6 @@ class Game {
   
   func startGame(){
     Ball.startMovement()
-    Ball.logStats()
   }
   
   func addMemberstoScene(collection: [SKSpriteNode]){
