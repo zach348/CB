@@ -98,7 +98,7 @@ class GameScene: SKScene {
   }
   
   override func update(_ currentTime: TimeInterval) {
-    Ball.logStats()
+    MotionControl.correctSpeed()
   }
 }
 

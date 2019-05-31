@@ -94,7 +94,6 @@ class Ball: SKSpriteNode {
     }
   }
   
-  
   var isDistractor: Bool?
   var isTarget: Bool?
   init(imageName: String) {
