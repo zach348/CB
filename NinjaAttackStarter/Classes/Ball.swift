@@ -103,6 +103,7 @@ class Ball: SKSpriteNode {
   init(imageName: String) {
     let texture = SKTexture(imageNamed: imageName)
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
+    self.size = CGSize(width: 30, height: 30)
     //physics setup
     self.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: texture.size().width, height: texture.size().height))
     self.physicsBody?.isDynamic = true
@@ -135,6 +136,7 @@ class Ball: SKSpriteNode {
     self.physicsBody?.velocity.dx *= 1.02
     self.physicsBody?.velocity.dy *= 1.02
     print("speeding")
+    
   }
   
   

@@ -4,7 +4,7 @@ import Foundation
 import SpriteKit
 
 class MotionControl {
-  static var speedMeanTarget:CGFloat = 500
+  static var speedMeanTarget:CGFloat = 350
   static var speedSdTarget:CGFloat = 0
   
   class func correctMeanSpeed(){

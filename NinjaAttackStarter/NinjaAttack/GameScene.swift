@@ -89,6 +89,7 @@ class GameScene: SKScene {
     game?.setupGame()
     game?.startGame()
     
+    
 //    run(SKAction.repeatForever(
 //      SKAction.sequence([
 //        SKAction.run(addMonster),

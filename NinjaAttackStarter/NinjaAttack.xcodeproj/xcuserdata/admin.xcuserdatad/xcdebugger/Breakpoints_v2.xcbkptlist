@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NinjaAttack/GameScene.swift"
-            timestampString = "581103489.767828"
+            timestampString = "581104945.382195"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
             landmarkName = "update(_:)"
             landmarkType = "7">
          </BreakpointContent>
