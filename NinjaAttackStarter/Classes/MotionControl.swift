@@ -5,19 +5,35 @@ import SpriteKit
 
 class MotionControl {
   static var speedMeanTarget:CGFloat = 500
-  static var speedSdTarget:CGFloat = 100
+  static var speedSdTarget:CGFloat = 0
   
-  class func correctSpeed(){
+  class func correctMeanSpeed(){
     let currentMeanSpeed = Ball.mean()
     for ball in Ball.members {
       if currentMeanSpeed < MotionControl.speedMeanTarget {
-        ball.physicsBody?.velocity.dx *= 1.01
-        ball.physicsBody?.velocity.dy *= 1.01
-        print("speeding")
-      }else if currentMeanSpeed > MotionControl.speedMeanTarget {
-        ball.physicsBody?.velocity.dx *= 0.99
-        ball.physicsBody?.velocity.dy *= 0.99
-        print("slowing")
+        ball.accelerate()
+      }
+      else if currentMeanSpeed > MotionControl.speedMeanTarget {
+        ball.decelerate()
+      }
+    }
+  }
+  
+  class func correctSpeedSD(){
+    let currentSD = Ball.standardDev()
+    for ball in Ball.members {
+      if currentSD < MotionControl.speedSdTarget {
+        if ball.currentSpeed() > MotionControl.speedMeanTarget {
+          ball.accelerate()
+        }else if ball.currentSpeed() < MotionControl.speedMeanTarget{
+          ball.decelerate()
+        }
+      }else if currentSD > MotionControl.speedSdTarget {
+        if ball.currentSpeed() > MotionControl.speedMeanTarget {
+          ball.decelerate()
+        }else if ball.currentSpeed() < MotionControl.speedMeanTarget {
+          ball.accelerate()
+        }
       }
     }
   }

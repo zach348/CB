@@ -98,7 +98,9 @@ class GameScene: SKScene {
   }
   
   override func update(_ currentTime: TimeInterval) {
-    MotionControl.correctSpeed()
+    MotionControl.correctMeanSpeed()
+    MotionControl.correctSpeedSD()
+      
   }
 }
 

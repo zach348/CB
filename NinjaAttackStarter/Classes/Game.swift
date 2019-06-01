@@ -31,6 +31,7 @@ import SpriteKit
 
 class Game {
   var gameScene:GameScene
+  var lastUpdateTime:Double?
   init(gameScene: GameScene){
     self.gameScene = gameScene
   }
