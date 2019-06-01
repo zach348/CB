@@ -11,6 +11,7 @@
 		84124FB8229C659B008A1510 /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84124FB7229C659B008A1510 /* Ball.swift */; };
 		849432AC22A0A57800CCD6CD /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AB22A0A57800CCD6CD /* Game.swift */; };
 		849432AE22A1CB9100CCD6CD /* MotionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AD22A1CB9100CCD6CD /* MotionControl.swift */; };
+		849432B022A329F000CCD6CD /* GlobalFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AF22A329F000CCD6CD /* GlobalFunctions.swift */; };
 		AFD63F872036493600E08C66 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD63F862036493600E08C66 /* GameViewController.swift */; };
 		AFD63F892036497100E08C66 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD63F882036497100E08C66 /* GameScene.swift */; };
 		AFD63F8F203649F800E08C66 /* background-music-aac.caf in Resources */ = {isa = PBXBuildFile; fileRef = AFD63F8D203649F800E08C66 /* background-music-aac.caf */; };
@@ -25,6 +26,7 @@
 		84124FB7229C659B008A1510 /* Ball.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
 		849432AB22A0A57800CCD6CD /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		849432AD22A1CB9100CCD6CD /* MotionControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionControl.swift; sourceTree = "<group>"; };
+		849432AF22A329F000CCD6CD /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
 		AFD63F862036493600E08C66 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameViewController.swift; path = NinjaAttack/GameViewController.swift; sourceTree = "<group>"; };
 		AFD63F882036497100E08C66 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameScene.swift; path = NinjaAttack/GameScene.swift; sourceTree = "<group>"; };
 		AFD63F8D203649F800E08C66 /* background-music-aac.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "background-music-aac.caf"; sourceTree = "<group>"; };
@@ -51,6 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				84124FB7229C659B008A1510 /* Ball.swift */,
+				849432AF22A329F000CCD6CD /* GlobalFunctions.swift */,
 				849432AD22A1CB9100CCD6CD /* MotionControl.swift */,
 				849432AB22A0A57800CCD6CD /* Game.swift */,
 			);
@@ -179,6 +182,7 @@
 			files = (
 				AFD63F892036497100E08C66 /* GameScene.swift in Sources */,
 				AFD63F872036493600E08C66 /* GameViewController.swift in Sources */,
+				849432B022A329F000CCD6CD /* GlobalFunctions.swift in Sources */,
 				849432AC22A0A57800CCD6CD /* Game.swift in Sources */,
 				849432AE22A1CB9100CCD6CD /* MotionControl.swift in Sources */,
 				84124FB8229C659B008A1510 /* Ball.swift in Sources */,

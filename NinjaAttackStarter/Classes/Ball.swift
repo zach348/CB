@@ -28,21 +28,20 @@
 
 import SpriteKit
 
-
 //CLASS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Ball: SKSpriteNode {
   static var members = [Ball]()
   
   class func createBall(xPos: CGFloat, yPos: CGFloat){
     let ball = Ball(imageName: "projectile")
-    ball.position.x = xPos
-    ball.position.y = yPos
+    ball.position.x = xPos + GlobalFunctions.randomCGFloat(lowerLimit: -5, upperLimit: 5)
+    ball.position.y = yPos + GlobalFunctions.randomCGFloat(lowerLimit: -5, upperLimit: 5)
     Ball.members.append(ball)
   }
   
   class func createBalls(num: Int, game: Game){
     var createBallCounter = 0
-    while createBallCounter < 15 {
+    while createBallCounter < num {
       createBall(xPos: game.gameScene.size.width/2, yPos: game.gameScene.size.height/2)
       createBallCounter += 1
     }
@@ -103,7 +102,7 @@ class Ball: SKSpriteNode {
   init(imageName: String) {
     let texture = SKTexture(imageNamed: imageName)
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
-    self.size = CGSize(width: 30, height: 30)
+    self.size = CGSize(width: 40, height: 40)
     //physics setup
     self.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: texture.size().width, height: texture.size().height))
     self.physicsBody?.isDynamic = true

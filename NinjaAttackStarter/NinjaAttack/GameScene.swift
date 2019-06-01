@@ -67,7 +67,6 @@ extension CGPoint {
   }
 }
 
-
 class GameScene: SKScene {
   // 1
 //  let player = SKSpriteNode(imageNamed: "player")

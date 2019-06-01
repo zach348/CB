@@ -29,34 +29,13 @@
 import Foundation
 import SpriteKit
 
-class Game {
-  var gameScene:GameScene
-  var lastUpdateTime:Double?
-  init(gameScene: GameScene){
-    self.gameScene = gameScene
+class GlobalFunctions {
+ 
+  class func randomCGFloat(lowerLimit:CGFloat, upperLimit:CGFloat) -> CGFloat {
+    let lValue:CGFloat = lowerLimit // (your negative number)
+    let uValue:CGFloat = upperLimit //(your positive number)
+    let result = CGFloat(arc4random_uniform(UInt32(uValue - lValue + 1))) +   lValue
+    return result
   }
-  
-  func setupGame(){
-    gameScene.backgroundColor = .white
-    gameScene.scaleMode = .aspectFit
-    gameScene.physicsBody = SKPhysicsBody(edgeLoopFrom: gameScene.frame)
-    gameScene.physicsWorld.gravity = .zero
-    gameScene.physicsWorld.contactDelegate = gameScene
-    
-    Ball.createBalls(num: 10, game: self)
-    
-    self.addMemberstoScene(collection: Ball.members)
-  }
-  
-  func startGame(){
-    Ball.startMovement()
-  }
-  
-  func addMemberstoScene(collection: [SKSpriteNode]){
-    for sprite in collection{
-      gameScene.addChild(sprite)
-    }
-  }
-  
-  
+
 }
