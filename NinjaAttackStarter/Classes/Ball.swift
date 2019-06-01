@@ -126,20 +126,11 @@ class Ball: SKSpriteNode {
     return CGFloat(sqrt(Float(cSq)))
   }
   
-  func decelerate(){
-    self.physicsBody?.velocity.dx *= 0.98
-    self.physicsBody?.velocity.dy *= 0.98
-    print("slowing")
+  func modifySpeed(factor:CGFloat){
+    self.physicsBody?.velocity.dx *= factor
+    self.physicsBody?.velocity.dy *= factor
+    if factor > 1 {print("speeding")}
+    else if factor < 1 {print("slowing")}
   }
-  
-  func accelerate(){
-    self.physicsBody?.velocity.dx *= 1.02
-    self.physicsBody?.velocity.dy *= 1.02
-    print("speeding")
-    
-  }
-  
-  
-  
   
 }
