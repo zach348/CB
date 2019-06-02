@@ -34,8 +34,8 @@ class Ball: SKSpriteNode {
   
   class func createBall(xPos: CGFloat, yPos: CGFloat){
     let ball = Ball(imageName: "projectile")
-    ball.position.x = xPos + GlobalFunctions.randomCGFloat(lowerLimit: -5, upperLimit: 5)
-    ball.position.y = yPos + GlobalFunctions.randomCGFloat(lowerLimit: -5, upperLimit: 5)
+    ball.position.x = xPos + GlobalFunctions.randomCGFloat(lowerLimit: -20, upperLimit: 20)
+    ball.position.y = yPos + GlobalFunctions.randomCGFloat(lowerLimit: -20, upperLimit: 20)
     Ball.members.append(ball)
   }
   
@@ -49,13 +49,11 @@ class Ball: SKSpriteNode {
   
   class func mean() -> CGFloat {
     var collection = [CGFloat]()
+    var sum = CGFloat(0)
+    let count = CGFloat(Ball.members.count)
     for ball in Ball.members {
       collection.append(ball.currentSpeed())
-    }
-    let count = CGFloat(collection.count)
-    var sum = CGFloat(0)
-    for num in collection {
-      sum += num
+      sum += ball.currentSpeed()
     }
     return sum / count
   }

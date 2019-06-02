@@ -42,8 +42,8 @@ class MotionControl {
   
   class func correctSpeedRange(){
     for ball in Ball.members {
-      if ball.currentSpeed() < MotionControl.minSpeed {ball.modifySpeed(factor: 1.02)}
-      else if ball.currentSpeed() > MotionControl.maxSpeed {ball.modifySpeed(factor: 0.98)}
+      if ball.currentSpeed() < MotionControl.minSpeed {ball.modifySpeed(factor: 1.01)}
+      else if ball.currentSpeed() > MotionControl.maxSpeed {ball.modifySpeed(factor: 0.99)}
     }
   }
 }
