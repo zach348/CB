@@ -29,6 +29,13 @@
 import Foundation
 import SpriteKit
 
-struct PhysicsMod {
-  
+class GlobalFunctions {
+ 
+  class func randomCGFloat(lowerLimit:CGFloat, upperLimit:CGFloat) -> CGFloat {
+    let lValue:CGFloat = lowerLimit // (your negative number)
+    let uValue:CGFloat = upperLimit //(your positive number)
+    let result = CGFloat(arc4random_uniform(UInt32(uValue - lValue + 1))) +   lValue
+    return result
+  }
+
 }

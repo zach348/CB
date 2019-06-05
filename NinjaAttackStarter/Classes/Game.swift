@@ -31,6 +31,7 @@ import SpriteKit
 
 class Game {
   var gameScene:GameScene
+  var lastUpdateTime:Double?
   init(gameScene: GameScene){
     self.gameScene = gameScene
   }
@@ -42,7 +43,7 @@ class Game {
     gameScene.physicsWorld.gravity = .zero
     gameScene.physicsWorld.contactDelegate = gameScene
     
-    Ball.createBalls(num: 15, game: self)
+    Ball.createBalls(num: 10, game: self)
     
     self.addMemberstoScene(collection: Ball.members)
   }

@@ -67,7 +67,6 @@ extension CGPoint {
   }
 }
 
-
 class GameScene: SKScene {
   // 1
 //  let player = SKSpriteNode(imageNamed: "player")
@@ -89,6 +88,7 @@ class GameScene: SKScene {
     game?.setupGame()
     game?.startGame()
     
+    
 //    run(SKAction.repeatForever(
 //      SKAction.sequence([
 //        SKAction.run(addMonster),
@@ -98,7 +98,9 @@ class GameScene: SKScene {
   }
   
   override func update(_ currentTime: TimeInterval) {
-    Ball.logStats()
+    MotionControl.correctMeanSpeed()
+    MotionControl.correctSpeedSD()
+    MotionControl.correctSpeedRange()
   }
 }
 

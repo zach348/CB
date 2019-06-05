@@ -28,20 +28,20 @@
 
 import SpriteKit
 
+//CLASS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Ball: SKSpriteNode {
   static var members = [Ball]()
   
-  class func createBall(xPos: CGFloat, yPos: CGFloat) -> Ball{
+  class func createBall(xPos: CGFloat, yPos: CGFloat){
     let ball = Ball(imageName: "projectile")
-    ball.position.x = xPos
-    ball.position.y = yPos
+    ball.position.x = xPos + GlobalFunctions.randomCGFloat(lowerLimit: -20, upperLimit: 20)
+    ball.position.y = yPos + GlobalFunctions.randomCGFloat(lowerLimit: -20, upperLimit: 20)
     Ball.members.append(ball)
-    return ball
   }
   
   class func createBalls(num: Int, game: Game){
     var createBallCounter = 0
-    while createBallCounter < 15 {
+    while createBallCounter < num {
       createBall(xPos: game.gameScene.size.width/2, yPos: game.gameScene.size.height/2)
       createBallCounter += 1
     }
@@ -49,13 +49,11 @@ class Ball: SKSpriteNode {
   
   class func mean() -> CGFloat {
     var collection = [CGFloat]()
-    for ball in Ball.members {
-      collection.append(ball.speed())
-    }
-    let count = CGFloat(collection.count)
     var sum = CGFloat(0)
-    for num in collection {
-      sum += num
+    let count = CGFloat(Ball.members.count)
+    for ball in Ball.members {
+      collection.append(ball.currentSpeed())
+      sum += ball.currentSpeed()
     }
     return sum / count
   }
@@ -65,7 +63,7 @@ class Ball: SKSpriteNode {
     let mean = Ball.mean()
     var sumSq = CGFloat(0)
     for ball in Ball.members {
-      let squaredDiff = pow(ball.speed() - mean, CGFloat(2))
+      let squaredDiff = pow(ball.currentSpeed() - mean, CGFloat(2))
       sumSq += squaredDiff
     }
     return sqrt(sumSq/count)
@@ -74,11 +72,11 @@ class Ball: SKSpriteNode {
   class func logStats(){
     var speedCollection = [CGFloat]()
     for ball in Ball.members{
-      speedCollection.append(ball.speed())
+      speedCollection.append(ball.currentSpeed())
       print("BALL STATS")
       print("Dx: \(ball.physicsBody!.velocity.dx)")
       print("Dy: \(ball.physicsBody!.velocity.dy)")
-      print("Speed: \(ball.speed())")
+      print("Speed: \(ball.currentSpeed())")
     }
     print("GROUP STATS")
     print("Mean Speed: \(Ball.mean())")
@@ -94,12 +92,15 @@ class Ball: SKSpriteNode {
     }
   }
   
+  //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   var isDistractor: Bool?
   var isTarget: Bool?
+  
   init(imageName: String) {
     let texture = SKTexture(imageNamed: imageName)
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
+    self.size = CGSize(width: 40, height: 40)
     //physics setup
     self.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: texture.size().width, height: texture.size().height))
     self.physicsBody?.isDynamic = true
@@ -115,14 +116,18 @@ class Ball: SKSpriteNode {
     super.init(coder:aDecoder)
   }
   
-  func speed() -> CGFloat {
+  func currentSpeed() -> CGFloat {
     let aSq = pow(self.physicsBody!.velocity.dx,2.0)
     let bSq = pow(self.physicsBody!.velocity.dy,2.0)
     let cSq = aSq + bSq
-    return CGFloat(sqrt(Float(cSq)))
+    return sqrt(CGFloat(cSq))
   }
   
-  
-  
+  func modifySpeed(factor:CGFloat){
+    self.physicsBody?.velocity.dx *= factor
+    self.physicsBody?.velocity.dy *= factor
+    if factor > 1 {print("speeding")}
+    else if factor < 1 {print("slowing")}
+  }
   
 }
