@@ -34,8 +34,8 @@ class Ball: SKSpriteNode {
   
   class func createBall(xPos: CGFloat, yPos: CGFloat){
     let ball = Ball(imageName: "projectile")
-    ball.position.x = xPos + GlobalFunctions.randomCGFloat(lowerLimit: -20, upperLimit: 20)
-    ball.position.y = yPos + GlobalFunctions.randomCGFloat(lowerLimit: -20, upperLimit: 20)
+    ball.position.x = xPos + GlobalFunctions.randomCGFloat(min: -20, max: 20)
+    ball.position.y = yPos + GlobalFunctions.randomCGFloat(min: -20, max: 20)
     Ball.members.append(ball)
   }
   

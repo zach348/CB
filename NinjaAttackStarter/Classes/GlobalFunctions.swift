@@ -30,12 +30,14 @@ import Foundation
 import SpriteKit
 
 class GlobalFunctions {
- 
-  class func randomCGFloat(lowerLimit:CGFloat, upperLimit:CGFloat) -> CGFloat {
-    let lValue:CGFloat = lowerLimit // (your negative number)
-    let uValue:CGFloat = upperLimit //(your positive number)
-    let result = CGFloat(arc4random_uniform(UInt32(uValue - lValue + 1))) +   lValue
-    return result
+  
+  
+  class func random() -> CGFloat {
+    return CGFloat((arc4random()) / 0xFFFFFFFF)
   }
-
+  
+  class func randomCGFloat(min: CGFloat, max: CGFloat) -> CGFloat {
+    return random() * (max - min) + min
+  }
+ 
 }
