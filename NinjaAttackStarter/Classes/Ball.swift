@@ -120,7 +120,7 @@ class Ball: SKSpriteNode {
     let aSq = pow(self.physicsBody!.velocity.dx,2.0)
     let bSq = pow(self.physicsBody!.velocity.dy,2.0)
     let cSq = aSq + bSq
-    return CGFloat(sqrt(Float(cSq)))
+    return sqrt(CGFloat(cSq))
   }
   
   func modifySpeed(factor:CGFloat){
