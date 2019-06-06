@@ -33,7 +33,7 @@ class Ball: SKSpriteNode {
   static var members = [Ball]()
   
   class func createBall(xPos: CGFloat, yPos: CGFloat){
-    let ball = Ball(imageName: "projectile")
+    let ball = Ball(imageName: "ball")
     ball.position.x = xPos + GlobalFunctions.randomCGFloat(min: -20, max: 20)
     ball.position.y = yPos + GlobalFunctions.randomCGFloat(min: -20, max: 20)
     Ball.members.append(ball)
@@ -100,9 +100,9 @@ class Ball: SKSpriteNode {
   init(imageName: String) {
     let texture = SKTexture(imageNamed: imageName)
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
-    self.size = CGSize(width: 40, height: 40)
+    self.size = CGSize(width: 50, height: 50)
     //physics setup
-    self.physicsBody = SKPhysicsBody(texture: texture, size: CGSize(width: texture.size().width, height: texture.size().height))
+    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.85)
     self.physicsBody?.isDynamic = true
     self.physicsBody?.allowsRotation = false
     self.physicsBody?.friction = 0

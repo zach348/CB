@@ -9,12 +9,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NinjaAttack/GameScene.swift"
-            timestampString = "581438974.377444"
+            filePath = "Classes/Ball.swift"
+            timestampString = "581526746.618122"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92">
+            startingLineNumber = "101"
+            endingLineNumber = "101"
+            landmarkName = "init(imageName:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
