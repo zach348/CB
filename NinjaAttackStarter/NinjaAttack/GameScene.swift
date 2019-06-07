@@ -79,19 +79,20 @@ class GameScene: SKScene {
     game?.setupGame()
     game?.startGame()
     
-    
-//    run(SKAction.repeatForever(
-//      SKAction.sequence([
-//        SKAction.run(addMonster),
-//        SKAction.wait(forDuration: 1.0)
-//        ])
-//    ))
+  
   }
   
   override func update(_ currentTime: TimeInterval) {
-    MotionControl.correctMeanSpeed()
-    MotionControl.correctSpeedSD()
-    MotionControl.correctSpeedRange()
+//    if let elapsedTime = game!.timer?.elapsedTime, let lastUpdateTime = game?.timer?.lastUpdateTime {
+//      if elapsedTime - lastUpdateTime > 1 {
+//        MotionControl.correctMeanSpeed()
+//        MotionControl.correctSpeedSD()
+//        MotionControl.correctSpeedRange()
+//
+//        print("updating...")
+//        game?.timer?.lastUpdateTime = elapsedTime
+//      }
+//    }
   }
 }
 

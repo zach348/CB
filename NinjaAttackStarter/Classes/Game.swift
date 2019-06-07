@@ -53,6 +53,7 @@ class Game {
   func startGame(){
     self.timer?.startGameTimer()
     Ball.startMovement()
+    self.timer?.startMovementTimer()
   }
   
   func addMemberstoScene(collection: [SKSpriteNode]){

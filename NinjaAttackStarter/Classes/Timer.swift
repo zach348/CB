@@ -32,7 +32,7 @@ import SpriteKit
 class Timer {
   var members = [String]()
   var elapsedTime:CGFloat = 0
-  var lastUpdateTime:CGFloat?
+  var lastUpdateTime:CGFloat = 0
   var gameScene:GameScene
   
   init(gameScene:GameScene){
@@ -46,5 +46,16 @@ class Timer {
     }
     self.members.append("gameTimer")
     self.gameScene.run(SKAction.repeatForever(SKAction.sequence([wait,count])), withKey: "gameTimer")
+  }
+  
+  func startMovementTimer(){
+    let wait = SKAction.wait(forDuration: 0.1)
+    let count = SKAction.run {
+      MotionControl.correctMovement()
+      print("correcting")
+      print(self.elapsedTime)
+    }
+    self.members.append("movementTimer")
+    self.gameScene.run(SKAction.repeatForever(SKAction.sequence([wait,count])), withKey: "movementTimer")
   }
 }
