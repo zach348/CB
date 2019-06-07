@@ -29,37 +29,22 @@
 import Foundation
 import SpriteKit
 
-class Game {
+class Timer {
+  var members = [String]()
+  var elapsedTime:CGFloat = 0
+  var lastUpdateTime:CGFloat?
   var gameScene:GameScene
-  var timer:Timer?
-  init(gameScene: GameScene){
+  
+  init(gameScene:GameScene){
     self.gameScene = gameScene
   }
   
-  func setupGame(){
-    self.timer = Timer(gameScene: self.gameScene)
-    
-    gameScene.backgroundColor = .white
-    gameScene.scaleMode = .aspectFit
-    gameScene.physicsBody = SKPhysicsBody(edgeLoopFrom: gameScene.frame)
-    gameScene.physicsWorld.gravity = .zero
-    gameScene.physicsWorld.contactDelegate = gameScene
-    
-    Ball.createBalls(num: 10, game: self)
-    
-    self.addMemberstoScene(collection: Ball.members)
-  }
-  
-  func startGame(){
-    self.timer?.startGameTimer()
-    Ball.startMovement()
-  }
-  
-  func addMemberstoScene(collection: [SKSpriteNode]){
-    for sprite in collection{
-      gameScene.addChild(sprite)
+  func startGameTimer(){
+    let wait = SKAction.wait(forDuration: 0.1)
+    let count = SKAction.run {
+      self.elapsedTime += 0.1
     }
+    self.members.append("gameTimer")
+    self.gameScene.run(SKAction.repeatForever(SKAction.sequence([wait,count])), withKey: "gameTimer")
   }
-  
-  
 }

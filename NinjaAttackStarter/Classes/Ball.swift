@@ -126,8 +126,6 @@ class Ball: SKSpriteNode {
   func modifySpeed(factor:CGFloat){
     self.physicsBody?.velocity.dx *= factor
     self.physicsBody?.velocity.dy *= factor
-    if factor > 1 {print("speeding")}
-    else if factor < 1 {print("slowing")}
   }
   
 }
