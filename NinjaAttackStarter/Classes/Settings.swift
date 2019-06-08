@@ -29,41 +29,6 @@
 import Foundation
 import SpriteKit
 
-class Game {
-  var gameScene:GameScene
-  var timer:Timer?
-  init(gameScene: GameScene){
-    self.gameScene = gameScene
-  }
-  
-  func setupGame(){
-    self.timer = Timer(gameScene: self.gameScene)
-    
-    gameScene.backgroundColor = .white
-    gameScene.scaleMode = .aspectFit
-    gameScene.physicsBody = SKPhysicsBody(edgeLoopFrom: gameScene.frame)
-    gameScene.physicsWorld.gravity = .zero
-    gameScene.physicsWorld.contactDelegate = gameScene
-    
-    Ball.createBalls(num: 10, game: self)
-    
-    self.addMemberstoScene(collection: Ball.members)
-  }
-  
-  func startGame(){
-    self.timer?.startGameTimer()
-    Ball.startMovement()
-    self.timer?.startMovementTimer()
-    
-    //testing
-    Ball.members.randomElement()?.blinkBall(imageId: "sphere-red")
-  }
-  
-  func addMemberstoScene(collection: [SKSpriteNode]){
-    for sprite in collection{
-      gameScene.addChild(sprite)
-    }
-  }
-  
+class Settings {
   
 }

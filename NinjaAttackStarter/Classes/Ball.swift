@@ -103,6 +103,7 @@ class Ball: SKSpriteNode {
     let texture = SKTexture(imageNamed: imageName)
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
     self.size = CGSize(width: 50, height: 50)
+    self.name = "ball-\(Ball.members.count + 1)"
     //physics setup
     self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.95)
     self.physicsBody?.isDynamic = true
@@ -128,6 +129,16 @@ class Ball: SKSpriteNode {
   func modifySpeed(factor:CGFloat){
     self.physicsBody?.velocity.dx *= factor
     self.physicsBody?.velocity.dy *= factor
+  }
+  
+  func blinkBall(imageId:String){
+    let currentTexture = self.texture!
+    let newTexture = SKTexture(imageNamed: imageId)
+    let flashNewTexture = SKAction.setTexture(newTexture)
+    let wait = SKAction.wait(forDuration: 0.15)
+    let flashCurrentTexture = SKAction.setTexture(currentTexture)
+    
+    self.run(SKAction.repeat(SKAction.sequence([wait,flashNewTexture,wait,flashCurrentTexture]), count: 10))
   }
   
 }
