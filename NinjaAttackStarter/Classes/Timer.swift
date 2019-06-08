@@ -52,8 +52,6 @@ class Timer {
     let wait = SKAction.wait(forDuration: 0.1)
     let count = SKAction.run {
       MotionControl.correctMovement()
-      print("correcting")
-      print(self.elapsedTime)
     }
     self.members.append("movementTimer")
     self.gameScene.run(SKAction.repeatForever(SKAction.sequence([wait,count])), withKey: "movementTimer")

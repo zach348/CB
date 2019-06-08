@@ -33,9 +33,9 @@ class Ball: SKSpriteNode {
   static var members = [Ball]()
   
   class func createBall(xPos: CGFloat, yPos: CGFloat){
-    let ball = Ball(imageName: "ball")
-    ball.position.x = xPos + GlobalFunctions.randomCGFloat(min: -20, max: 20)
-    ball.position.y = yPos + GlobalFunctions.randomCGFloat(min: -20, max: 20)
+    let ball = Ball(imageName: "sphere-blue2")
+    ball.position.x = xPos
+    ball.position.y = yPos
     Ball.members.append(ball)
   }
   
@@ -85,8 +85,10 @@ class Ball: SKSpriteNode {
   
  class func startMovement(){
     for ball in Ball.members {
-      let xVec = (CGFloat(arc4random_uniform(100)) / 50.0) * (CGFloat(arc4random_uniform(5)+1))
-      let yVec = (CGFloat(arc4random_uniform(100)) / 50.0) * (CGFloat(arc4random_uniform(5)+1))
+      let xVec = CGFloat.random(min: -75, max: 75)
+      print(xVec)
+      let yVec = CGFloat.random(min: -75, max: 75)
+      print(yVec)
       let vector = CGVector(dx: xVec, dy: yVec)
       ball.physicsBody?.applyImpulse(vector)
     }
@@ -102,7 +104,7 @@ class Ball: SKSpriteNode {
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
     self.size = CGSize(width: 50, height: 50)
     //physics setup
-    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.85)
+    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.95)
     self.physicsBody?.isDynamic = true
     self.physicsBody?.allowsRotation = false
     self.physicsBody?.friction = 0
