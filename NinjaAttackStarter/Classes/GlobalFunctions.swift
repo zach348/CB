@@ -32,12 +32,6 @@ import SpriteKit
 class GlobalFunctions {
   
   
-  class func random() -> CGFloat {
-    return CGFloat((arc4random()) / 0xFFFFFFFF)
-  }
-  
-  class func randomCGFloat(min: CGFloat, max: CGFloat) -> CGFloat {
-    return random() * (max - min) + min
-  }
+
  
 }
