@@ -56,9 +56,9 @@ class Game {
     self.timer?.startMovementTimer()
   }
   
-  func addMemberstoScene(collection: [SKSpriteNode]){
-    for sprite in collection{
-      gameScene.addChild(sprite)
+  func addMemberstoScene(collection: [SKNode]){
+    for node in collection{
+      gameScene.addChild(node)
     }
   }
   

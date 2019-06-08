@@ -29,11 +29,11 @@
 import SpriteKit
 
 //CLASS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class Ball: SKSpriteNode {
+class Ball: SKShapeNode {
   static var members = [Ball]()
   
   class func createBall(xPos: CGFloat, yPos: CGFloat){
-    let ball = Ball(imageName: "ball")
+    let ball = Ball(circleOfRadius: 25)
     ball.position.x = xPos + GlobalFunctions.randomCGFloat(min: -20, max: 20)
     ball.position.y = yPos + GlobalFunctions.randomCGFloat(min: -20, max: 20)
     Ball.members.append(ball)
@@ -97,12 +97,16 @@ class Ball: SKSpriteNode {
   var isDistractor: Bool?
   var isTarget: Bool?
   
-  init(imageName: String) {
-    let texture = SKTexture(imageNamed: imageName)
-    super.init(texture: texture, color: UIColor.clear, size: texture.size())
-    self.size = CGSize(width: 50, height: 50)
+  init(circleOfRadius:CGFloat) {
+    super.init()
+
+    self.lineWidth = 1
+    self.fillColor = UIColor.darkGray
+    self.strokeColor = UIColor.darkGray
+    self.glowWidth = 0.5
+    print(self.fillColor)
     //physics setup
-    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.85)
+    self.physicsBody = SKPhysicsBody(circleOfRadius: circleOfRadius)
     self.physicsBody?.isDynamic = true
     self.physicsBody?.allowsRotation = false
     self.physicsBody?.friction = 0
