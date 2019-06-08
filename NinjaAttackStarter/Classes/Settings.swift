@@ -29,6 +29,18 @@
 import Foundation
 import SpriteKit
 
-class Settings {
-  
+struct Settings {
+  let targetSpeed:CGFloat
+  let targetSD:CGFloat
+  let shiftDelay:CGFloat
+  let shiftSD:CGFloat
+  let numTargets:CGFloat
+
+  init(targetSpeed:CGFloat, targetSD:CGFloat, shiftDelay:CGFloat, shiftSD:CGFloat,numTargets:CGFloat){
+    self.targetSpeed = targetSpeed
+    self.targetSD = targetSD
+    self.shiftDelay = shiftDelay
+    self.shiftSD = shiftSD
+    self.numTargets = numTargets
+  }
 }
