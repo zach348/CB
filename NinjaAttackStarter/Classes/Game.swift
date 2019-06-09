@@ -72,12 +72,16 @@ class Game {
     }
   }
   
+  func transitionSettings(){
+    
+  }
+  
   private func createSettings(){
-    let phase1 = Settings(targetSpeed: 50, targetSD: 0, shiftDelay: 30, shiftSD: 5, numTargets: 5)
-    let phase2 = Settings(targetSpeed: 75, targetSD: 20, shiftDelay: 25, shiftSD: 7, numTargets: 4)
-    let phase3 = Settings(targetSpeed: 125, targetSD: 75, shiftDelay: 20, shiftSD: 4, numTargets: 4)
-    let phase4 = Settings(targetSpeed: 175, targetSD: 150, shiftDelay: 10, shiftSD: 4, numTargets: 2)
-    let phase5 = Settings(targetSpeed: 225, targetSD: 225, shiftDelay: 4, shiftSD: 1, numTargets: 1)
+    let phase1 = Settings(targetMeanSpeed: 50, targetSpeedSD: 0, shiftDelay: 30, shiftSD: 5, numTargets: 5)
+    let phase2 = Settings(targetMeanSpeed: 75, targetSpeedSD: 20, shiftDelay: 25, shiftSD: 7, numTargets: 4)
+    let phase3 = Settings(targetMeanSpeed: 125, targetSpeedSD: 75, shiftDelay: 20, shiftSD: 4, numTargets: 4)
+    let phase4 = Settings(targetMeanSpeed: 175, targetSpeedSD: 150, shiftDelay: 10, shiftSD: 4, numTargets: 2)
+    let phase5 = Settings(targetMeanSpeed: 225, targetSpeedSD: 225, shiftDelay: 4, shiftSD: 1, numTargets: 1)
     Game.settingsArr += [phase1,phase2,phase3,phase4,phase5]
   }
 }

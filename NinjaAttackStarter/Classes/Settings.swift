@@ -34,11 +34,11 @@ struct Settings {
   let targetSpeedSD:CGFloat
   let shiftDelay:CGFloat
   let shiftSD:CGFloat
-  let numTargets:CGFloat
+  let numTargets:Int
   let minSpeed:CGFloat = 300
   let maxSpeed:CGFloat = 1200
 
-  init(targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:CGFloat, shiftSD:CGFloat,numTargets:CGFloat){
+  init(targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:CGFloat, shiftSD:CGFloat,numTargets:Int){
     self.targetMeanSpeed = targetMeanSpeed
     self.targetSpeedSD = targetSpeedSD
     self.shiftDelay = shiftDelay
