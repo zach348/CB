@@ -32,8 +32,8 @@ import SpriteKit
 class Ball: SKSpriteNode {
   static var members = [Ball]()
   
-  class func createBall(xPos: CGFloat, yPos: CGFloat){
-    let ball = Ball(imageName: "sphere-blue2")
+  class func createBall(game: Game, xPos: CGFloat, yPos: CGFloat){
+    let ball = Ball(imageName: "sphere-blue2", game: game)
     ball.position.x = xPos
     ball.position.y = yPos
     Ball.members.append(ball)
@@ -42,7 +42,7 @@ class Ball: SKSpriteNode {
   class func createBalls(num: Int, game: Game){
     var createBallCounter = 0
     while createBallCounter < num {
-      createBall(xPos: game.gameScene.size.width/2, yPos: game.gameScene.size.height/2)
+      createBall(game: game, xPos: game.gameScene.size.width/2, yPos: game.gameScene.size.height/2)
       createBallCounter += 1
     }
   }
@@ -96,18 +96,20 @@ class Ball: SKSpriteNode {
   
   //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  var isDistractor: Bool?
-  var isTarget: Bool?
+  let game:Game
+  var isTarget:Bool
   
-  init(imageName: String) {
+  init(imageName: String, game: Game) {
     let texture = SKTexture(imageNamed: imageName)
+    self.game = game
+    self.isTarget = false
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
     self.size = CGSize(width: 50, height: 50)
     self.name = "ball-\(Ball.members.count + 1)"
     //physics setup
-    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.95)
+    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.9)
     self.physicsBody?.isDynamic = true
-    self.physicsBody?.allowsRotation = false
+    self.physicsBody?.allowsRotation = true
     self.physicsBody?.friction = 0
     self.physicsBody?.linearDamping = 0
     self.physicsBody?.restitution = 1
@@ -116,6 +118,8 @@ class Ball: SKSpriteNode {
   }
 
   required init?(coder aDecoder: NSCoder) {
+    self.game = Game(gameScene: GameScene())
+    self.isTarget = false
     super.init(coder:aDecoder)
   }
   

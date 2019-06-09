@@ -56,4 +56,9 @@ class Timer {
     self.members.append("movementTimer")
     self.gameScene.run(SKAction.repeatForever(SKAction.sequence([wait,count])), withKey: "movementTimer")
   }
+  
+  func startPhaseTimer(){
+    let wait = 25
+    
+  }
 }

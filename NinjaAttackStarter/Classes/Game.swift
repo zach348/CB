@@ -30,24 +30,30 @@ import Foundation
 import SpriteKit
 
 class Game {
+  
+  static var settingsArr:[Settings] = [Settings]()
+  static var currentSettings:Settings = Game.settingsArr[0]
+
   var gameScene:GameScene
   var timer:Timer?
-  var settings:[Settings] = [Settings]()
   init(gameScene: GameScene){
     self.gameScene = gameScene
   }
   
   func setupGame(){
+    //intitializations
     self.timer = Timer(gameScene: self.gameScene)
+    self.createSettings()
     
+    //gamescene formatting
     gameScene.backgroundColor = .white
     gameScene.scaleMode = .aspectFit
     gameScene.physicsBody = SKPhysicsBody(edgeLoopFrom: gameScene.frame)
     gameScene.physicsWorld.gravity = .zero
     gameScene.physicsWorld.contactDelegate = gameScene
     
+    //stimuli
     Ball.createBalls(num: 10, game: self)
-    
     self.addMemberstoScene(collection: Ball.members)
   }
   
@@ -72,6 +78,6 @@ class Game {
     let phase3 = Settings(targetSpeed: 125, targetSD: 75, shiftDelay: 20, shiftSD: 4, numTargets: 4)
     let phase4 = Settings(targetSpeed: 175, targetSD: 150, shiftDelay: 10, shiftSD: 4, numTargets: 2)
     let phase5 = Settings(targetSpeed: 225, targetSD: 225, shiftDelay: 4, shiftSD: 1, numTargets: 1)
-    self.settings += [phase1,phase2,phase3,phase4,phase5]
+    Game.settingsArr += [phase1,phase2,phase3,phase4,phase5]
   }
 }

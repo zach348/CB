@@ -4,8 +4,16 @@ import Foundation
 import SpriteKit
 
 class MotionControl {
-  static var speedMeanTarget:CGFloat = 200
-  static var speedSdTarget:CGFloat = 0
+  static var speedMeanTarget:CGFloat {
+    get {
+      return Game.currentSettings.targetSpeed
+    }
+  }
+  static var speedSdTarget:CGFloat {
+    get {
+      return Game.currentSettings.targetSD
+    }
+  }
   static var minSpeed:CGFloat = 300
   static var maxSpeed:CGFloat = 1200
   
