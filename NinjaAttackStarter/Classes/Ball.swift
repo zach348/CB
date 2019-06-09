@@ -97,12 +97,13 @@ class Ball: SKSpriteNode {
   class func shiftTargets(){
     self.clearTargets()
     self.assignRandomTargets()
-    self.getTargets().forEach { target in target.blinkBall(imageId: "sphere-red")  }
   }
   
-  class func assignRandomTargets(){
+  class func assignRandomTargets() {
     for _ in 1...Game.currentSettings.numTargets {
-      self.members.randomElement()?.isTarget = true
+      let newTarget = self.members.randomElement()!
+      newTarget.isTarget = true
+      newTarget.blinkBall(imageId: "sphere-red")
     }
   }
   
@@ -113,16 +114,10 @@ class Ball: SKSpriteNode {
     }
   }
   
-  class func getTargets() -> [Ball] {
-    return self.members.filter { $0.isTarget }
-  }
-  
-  class func getDistractors() -> [Ball] {
-    return self.members.filter { !$0.isTarget }
-  }
-  
   class func clearTargets(){
-    self.getTargets().forEach { target in target.isTarget = false }
+    self.members.forEach { ball in
+      if ball.isTarget { ball.isTarget = false }
+    }
   }
   
   

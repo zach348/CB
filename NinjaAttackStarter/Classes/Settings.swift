@@ -30,19 +30,21 @@ import Foundation
 import SpriteKit
 
 struct Settings {
+  let phase:Int
   let targetMeanSpeed:CGFloat
   let targetSpeedSD:CGFloat
-  let shiftDelay:CGFloat
-  let shiftSD:CGFloat
+  let shiftDelay:Double
+  let shiftError:Double
   let numTargets:Int
   let minSpeed:CGFloat = 300
   let maxSpeed:CGFloat = 1200
 
-  init(targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:CGFloat, shiftSD:CGFloat,numTargets:Int){
+  init(phase:Int, targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:Double, shiftError:Double,numTargets:Int){
+    self.phase = phase
     self.targetMeanSpeed = targetMeanSpeed
     self.targetSpeedSD = targetSpeedSD
     self.shiftDelay = shiftDelay
-    self.shiftSD = shiftSD
+    self.shiftError = shiftError
     self.numTargets = numTargets
   }
 }

@@ -31,8 +31,22 @@ import SpriteKit
 
 class Game {
   
-  static var settingsArr:[Settings] = [Settings]()
-  static var currentSettings:Settings = Game.settingsArr[0]
+  static var settingsArr:[Settings] = [
+    Settings(phase: 1, targetMeanSpeed: 50, targetSpeedSD: 0, shiftDelay: 30, shiftError: 5, numTargets: 5),
+    Settings(phase: 2, targetMeanSpeed: 75, targetSpeedSD: 20, shiftDelay: 25, shiftError: 7, numTargets: 4),
+    Settings(phase: 3, targetMeanSpeed: 125, targetSpeedSD: 75, shiftDelay: 20, shiftError: 4, numTargets: 4),
+    Settings(phase: 4, targetMeanSpeed: 175, targetSpeedSD: 150, shiftDelay: 10, shiftError: 4, numTargets: 2),
+    Settings(phase: 5, targetMeanSpeed: 225, targetSpeedSD: 225, shiftDelay: 4, shiftError: 1, numTargets: 1)
+  ]
+  static var currentSettings:Settings = settingsArr.first!
+  
+  func transitionSettings(){
+    print("Phaseshift...")
+    self.timer?.stopTimer(timerID: "targetShiftTimer")
+    self.timer?.members = self.timer!.members.filter { $0 != "targetShiftTimer" }
+    self.timer?.startTargetTimer()
+  }
+  
 
   var gameScene:GameScene
   var timer:Timer?
@@ -43,7 +57,6 @@ class Game {
   func setupGame(){
     //intitializations
     self.timer = Timer(gameScene: self.gameScene)
-    self.createSettings()
     
     //gamescene formatting
     gameScene.backgroundColor = .white
@@ -61,9 +74,7 @@ class Game {
     self.timer?.startGameTimer()
     Ball.startMovement()
     self.timer?.startMovementTimer()
-    
-    //testing
-    Ball.members.randomElement()?.blinkBall(imageId: "sphere-red")
+    self.timer?.startPhaseTimer()
   }
   
   func addMemberstoScene(collection: [SKSpriteNode]){
@@ -71,17 +82,5 @@ class Game {
       gameScene.addChild(sprite)
     }
   }
-  
-  func transitionSettings(){
-    
-  }
-  
-  private func createSettings(){
-    let phase1 = Settings(targetMeanSpeed: 50, targetSpeedSD: 0, shiftDelay: 30, shiftSD: 5, numTargets: 5)
-    let phase2 = Settings(targetMeanSpeed: 75, targetSpeedSD: 20, shiftDelay: 25, shiftSD: 7, numTargets: 4)
-    let phase3 = Settings(targetMeanSpeed: 125, targetSpeedSD: 75, shiftDelay: 20, shiftSD: 4, numTargets: 4)
-    let phase4 = Settings(targetMeanSpeed: 175, targetSpeedSD: 150, shiftDelay: 10, shiftSD: 4, numTargets: 2)
-    let phase5 = Settings(targetMeanSpeed: 225, targetSpeedSD: 225, shiftDelay: 4, shiftSD: 1, numTargets: 1)
-    Game.settingsArr += [phase1,phase2,phase3,phase4,phase5]
-  }
 }
+
