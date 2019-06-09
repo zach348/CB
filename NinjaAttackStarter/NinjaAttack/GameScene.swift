@@ -70,14 +70,14 @@ extension CGPoint {
 class GameScene: SKScene {
   // 1
 //  let player = SKSpriteNode(imageNamed: "player")
+  static var game:Game?
   var game:Game?
-  
   
   override func didMove(to view: SKView) {
     
-    self.game = Game(gameScene: self)
-    game?.setupGame()
-    game?.startGame()
+    GameScene.game = Game(gameScene: self)
+    GameScene.game?.setupGame()
+    GameScene.game?.startGame()
     
   
   }

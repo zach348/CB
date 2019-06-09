@@ -58,12 +58,14 @@ class Timer {
   }
   
   func startPhaseTimer() {
-    let currentPhase = Game.currentSettings.phase
-
-    let wait = SKAction.wait(forDuration: 20)
+    let wait = SKAction.wait(forDuration: 10)
     let phaseShift = SKAction.run {
+      let currentPhase = Game.currentSettings.phase
       if currentPhase < Game.settingsArr.count {
-        Game.currentSettings = Game.settingsArr[currentPhase + 1]
+        let newSettings = Game.settingsArr.filter { settings in
+          settings.phase == currentPhase + 1
+        }.first!
+        Game.currentSettings = newSettings
         if let game = self.gameScene.game { game.transitionSettings() }
       }
     }
@@ -74,7 +76,10 @@ class Timer {
   func startTargetTimer() {
     let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
     let targetShift = SKAction.run {
+      
       Ball.shiftTargets()
+      print("shifting targets")
+      print("Phase:", Game.currentSettings.phase)
     }
     self.members.append("targetShiftTimer")
     self.gameScene.run(SKAction.repeatForever(SKAction.sequence([wait,targetShift])), withKey: "targetShiftTimer")

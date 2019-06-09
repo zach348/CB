@@ -95,28 +95,31 @@ class Ball: SKSpriteNode {
   }
   
   class func shiftTargets(){
-    self.clearTargets()
-    self.assignRandomTargets()
+    GameScene.game?.gameScene.removeAction(forKey: "blinkBall")
+//    let clearTargets = SKAction.run { Ball.clearTargets() }
+//    let wait = SKAction.wait(forDuration: 1)
+//    let assignTargets = SKAction.run { Ball.assignRandomTargets()}
+//    let sequence = SKAction.sequence([clearTargets,wait,assignTargets])
+//    GameScene.game?.gameScene.run(sequence)
+    Ball.clearTargets()
+    Ball.assignRandomTargets()
   }
   
   class func assignRandomTargets() {
+    var result = [Ball]()
     for _ in 1...Game.currentSettings.numTargets {
-      let newTarget = self.members.randomElement()!
+      let randomIndex = Int.random(min: 0, max: self.members.count - 1)
+      let newTarget = self.members[randomIndex]
       newTarget.isTarget = true
-      newTarget.blinkBall(imageId: "sphere-red")
+      result.append(newTarget)
     }
-  }
-  
-  class func assignRandomDistractors(){
-    let numDistractors = self.members.count - Game.currentSettings.numTargets
-    for _ in 1...numDistractors {
-      self.members.randomElement()?.isTarget = false
-    }
+    
+    for ball in result { ball.blinkBall(imageId: "sphere-red") }
   }
   
   class func clearTargets(){
-    self.members.forEach { ball in
-      if ball.isTarget { ball.isTarget = false }
+    for ball in self.members {
+      ball.isTarget = false
     }
   }
   
@@ -169,7 +172,7 @@ class Ball: SKSpriteNode {
     let wait = SKAction.wait(forDuration: 0.15)
     let flashCurrentTexture = SKAction.setTexture(currentTexture)
     
-    self.run(SKAction.repeat(SKAction.sequence([wait,flashNewTexture,wait,flashCurrentTexture]), count: 10))
+    self.run(SKAction.repeat(SKAction.sequence([wait,flashNewTexture,wait,flashCurrentTexture]), count: 10), withKey: "blinkBall")
   }
   
 }
