@@ -30,15 +30,17 @@ import Foundation
 import SpriteKit
 
 struct Settings {
-  let targetSpeed:CGFloat
-  let targetSD:CGFloat
+  let targetMeanSpeed:CGFloat
+  let targetSpeedSD:CGFloat
   let shiftDelay:CGFloat
   let shiftSD:CGFloat
   let numTargets:CGFloat
+  let minSpeed:CGFloat = 300
+  let maxSpeed:CGFloat = 1200
 
-  init(targetSpeed:CGFloat, targetSD:CGFloat, shiftDelay:CGFloat, shiftSD:CGFloat,numTargets:CGFloat){
-    self.targetSpeed = targetSpeed
-    self.targetSD = targetSD
+  init(targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:CGFloat, shiftSD:CGFloat,numTargets:CGFloat){
+    self.targetMeanSpeed = targetMeanSpeed
+    self.targetSpeedSD = targetSpeedSD
     self.shiftDelay = shiftDelay
     self.shiftSD = shiftSD
     self.numTargets = numTargets

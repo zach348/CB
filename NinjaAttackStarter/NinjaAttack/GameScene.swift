@@ -83,16 +83,7 @@ class GameScene: SKScene {
   }
   
   override func update(_ currentTime: TimeInterval) {
-//    if let elapsedTime = game!.timer?.elapsedTime, let lastUpdateTime = game?.timer?.lastUpdateTime {
-//      if elapsedTime - lastUpdateTime > 1 {
-//        MotionControl.correctMeanSpeed()
-//        MotionControl.correctSpeedSD()
-//        MotionControl.correctSpeedRange()
-//
-//        print("updating...")
-//        game?.timer?.lastUpdateTime = elapsedTime
-//      }
-//    }
+
   }
 }
 

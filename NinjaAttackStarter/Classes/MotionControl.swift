@@ -4,18 +4,6 @@ import Foundation
 import SpriteKit
 
 class MotionControl {
-  static var speedMeanTarget:CGFloat {
-    get {
-      return Game.currentSettings.targetSpeed
-    }
-  }
-  static var speedSdTarget:CGFloat {
-    get {
-      return Game.currentSettings.targetSD
-    }
-  }
-  static var minSpeed:CGFloat = 300
-  static var maxSpeed:CGFloat = 1200
   
   public class func correctMovement(){
     self.correctSpeedSD()
@@ -26,10 +14,10 @@ class MotionControl {
   private class func correctMeanSpeed(){
     let currentMeanSpeed = Ball.mean()
     for ball in Ball.members {
-      if currentMeanSpeed < MotionControl.speedMeanTarget && ball.currentSpeed() < MotionControl.maxSpeed {
+      if currentMeanSpeed < Game.currentSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentSettings.maxSpeed {
         ball.modifySpeed(factor: 1.02)
       }
-      else if currentMeanSpeed > MotionControl.speedMeanTarget && ball.currentSpeed() > MotionControl.minSpeed {
+      else if currentMeanSpeed > Game.currentSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentSettings.minSpeed {
         ball.modifySpeed(factor: 0.98)
       }
     }
@@ -38,16 +26,16 @@ class MotionControl {
   private class func correctSpeedSD(){
     let currentSD = Ball.standardDev()
     for ball in Ball.members {
-      if currentSD < MotionControl.speedSdTarget {
-        if ball.currentSpeed() > MotionControl.speedMeanTarget && ball.currentSpeed() < MotionControl.maxSpeed {
+      if currentSD < Game.currentSettings.targetSpeedSD {
+        if ball.currentSpeed() > Game.currentSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentSettings.maxSpeed {
           ball.modifySpeed(factor: 1.02)
-        }else if ball.currentSpeed() < MotionControl.speedMeanTarget && ball.currentSpeed() > MotionControl.minSpeed{
+        }else if ball.currentSpeed() < Game.currentSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentSettings.minSpeed{
           ball.modifySpeed(factor: 0.98)
         }
-      }else if currentSD > MotionControl.speedSdTarget {
-        if ball.currentSpeed() > MotionControl.speedMeanTarget && ball.currentSpeed() > MotionControl.minSpeed {
+      }else if currentSD > Game.currentSettings.targetSpeedSD{
+        if ball.currentSpeed() > Game.currentSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentSettings.minSpeed {
           ball.modifySpeed(factor: 0.98)
-        }else if ball.currentSpeed() < MotionControl.speedMeanTarget && ball.currentSpeed() < MotionControl.maxSpeed{
+        }else if ball.currentSpeed() < Game.currentSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentSettings.maxSpeed{
           ball.modifySpeed(factor: 1.02)
         }
       }
@@ -56,8 +44,8 @@ class MotionControl {
   
   private class func correctSpeedRange(){
     for ball in Ball.members {
-      if ball.currentSpeed() < MotionControl.minSpeed {ball.modifySpeed(factor: 1.01)}
-      else if ball.currentSpeed() > MotionControl.maxSpeed {ball.modifySpeed(factor: 0.99)}
+      if ball.currentSpeed() < Game.currentSettings.minSpeed {ball.modifySpeed(factor: 1.01)}
+      else if ball.currentSpeed() > Game.currentSettings.maxSpeed {ball.modifySpeed(factor: 0.99)}
     }
   }
 }
