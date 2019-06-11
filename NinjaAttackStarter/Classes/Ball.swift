@@ -86,9 +86,7 @@ class Ball: SKSpriteNode {
  class func startMovement(){
     for ball in Ball.members {
       let xVec = CGFloat.random(min: -75, max: 75)
-      print(xVec)
       let yVec = CGFloat.random(min: -75, max: 75)
-      print(yVec)
       let vector = CGVector(dx: xVec, dy: yVec)
       ball.physicsBody?.applyImpulse(vector)
     }
@@ -107,14 +105,20 @@ class Ball: SKSpriteNode {
   
   class func assignRandomTargets() {
     var result = [Ball]()
-    for _ in 1...Game.currentSettings.numTargets {
+    var names = [String]()
+    var counter = 0
+    while counter < Game.currentSettings.numTargets {
       let randomIndex = Int.random(min: 0, max: self.members.count - 1)
       let newTarget = self.members[randomIndex]
       newTarget.isTarget = true
-      result.append(newTarget)
+      if !result.contains(newTarget) {
+        result.append(newTarget)
+        counter += 1
+      }
     }
-    
-    for ball in result { ball.blinkBall(imageId: "sphere-red") }
+    for ball in result {
+      ball.blinkBall(imageId: "sphere-red")
+    }
   }
   
   class func clearTargets(){
@@ -171,7 +175,6 @@ class Ball: SKSpriteNode {
     let flashNewTexture = SKAction.setTexture(newTexture)
     let wait = SKAction.wait(forDuration: 0.15)
     let flashCurrentTexture = SKAction.setTexture(currentTexture)
-    
     self.run(SKAction.repeat(SKAction.sequence([wait,flashNewTexture,wait,flashCurrentTexture]), count: 10), withKey: "blinkBall")
   }
   

@@ -32,11 +32,11 @@ import SpriteKit
 class Game {
   
   static var settingsArr:[Settings] = [
-    Settings(phase: 1, targetMeanSpeed: 225, targetSpeedSD: 225, shiftDelay: 4, shiftError: 1, numTargets: 1),
-    Settings(phase: 2, targetMeanSpeed: 175, targetSpeedSD: 150, shiftDelay: 10, shiftError: 4, numTargets: 2),
-    Settings(phase: 3, targetMeanSpeed: 125, targetSpeedSD: 75, shiftDelay: 20, shiftError: 4, numTargets: 3),
-    Settings(phase: 4, targetMeanSpeed: 75, targetSpeedSD: 20, shiftDelay: 25, shiftError: 7, numTargets: 4),
-    Settings(phase: 5, targetMeanSpeed: 50, targetSpeedSD: 0, shiftDelay: 30, shiftError: 5, numTargets: 5)
+    Settings(phase: 1, targetMeanSpeed: 225, targetSpeedSD: 225, shiftDelay: 4, shiftError: 1, numTargets: 1, targetTexture: "sphere-blue2", distractorTexture: ""),
+    Settings(phase: 2, targetMeanSpeed: 175, targetSpeedSD: 150, shiftDelay: 10, shiftError: 4, numTargets: 2, targetTexture: "sphere-blue2", distractorTexture: ""),
+    Settings(phase: 3, targetMeanSpeed: 125, targetSpeedSD: 75, shiftDelay: 20, shiftError: 4, numTargets: 3, targetTexture: "sphere-blue2", distractorTexture: ""),
+    Settings(phase: 4, targetMeanSpeed: 75, targetSpeedSD: 20, shiftDelay: 25, shiftError: 7, numTargets: 4, targetTexture: "sphere-blue2", distractorTexture: ""),
+    Settings(phase: 5, targetMeanSpeed: 50, targetSpeedSD: 0, shiftDelay: 30, shiftError: 5, numTargets: 5, targetTexture: "sphere-blue2", distractorTexture: "")
   ]
   static var currentSettings:Settings = settingsArr.first!
   
