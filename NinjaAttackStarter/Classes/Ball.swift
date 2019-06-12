@@ -105,7 +105,6 @@ class Ball: SKSpriteNode {
   
   class func assignRandomTargets() {
     var result = [Ball]()
-    var names = [String]()
     var counter = 0
     while counter < Game.currentSettings.numTargets {
       let randomIndex = Int.random(min: 0, max: self.members.count - 1)
