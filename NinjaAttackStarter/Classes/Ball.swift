@@ -94,11 +94,6 @@ class Ball: SKSpriteNode {
   
   class func shiftTargets(){
     GameScene.game?.gameScene.removeAction(forKey: "blinkBall")
-//    let clearTargets = SKAction.run { Ball.clearTargets() }
-//    let wait = SKAction.wait(forDuration: 1)
-//    let assignTargets = SKAction.run { Ball.assignRandomTargets()}
-//    let sequence = SKAction.sequence([clearTargets,wait,assignTargets])
-//    GameScene.game?.gameScene.run(sequence)
     Ball.clearTargets()
     Ball.assignRandomTargets()
   }
@@ -126,16 +121,25 @@ class Ball: SKSpriteNode {
     }
   }
   
-  
-  //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  class func checkTextures() {
+    self.members.forEach { ball in
+      if ball.isTarget && ball.texture! != Game.currentSettings.targetTexture {
+        ball.texture = Game.currentSettings.targetTexture
+      }else if !ball.isTarget && ball.texture != Game.currentSettings.distractorTexture{
+        ball.texture = Game.currentSettings.distractorTexture
+      }
+    }
+  }
+//INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   let game:Game
   var isTarget:Bool
-  
+  var textureString:String
   init(imageName: String, game: Game) {
     let texture = SKTexture(imageNamed: imageName)
     self.game = game
     self.isTarget = false
+    self.textureString = imageName
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
     self.size = CGSize(width: 50, height: 50)
     self.name = "ball-\(Ball.members.count + 1)"
@@ -153,6 +157,7 @@ class Ball: SKSpriteNode {
   required init?(coder aDecoder: NSCoder) {
     self.game = Game(gameScene: GameScene())
     self.isTarget = false
+    self.textureString = ""
     super.init(coder:aDecoder)
   }
   
