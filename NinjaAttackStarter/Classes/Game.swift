@@ -32,11 +32,11 @@ import SpriteKit
 class Game {
   
   static var settingsArr:[Settings] = [
-    Settings(phase: 1, targetMeanSpeed: 225, targetSpeedSD: 225, shiftDelay: 3, shiftError: 1, numTargets: 1, targetTexture: "sphere-purple", distractorTexture: ""),
-    Settings(phase: 2, targetMeanSpeed: 175, targetSpeedSD: 150, shiftDelay: 5, shiftError: 2, numTargets: 2, targetTexture: "sphere-blue2", distractorTexture: "sphere-blue1"),
-    Settings(phase: 3, targetMeanSpeed: 125, targetSpeedSD: 75, shiftDelay: 10, shiftError: 3, numTargets: 3, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green"),
-    Settings(phase: 4, targetMeanSpeed: 75, targetSpeedSD: 20, shiftDelay: 15, shiftError: 4, numTargets: 4, targetTexture: "sphere-blue2", distractorTexture: ""),
-    Settings(phase: 5, targetMeanSpeed: 50, targetSpeedSD: 0, shiftDelay: 20, shiftError: 5, numTargets: 5, targetTexture: "sphere-blue2", distractorTexture: "")
+    Settings(phase: 1, targetMeanSpeed: 225, targetSpeedSD: 225, shiftDelay: 3, shiftError: 1, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red"),
+    Settings(phase: 2, targetMeanSpeed: 175, targetSpeedSD: 150, shiftDelay: 5, shiftError: 2, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red"),
+    Settings(phase: 3, targetMeanSpeed: 125, targetSpeedSD: 75, shiftDelay: 10, shiftError: 3, numTargets: 3, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-red"),
+    Settings(phase: 4, targetMeanSpeed: 75, targetSpeedSD: 20, shiftDelay: 15, shiftError: 4, numTargets: 4, targetTexture: "sphere-purple", distractorTexture: "sphere-neonGreen", flashTexture: "sphere-red"),
+    Settings(phase: 5, targetMeanSpeed: 50, targetSpeedSD: 0, shiftDelay: 20, shiftError: 5, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-red")
   ]
   static var currentSettings:Settings = settingsArr.first! {
     didSet{
@@ -51,7 +51,6 @@ class Game {
     self.timer?.startTargetTimer()
     print("shifting settings")
     //Art/Texture management
-    Ball.checkTextures()
     print(Game.currentSettings.phase)
   }
   

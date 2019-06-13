@@ -33,7 +33,7 @@ class Ball: SKSpriteNode {
   static var members = [Ball]()
   
   class func createBall(game: Game, xPos: CGFloat, yPos: CGFloat){
-    let ball = Ball(imageName: "sphere-blue2", game: game)
+    let ball = Ball(game: game)
     ball.position.x = xPos
     ball.position.y = yPos
     Ball.members.append(ball)
@@ -95,23 +95,34 @@ class Ball: SKSpriteNode {
   class func shiftTargets(){
     GameScene.game?.gameScene.removeAction(forKey: "blinkBall")
     Ball.clearTargets()
-    Ball.assignRandomTargets()
+    Ball.assignRandomTargets().forEach { ball in ball.blinkBall() }
+    print(self.members)
   }
   
-  class func assignRandomTargets() {
-    var result = [Ball]()
+  class func assignRandomTargets() -> [Ball] {
+    var newTargets = [Ball]()
     var counter = 0
     while counter < Game.currentSettings.numTargets {
       let randomIndex = Int.random(min: 0, max: self.members.count - 1)
       let newTarget = self.members[randomIndex]
-      newTarget.isTarget = true
-      if !result.contains(newTarget) {
-        result.append(newTarget)
+      if !newTargets.contains(newTarget) {
+        newTarget.isTarget = true
+        newTargets.append(newTarget)
         counter += 1
       }
     }
-    for ball in result {
-      ball.blinkBall(imageId: "sphere-red")
+    return newTargets
+  }
+  
+  class func getTargets() -> [Ball]{
+    return self.members.filter { ball in
+      ball.isTarget
+    }
+  }
+  
+  class func getDistractors() -> [Ball] {
+    return self.members.filter { ball in
+      !ball.isTarget
     }
   }
   
@@ -120,26 +131,21 @@ class Ball: SKSpriteNode {
       ball.isTarget = false
     }
   }
-  
-  class func checkTextures() {
-    self.members.forEach { ball in
-      if ball.isTarget && ball.texture! != Game.currentSettings.targetTexture {
-        ball.texture = Game.currentSettings.targetTexture
-      }else if !ball.isTarget && ball.texture != Game.currentSettings.distractorTexture{
-        ball.texture = Game.currentSettings.distractorTexture
-      }
-    }
-  }
 //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   let game:Game
-  var isTarget:Bool
-  var textureString:String
-  init(imageName: String, game: Game) {
-    let texture = SKTexture(imageNamed: imageName)
+  var isTarget:Bool {
+    didSet {
+      if isTarget { self.texture = Game.currentSettings.targetTexture }
+      else { self.texture = Game.currentSettings.distractorTexture }
+    }
+  }
+  
+  
+  init(game: Game) {
+    let texture = Game.currentSettings.targetTexture
     self.game = game
     self.isTarget = false
-    self.textureString = imageName
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
     self.size = CGSize(width: 50, height: 50)
     self.name = "ball-\(Ball.members.count + 1)"
@@ -157,7 +163,6 @@ class Ball: SKSpriteNode {
   required init?(coder aDecoder: NSCoder) {
     self.game = Game(gameScene: GameScene())
     self.isTarget = false
-    self.textureString = ""
     super.init(coder:aDecoder)
   }
   
@@ -173,10 +178,9 @@ class Ball: SKSpriteNode {
     self.physicsBody?.velocity.dy *= factor
   }
   
-  func blinkBall(imageId:String){
+  func blinkBall(){
     let currentTexture = self.texture!
-    let newTexture = SKTexture(imageNamed: imageId)
-    let flashNewTexture = SKAction.setTexture(newTexture)
+    let flashNewTexture = SKAction.setTexture( Game.currentSettings.flashTexture)
     let wait = SKAction.wait(forDuration: 0.15)
     let flashCurrentTexture = SKAction.setTexture(currentTexture)
     self.run(SKAction.repeat(SKAction.sequence([wait,flashNewTexture,wait,flashCurrentTexture]), count: 10), withKey: "blinkBall")

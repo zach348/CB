@@ -38,10 +38,11 @@ struct Settings {
   let numTargets:Int
   let targetTexture:SKTexture
   let distractorTexture:SKTexture
+  let flashTexture:SKTexture
   let minSpeed:CGFloat = 300
   let maxSpeed:CGFloat = 1200
   
-  init(phase:Int, targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:Double, shiftError:Double,numTargets:Int, targetTexture:String, distractorTexture:String){
+  init(phase:Int, targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:Double, shiftError:Double,numTargets:Int, targetTexture:String, distractorTexture:String, flashTexture:String){
     self.phase = phase
     self.targetMeanSpeed = targetMeanSpeed
     self.targetSpeedSD = targetSpeedSD
@@ -50,5 +51,6 @@ struct Settings {
     self.numTargets = numTargets
     self.targetTexture = SKTexture(imageNamed: targetTexture)
     self.distractorTexture = SKTexture(imageNamed: distractorTexture)
+    self.flashTexture = SKTexture(imageNamed: flashTexture)
   }
 }
