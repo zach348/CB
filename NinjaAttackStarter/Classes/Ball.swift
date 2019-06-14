@@ -96,7 +96,6 @@ class Ball: SKSpriteNode {
     GameScene.game?.gameScene.removeAction(forKey: "blinkBall")
     Ball.clearTargets()
     Ball.assignRandomTargets().forEach { ball in ball.blinkBall() }
-    print(self.members)
   }
   
   class func assignRandomTargets() -> [Ball] {
@@ -140,6 +139,8 @@ class Ball: SKSpriteNode {
       else { self.texture = Game.currentSettings.distractorTexture }
     }
   }
+  var xHistory = [CGFloat]()
+  var yHistory = [CGFloat]()
   
   
   init(game: Game) {
@@ -165,6 +166,32 @@ class Ball: SKSpriteNode {
     self.isTarget = false
     super.init(coder:aDecoder)
   }
+  
+  func updatePositionHistory() {
+    self.xHistory.append(self.position.x)
+    self.yHistory.append(self.position.y)
+    if self.xHistory.count > 5 { self.xHistory.removeFirst() }
+    if self.yHistory.count > 5 { self.yHistory.removeFirst() }
+  }
+  
+  func ballStuckX() -> Bool {
+    if let lastXVal = self.xHistory.last {
+      if !self.xHistory.contains(lastXVal) { return false }
+      else { return true }
+    }else{
+      return false
+    }
+  }
+  
+  func ballStuckY() -> Bool {
+    if let lastYVal = self.yHistory.last {
+      if !self.yHistory.contains(lastYVal) { return false }
+      else { return true }
+    }else{
+      return false
+    }
+  }
+  
   
   func currentSpeed() -> CGFloat {
     let aSq = pow(self.physicsBody!.velocity.dx,2.0)
