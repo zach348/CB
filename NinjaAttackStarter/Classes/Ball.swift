@@ -179,11 +179,14 @@ class Ball: SKSpriteNode {
   }
   
   func blinkBall(){
-    let currentTexture = self.texture!
-    let flashNewTexture = SKAction.setTexture( Game.currentSettings.flashTexture)
-    let wait = SKAction.wait(forDuration: 0.15)
-    let flashCurrentTexture = SKAction.setTexture(currentTexture)
-    self.run(SKAction.repeat(SKAction.sequence([wait,flashNewTexture,wait,flashCurrentTexture]), count: 10), withKey: "blinkBall")
+    if let currentTexture = self.texture {
+      let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
+      let resetTexture = SKAction.setTexture(currentTexture)
+      let fadeOut = SKAction.fadeOut(withDuration: 0.15)
+      let fadeIn = SKAction.fadeIn(withDuration: 0.15)
+      let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 5)
+      let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
+      self.run(blinkAction, withKey: "blinkBall")
+    }
   }
-  
 }
