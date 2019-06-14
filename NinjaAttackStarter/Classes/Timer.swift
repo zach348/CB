@@ -30,10 +30,10 @@ import Foundation
 import SpriteKit
 
 class Timer {
-  var members = [String]()
-  var elapsedTime:CGFloat = 0
-  var lastUpdateTime:CGFloat = 0
-  var gameScene:GameScene
+ var members = [String]()
+ var elapsedTime:CGFloat = 0
+ var lastUpdateTime:CGFloat = 0
+ var gameScene:GameScene
   
   init(gameScene:GameScene){
     self.gameScene = gameScene
@@ -50,10 +50,43 @@ class Timer {
   
   func startMovementTimer(){
     let wait = SKAction.wait(forDuration: 0.1)
-    let count = SKAction.run {
+    let correctMovement = SKAction.run {
       MotionControl.correctMovement()
     }
     self.members.append("movementTimer")
-    self.gameScene.run(SKAction.repeatForever(SKAction.sequence([wait,count])), withKey: "movementTimer")
+    self.gameScene.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
+  }
+  
+  func startPhaseTimer() {
+    let wait = SKAction.wait(forDuration: 20)
+    let phaseShift = SKAction.run {
+      let currentPhase = Game.currentSettings.phase
+      if currentPhase < Game.settingsArr.count {
+        let newSettings = Game.settingsArr.filter { settings in
+          settings.phase == currentPhase + 1
+        }.first!
+        Game.currentSettings = newSettings
+        if let game = GameScene.game {
+          game.transitionSettings()
+        }
+      }
+    }
+    
+    self.members.append("phaseShiftTimer")
+    self.gameScene.run(SKAction.repeatForever(SKAction.sequence([wait,phaseShift])), withKey: "phaseShiftTimer")
+  }
+  
+  func startTargetTimer() {
+    let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
+    let targetShift = SKAction.run {
+      Ball.shiftTargets()
+      print("shifting")
+    }
+    self.members.append("targetShiftTimer")
+    self.gameScene.run(SKAction.repeatForever(SKAction.sequence([wait,targetShift])), withKey: "targetShiftTimer")
+  }
+  
+  func stopTimer(timerID:String) {
+    self.gameScene.removeAction(forKey: timerID)
   }
 }

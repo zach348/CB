@@ -1,15 +1,15 @@
-/// Copyright (c) 2018 Razeware LLC
-/// 
+/// Copyright (c) 2019 Razeware LLC
+///
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
 /// distribute, sublicense, create a derivative work, and/or sell copies of the
 /// Software in any work that is designed, intended, or marketed for pedagogical or
@@ -17,7 +17,7 @@
 /// or information technology.  Permission for such use, copying, modification,
 /// merger, publication, distribution, sublicensing, creation of derivative works,
 /// or sale is expressly withheld.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,67 +26,31 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
+import Foundation
 import SpriteKit
 
-
-struct PhysicsCategory {
-  static let none      : UInt32 = 0
-  static let all       : UInt32 = UInt32.max
-  static let ball   : UInt32 = 0b1       // 1
-}
-
-func +(left: CGPoint, right: CGPoint) -> CGPoint {
-  return CGPoint(x: left.x + right.x, y: left.y + right.y)
-}
-
-func -(left: CGPoint, right: CGPoint) -> CGPoint {
-  return CGPoint(x: left.x - right.x, y: left.y - right.y)
-}
-
-func *(point: CGPoint, scalar: CGFloat) -> CGPoint {
-  return CGPoint(x: point.x * scalar, y: point.y * scalar)
-}
-
-func /(point: CGPoint, scalar: CGFloat) -> CGPoint {
-  return CGPoint(x: point.x / scalar, y: point.y / scalar)
-}
-
-#if !(arch(x86_64) || arch(arm64))
-func sqrt(a: CGFloat) -> CGFloat {
-  return CGFloat(sqrtf(Float(a)))
-}
-#endif
-
-extension CGPoint {
-  func length() -> CGFloat {
-    return sqrt(x*x + y*y)
+struct Settings {
+  let phase:Int
+  let targetMeanSpeed:CGFloat
+  let targetSpeedSD:CGFloat
+  let shiftDelay:Double
+  let shiftError:Double
+  let numTargets:Int
+  let targetTexture:SKTexture
+  let distractorTexture:SKTexture
+  let flashTexture:SKTexture
+  let minSpeed:CGFloat = 300
+  let maxSpeed:CGFloat = 1200
+  
+  init(phase:Int, targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:Double, shiftError:Double,numTargets:Int, targetTexture:String, distractorTexture:String, flashTexture:String){
+    self.phase = phase
+    self.targetMeanSpeed = targetMeanSpeed
+    self.targetSpeedSD = targetSpeedSD
+    self.shiftDelay = shiftDelay
+    self.shiftError = shiftError
+    self.numTargets = numTargets
+    self.targetTexture = SKTexture(imageNamed: targetTexture)
+    self.distractorTexture = SKTexture(imageNamed: distractorTexture)
+    self.flashTexture = SKTexture(imageNamed: flashTexture)
   }
-  
-  func normalized() -> CGPoint {
-    return self / length()
-  }
-}
-
-class GameScene: SKScene {
-  // 1
-//  let player = SKSpriteNode(imageNamed: "player")
-  static var game:Game?
-  var game:Game?
-  
-  override func didMove(to view: SKView) {
-    
-    GameScene.game = Game(gameScene: self)
-    GameScene.game?.setupGame()
-    GameScene.game?.startGame()
-    
-  
-  }
-  
-  override func update(_ currentTime: TimeInterval) {
-
-  }
-}
-
-extension GameScene: SKPhysicsContactDelegate {
-  
 }

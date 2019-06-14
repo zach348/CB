@@ -32,8 +32,8 @@ import SpriteKit
 class Ball: SKSpriteNode {
   static var members = [Ball]()
   
-  class func createBall(xPos: CGFloat, yPos: CGFloat){
-    let ball = Ball(imageName: "sphere-blue2")
+  class func createBall(game: Game, xPos: CGFloat, yPos: CGFloat){
+    let ball = Ball(game: game)
     ball.position.x = xPos
     ball.position.y = yPos
     Ball.members.append(ball)
@@ -42,7 +42,7 @@ class Ball: SKSpriteNode {
   class func createBalls(num: Int, game: Game){
     var createBallCounter = 0
     while createBallCounter < num {
-      createBall(xPos: game.gameScene.size.width/2, yPos: game.gameScene.size.height/2)
+      createBall(game: game, xPos: game.gameScene.size.width/2, yPos: game.gameScene.size.height/2)
       createBallCounter += 1
     }
   }
@@ -86,25 +86,71 @@ class Ball: SKSpriteNode {
  class func startMovement(){
     for ball in Ball.members {
       let xVec = CGFloat.random(min: -75, max: 75)
-      print(xVec)
       let yVec = CGFloat.random(min: -75, max: 75)
-      print(yVec)
       let vector = CGVector(dx: xVec, dy: yVec)
       ball.physicsBody?.applyImpulse(vector)
     }
   }
   
-  //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  class func shiftTargets(){
+    GameScene.game?.gameScene.removeAction(forKey: "blinkBall")
+    Ball.clearTargets()
+    Ball.assignRandomTargets().forEach { ball in ball.blinkBall() }
+    print(self.members)
+  }
   
-  var isDistractor: Bool?
-  var isTarget: Bool?
+  class func assignRandomTargets() -> [Ball] {
+    var newTargets = [Ball]()
+    var counter = 0
+    while counter < Game.currentSettings.numTargets {
+      let randomIndex = Int.random(min: 0, max: self.members.count - 1)
+      let newTarget = self.members[randomIndex]
+      if !newTargets.contains(newTarget) {
+        newTarget.isTarget = true
+        newTargets.append(newTarget)
+        counter += 1
+      }
+    }
+    return newTargets
+  }
   
-  init(imageName: String) {
-    let texture = SKTexture(imageNamed: imageName)
+  class func getTargets() -> [Ball]{
+    return self.members.filter { ball in
+      ball.isTarget
+    }
+  }
+  
+  class func getDistractors() -> [Ball] {
+    return self.members.filter { ball in
+      !ball.isTarget
+    }
+  }
+  
+  class func clearTargets(){
+    for ball in self.members {
+      ball.isTarget = false
+    }
+  }
+//INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  let game:Game
+  var isTarget:Bool {
+    didSet {
+      if isTarget { self.texture = Game.currentSettings.targetTexture }
+      else { self.texture = Game.currentSettings.distractorTexture }
+    }
+  }
+  
+  
+  init(game: Game) {
+    let texture = Game.currentSettings.targetTexture
+    self.game = game
+    self.isTarget = false
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
     self.size = CGSize(width: 50, height: 50)
+    self.name = "ball-\(Ball.members.count + 1)"
     //physics setup
-    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.95)
+    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.9)
     self.physicsBody?.isDynamic = true
     self.physicsBody?.allowsRotation = false
     self.physicsBody?.friction = 0
@@ -115,6 +161,8 @@ class Ball: SKSpriteNode {
   }
 
   required init?(coder aDecoder: NSCoder) {
+    self.game = Game(gameScene: GameScene())
+    self.isTarget = false
     super.init(coder:aDecoder)
   }
   
@@ -130,4 +178,15 @@ class Ball: SKSpriteNode {
     self.physicsBody?.velocity.dy *= factor
   }
   
+  func blinkBall(){
+    if let currentTexture = self.texture {
+      let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
+      let resetTexture = SKAction.setTexture(currentTexture)
+      let fadeOut = SKAction.fadeOut(withDuration: 0.15)
+      let fadeIn = SKAction.fadeIn(withDuration: 0.15)
+      let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 5)
+      let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
+      self.run(blinkAction, withKey: "blinkBall")
+    }
+  }
 }
