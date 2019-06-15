@@ -87,5 +87,14 @@ class Timer {
   
   func stopTimer(timerID:String) {
     self.gameScene.removeAction(forKey: timerID)
+    self.members = self.members.filter { $0 != timerID }
+
+  }
+  
+  
+  func stopTimerActions(){
+    for timer in self.members {
+      self.stopTimer(timerID: timer)
+    }
   }
 }

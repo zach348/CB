@@ -81,8 +81,12 @@ class Game {
     self.timer?.startMovementTimer()
     self.timer?.startPhaseTimer()
     self.timer?.startTargetTimer()
-    print(gameScene.size.width)
-    print(gameScene.size)
+  }
+  
+  func pauseGame(){
+    if let timer = self.timer {
+      timer.stopTimerActions()
+    }
     
   }
   

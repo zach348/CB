@@ -96,6 +96,7 @@ class Ball: SKSpriteNode {
     GameScene.game?.gameScene.removeAction(forKey: "blinkBall")
     Ball.clearTargets()
     Ball.assignRandomTargets().forEach { ball in ball.blinkBall() }
+    GameScene.game?.pauseGame()
   }
   
   class func assignRandomTargets() -> [Ball] {
@@ -139,9 +140,7 @@ class Ball: SKSpriteNode {
       else { self.texture = Game.currentSettings.distractorTexture }
     }
   }
-  var xHistory = [CGFloat]()
-  var yHistory = [CGFloat]()
-  
+  var positionHistory = [CGPoint]()
   
   init(game: Game) {
     let texture = Game.currentSettings.targetTexture
@@ -166,26 +165,25 @@ class Ball: SKSpriteNode {
     self.isTarget = false
     super.init(coder:aDecoder)
   }
+  
   func updatePositionHistory() {
-    self.xHistory.append(self.position.x)
-    self.yHistory.append(self.position.y)
-    if self.xHistory.count > 10 { self.xHistory.removeFirst() }
-    if self.yHistory.count > 10 { self.yHistory.removeFirst() }
+    self.positionHistory.append(self.position)
+    if self.positionHistory.count > 10 { self.positionHistory.removeFirst() }
   }
   
   func ballStuckX() -> Bool {
-    if let lastXVal = self.xHistory.last {
-      for val in self.xHistory {
-        if val != lastXVal { return false }
+    if let lastXVal = self.positionHistory.last?.x {
+      for position in self.positionHistory {
+        if position.x != lastXVal { return false }
       }
     }
     return true
   }
   
   func ballStuckY() -> Bool {
-    if let lastYVal = self.yHistory.last {
-      for val in self.yHistory {
-        if val != lastYVal { return false }
+    if let lastYVal = self.positionHistory.last?.y {
+      for position in self.positionHistory {
+        if position.y != lastYVal { return false }
       }
     }
     return true
