@@ -166,30 +166,29 @@ class Ball: SKSpriteNode {
     self.isTarget = false
     super.init(coder:aDecoder)
   }
-  
   func updatePositionHistory() {
     self.xHistory.append(self.position.x)
     self.yHistory.append(self.position.y)
-    if self.xHistory.count > 5 { self.xHistory.removeFirst() }
-    if self.yHistory.count > 5 { self.yHistory.removeFirst() }
+    if self.xHistory.count > 10 { self.xHistory.removeFirst() }
+    if self.yHistory.count > 10 { self.yHistory.removeFirst() }
   }
   
   func ballStuckX() -> Bool {
     if let lastXVal = self.xHistory.last {
-      if !self.xHistory.contains(lastXVal) { return false }
-      else { return true }
-    }else{
-      return false
+      for val in self.xHistory {
+        if val != lastXVal { return false }
+      }
     }
+    return true
   }
   
   func ballStuckY() -> Bool {
     if let lastYVal = self.yHistory.last {
-      if !self.yHistory.contains(lastYVal) { return false }
-      else { return true }
-    }else{
-      return false
+      for val in self.yHistory {
+        if val != lastYVal { return false }
+      }
     }
+    return true
   }
   
   
