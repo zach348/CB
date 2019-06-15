@@ -45,7 +45,6 @@ class Game {
     self.timer?.stopTimer(timerID: "targetShiftTimer")
     self.timer?.members = self.timer!.members.filter { $0 != "targetShiftTimer" }
     self.timer?.startTargetTimer()
-    print("shifting settings")
     
     
     
@@ -82,6 +81,8 @@ class Game {
     self.timer?.startMovementTimer()
     self.timer?.startPhaseTimer()
     self.timer?.startTargetTimer()
+    print(gameScene.size.width)
+    print(gameScene.size)
     
   }
   

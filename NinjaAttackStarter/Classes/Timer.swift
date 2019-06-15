@@ -80,7 +80,6 @@ class Timer {
     let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
     let targetShift = SKAction.run {
       Ball.shiftTargets()
-      print("shifting")
     }
     self.members.append("targetShiftTimer")
     self.gameScene.run(SKAction.repeatForever(SKAction.sequence([wait,targetShift])), withKey: "targetShiftTimer")
