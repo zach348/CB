@@ -138,12 +138,15 @@ class Ball: SKSpriteNode {
   
   class func freezeMovement(){
     if let scene = currentGame.gameScene {
+      print("freezing")
       scene.physicsWorld.speed = 0
     }
   }
   
   class func unfreezeMovement(){
+    print("preunfreeze")
     if let scene = currentGame.gameScene {
+      print("unfreezing")
       scene.physicsWorld.speed = 1
     }
   }

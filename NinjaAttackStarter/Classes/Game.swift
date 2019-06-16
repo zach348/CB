@@ -76,11 +76,21 @@ class Game {
   }
   
   func pauseGame(){
-    Ball.freezeMovement()
+    if let world = self.world {
+      world.isPaused = true
+      Ball.freezeMovement()
+    }
+  }
+  
+  func unpauseGame(){
+    if let world = self.world {
+      world.isPaused = false
+      Ball.unfreezeMovement()
+    }
   }
   
   func addMemberstoScene(collection: [SKSpriteNode]){
-    if let actionNode = currentGame.world {
+    if let actionNode = self.world {
       for sprite in collection{
         actionNode.addChild(sprite)
       }
