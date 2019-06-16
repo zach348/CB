@@ -40,60 +40,64 @@ class Game {
   ]
   static var currentSettings:Settings = settingsArr.first!
 
-  func transitionSettings(){
-    //timer management
-    self.timer?.stopTimer(timerID: "targetShiftTimer")
-    self.timer?.members = self.timer!.members.filter { $0 != "targetShiftTimer" }
-    self.timer?.startTargetTimer()
-    
-    
-    
-    //diagnostics
-    print(Game.currentSettings.phase)
-  }
-  
-
-  var gameScene:GameScene
+  var gameScene:GameScene?
   var timer:Timer?
-  init(gameScene: GameScene){
-    self.gameScene = gameScene
+  var world:SKNode?
+  init(){
+    
   }
   
   func setupGame(){
-    //intitializations
-    self.timer = Timer(gameScene: self.gameScene)
-    
+    self.timer = Timer()
+    self.world = SKNode()
+    if let scene = self.gameScene {
+      if let world = self.world { scene.addChild(world) }
     //gamescene formatting
-    gameScene.backgroundColor = .white
-    gameScene.scaleMode = .aspectFit
-    gameScene.physicsBody = SKPhysicsBody(edgeLoopFrom: gameScene.frame)
-    gameScene.physicsWorld.gravity = .zero
-    gameScene.physicsWorld.contactDelegate = gameScene
-    
-    //stimuli
-    Ball.createBalls(num: 10, game: self)
-    self.addMemberstoScene(collection: Ball.members)
+      scene.backgroundColor = .white
+      scene.scaleMode = .aspectFit
+      scene.physicsBody = SKPhysicsBody(edgeLoopFrom: scene.frame)
+      scene.physicsWorld.gravity = .zero
+      scene.physicsWorld.contactDelegate = gameScene
+      
+      //stimuli
+      Ball.createBalls(num: 10, game: self)
+      self.addMemberstoScene(collection: Ball.members)
+    }
   }
   
   func startGame(){
-    self.timer?.startGameTimer()
-    Ball.startMovement()
-    self.timer?.startMovementTimer()
-    self.timer?.startPhaseTimer()
-    self.timer?.startTargetTimer()
+    if let masterTimer = currentGame.timer {
+      masterTimer.startGameTimer()
+      Ball.startMovement()
+      masterTimer.startMovementTimer()
+      masterTimer.startPhaseTimer()
+      masterTimer.startTargetTimer()
+    }
   }
   
   func pauseGame(){
-    if let timer = self.timer {
-      timer.stopTimerActions()
-    }
-    
+//     self.timer.stopTimerActions()
   }
   
   func addMemberstoScene(collection: [SKSpriteNode]){
-    for sprite in collection{
-      gameScene.addChild(sprite)
+    print("here")
+    if let actionNode = currentGame.gameScene {
+      print("there")
+      for sprite in collection{
+        actionNode.addChild(sprite)
+      }
     }
+  }
+  
+  func transitionSettings(){
+    //timer management
+    if let gameTimer = currentGame.timer {
+      gameTimer.stopTimer(timerID: "targetShiftTimer")
+      gameTimer.members = self.timer!.members.filter { $0 != "targetShiftTimer" }
+      gameTimer.startTargetTimer()
+    }
+    //diagnostics
+    print(Game.currentSettings.phase)
   }
 }
 

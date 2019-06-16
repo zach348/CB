@@ -67,19 +67,16 @@ extension CGPoint {
   }
 }
 
+let currentGame:Game = Game()
+
 class GameScene: SKScene {
   // 1
-//  let player = SKSpriteNode(imageNamed: "player")
-  static var game:Game?
-  var game:Game?
-  
+//  let player = SKSpriteNode(imageNamed: "player")  
   override func didMove(to view: SKView) {
+    currentGame.gameScene = self
+    currentGame.setupGame()
+    currentGame.startGame()
     
-    GameScene.game = Game(gameScene: self)
-    GameScene.game?.setupGame()
-    GameScene.game?.startGame()
-    
-  
   }
   
   override func update(_ currentTime: TimeInterval) {

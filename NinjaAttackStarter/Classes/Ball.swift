@@ -33,17 +33,19 @@ class Ball: SKSpriteNode {
   static var members = [Ball]()
   
   class func createBall(game: Game, xPos: CGFloat, yPos: CGFloat){
-    let ball = Ball(game: game)
+    let ball = Ball()
     ball.position.x = xPos
     ball.position.y = yPos
     Ball.members.append(ball)
   }
   
   class func createBalls(num: Int, game: Game){
-    var createBallCounter = 0
-    while createBallCounter < num {
-      createBall(game: game, xPos: game.gameScene.size.width/2, yPos: game.gameScene.size.height/2)
-      createBallCounter += 1
+    if let scene = currentGame.gameScene {
+      var createBallCounter = 0
+      while createBallCounter < num {
+        createBall(game: game, xPos: scene.size.width/2, yPos: scene.size.height/2)
+        createBallCounter += 1
+      }
     }
   }
   
@@ -93,10 +95,12 @@ class Ball: SKSpriteNode {
   }
   
   class func shiftTargets(){
-    GameScene.game?.gameScene.removeAction(forKey: "blinkBall")
-    Ball.clearTargets()
-    Ball.assignRandomTargets().forEach { ball in ball.blinkBall() }
-    GameScene.game?.pauseGame()
+    if let world = currentGame.world {
+      world.removeAction(forKey: "blinkBall")
+      Ball.clearTargets()
+      Ball.assignRandomTargets().forEach { ball in ball.blinkBall() }
+      print("shifting targets")
+    }
   }
   
   class func assignRandomTargets() -> [Ball] {
@@ -133,7 +137,6 @@ class Ball: SKSpriteNode {
   }
 //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  let game:Game
   var isTarget:Bool {
     didSet {
       if isTarget { self.texture = Game.currentSettings.targetTexture }
@@ -141,10 +144,10 @@ class Ball: SKSpriteNode {
     }
   }
   var positionHistory = [CGPoint]()
-  
-  init(game: Game) {
+  let game:Game
+  init() {
     let texture = Game.currentSettings.targetTexture
-    self.game = game
+    self.game = currentGame
     self.isTarget = false
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
     self.size = CGSize(width: 50, height: 50)
@@ -161,7 +164,7 @@ class Ball: SKSpriteNode {
   }
 
   required init?(coder aDecoder: NSCoder) {
-    self.game = Game(gameScene: GameScene())
+    self.game = currentGame
     self.isTarget = false
     super.init(coder:aDecoder)
   }
