@@ -99,7 +99,7 @@ class Ball: SKSpriteNode {
       world.removeAction(forKey: "blinkBall")
       Ball.clearTargets()
       Ball.assignRandomTargets().forEach { ball in ball.blinkBall() }
-      print("shifting targets")
+      //testing
     }
   }
   
@@ -135,6 +135,18 @@ class Ball: SKSpriteNode {
       ball.isTarget = false
     }
   }
+  
+  class func freezeMovement(){
+    if let scene = currentGame.gameScene {
+      scene.physicsWorld.speed = 0
+    }
+  }
+  
+  class func unfreezeMovement(){
+    if let scene = currentGame.gameScene {
+      scene.physicsWorld.speed = 1
+    }
+  }
 //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   var isTarget:Bool {
@@ -143,12 +155,15 @@ class Ball: SKSpriteNode {
       else { self.texture = Game.currentSettings.distractorTexture }
     }
   }
-  var positionHistory = [CGPoint]()
+  var positionHistory:[CGPoint]
+  var vectorHistory:[String:CGFloat]
   let game:Game
   init() {
     let texture = Game.currentSettings.targetTexture
     self.game = currentGame
     self.isTarget = false
+    self.positionHistory = [CGPoint]()
+    self.vectorHistory = [String:CGFloat]()
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
     self.size = CGSize(width: 50, height: 50)
     self.name = "ball-\(Ball.members.count + 1)"
@@ -166,6 +181,8 @@ class Ball: SKSpriteNode {
   required init?(coder aDecoder: NSCoder) {
     self.game = currentGame
     self.isTarget = false
+    self.positionHistory = [CGPoint]()
+    self.vectorHistory = [String:CGFloat]()
     super.init(coder:aDecoder)
   }
   

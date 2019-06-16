@@ -76,13 +76,11 @@ class Game {
   }
   
   func pauseGame(){
-//     self.timer.stopTimerActions()
+    Ball.freezeMovement()
   }
   
   func addMemberstoScene(collection: [SKSpriteNode]){
-    print("here")
-    if let actionNode = currentGame.gameScene {
-      print("there")
+    if let actionNode = currentGame.world {
       for sprite in collection{
         actionNode.addChild(sprite)
       }

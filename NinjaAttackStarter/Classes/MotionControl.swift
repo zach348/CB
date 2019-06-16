@@ -57,18 +57,14 @@ struct MotionControl {
         if ball.ballStuckX() {
           if ball.position.x > scene.size.width {
             ball.physicsBody?.applyImpulse(CGVector(dx: -3, dy: 0))
-            print("ballStuckX")
           }else{
             ball.physicsBody?.applyImpulse(CGVector(dx: 3, dy: 0))
-            print("ballStuckX")
           }
         }
         if ball.ballStuckY() {
           if ball.position.y > scene.size.height {
-            print("ballStuckY")
             ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: -3))
           }else{
-            print("ballStuckY")
             ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 3))
           }
         }
