@@ -150,6 +150,10 @@ class Ball: SKSpriteNode {
       scene.physicsWorld.speed = 1
     }
   }
+  
+  class func resetTextures(){
+    self.members.forEach({ball in ball.texture = ball.isTarget ? Game.currentSettings.targetTexture : Game.currentSettings.distractorTexture})
+  }
 //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   var isTarget:Bool {
