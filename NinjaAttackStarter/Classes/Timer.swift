@@ -31,25 +31,18 @@ import SpriteKit
 
 class Timer {
   var members:[String]
-  var elapsedTime:Double {
-    get{
-      return self.elapsedTime
-    }
-    set{
-      if remainingInPhase <= 0 { print("") }
+  var elapsedTime:Double = 0 {
+    didSet {
+      self.remainingInPhase = Game.currentSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
+      if self.remainingInPhase <  0 { Game.advancePhase() }
     }
   }
   var lastPhaseShiftTime:Double
-  var remainingInPhase:Double {
-    get{
-      return Game.currentSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
-    }
-  }
-  
+  var remainingInPhase:Double
   init(){
     self.members = [String]()
-    self.elapsedTime = 0
     self.lastPhaseShiftTime = 0
+    self.remainingInPhase = Game.currentSettings.phaseDuration
     currentGame.timer = self
   }
   
@@ -77,26 +70,6 @@ class Timer {
     }
   }
   
-  func startPhaseTimer() {
-    print(self.remainingInPhase)
-    if let world = currentGame.world {
-      let wait = SKAction.wait(forDuration: self.remainingInPhase)
-      let phaseShift = SKAction.run {
-        let currentPhase = Game.currentSettings.phase
-        if currentPhase < Game.settingsArr.count {
-          let newSettings = Game.settingsArr.filter { settings in
-            settings.phase == currentPhase + 1
-            }.first!
-          Game.currentSettings = newSettings
-          self.lastPhaseShiftTime = self.elapsedTime
-          currentGame.transitionSettings()
-        }
-      }
-      self.members.append("phaseShiftTimer")
-      world.run(SKAction.repeatForever(SKAction.sequence([wait,phaseShift])), withKey: "phaseShiftTimer")
-    }
-  }
-  
   func startTargetTimer() {
     if let gameWorld = currentGame.world {
       let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
@@ -111,7 +84,7 @@ class Timer {
   func stopTimer(timerID:String) {
     if let world = currentGame.world {
       if let scene = currentGame.gameScene {
-        if timerID == "gameTimer" {
+        if timerID == "gameTimer" || timerID == "targetShiftTimer" {
           self.members = self.members.filter { $0 != timerID }
           scene.removeAction(forKey: timerID)
         }else{
@@ -129,7 +102,6 @@ class Timer {
   }
   
   func startTimerActions(){
-    self.startPhaseTimer()
     self.startMovementTimer()
     self.startTargetTimer()
   }

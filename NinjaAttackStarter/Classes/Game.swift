@@ -38,7 +38,15 @@ class Game {
     Settings(phase: 4, phaseDuration: 50, targetMeanSpeed: 300, targetSpeedSD: 100, shiftDelay: 15, shiftError: 4, numTargets: 4, targetTexture: "sphere-purple", distractorTexture: "sphere-neonGreen", flashTexture: "sphere-red"),
     Settings(phase: 5, phaseDuration: 60, targetMeanSpeed: 200, targetSpeedSD: 50, shiftDelay: 20, shiftError: 5, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-red")
   ]
-  static var currentSettings:Settings = settingsArr.first! 
+  static var currentSettings:Settings = settingsArr.first!
+  class func advancePhase(){
+    if let index = self.settingsArr.firstIndex(where: {setting in setting.phase == self.currentSettings.phase + 1 }), let timer = currentGame.timer {
+      if index - 1 < self.settingsArr.count {
+        self.currentSettings = self.settingsArr[index]
+        timer.lastPhaseShiftTime = timer.elapsedTime
+      }
+    }
+  }
 
   var gameScene:GameScene?
   var timer:Timer?
@@ -47,11 +55,11 @@ class Game {
     didSet {
       if let gameTimer = self.timer {
         if self.isPaused {
-          gameTimer.stopTimerActions()
-          
+//          gameTimer.stopTimerActions()
+
         }else{
           print("unpause")
-          gameTimer.startTimerActions()
+//          gameTimer.startTimerActions()
           print(gameTimer.members)
         }
       }
@@ -100,6 +108,8 @@ class Game {
       self.isPaused = true
       Ball.freezeMovement()
       self.isPaused = true
+      
+      //testing
     }
   }
   
