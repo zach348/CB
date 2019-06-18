@@ -45,11 +45,10 @@ class Game {
     }
   }
   class func advancePhase(){
-    if let index = self.settingsArr.firstIndex(where: {setting in setting.phase == self.currentSettings.phase + 1 }), let timer = currentGame.timer {
+    if let index = self.settingsArr.firstIndex(where: { setting in setting.phase == self.currentSettings.phase + 1 }), let timer = currentGame.timer {
       if index < self.settingsArr.count {
         self.currentSettings = self.settingsArr[index]
         timer.lastPhaseShiftTime = timer.elapsedTime
-        print(index)
       }
     }
   }
@@ -64,7 +63,6 @@ class Game {
           gameTimer.stopTimerActions()
 
         }else{
-          print("unpause")
           gameTimer.startTimerActions()
           print(gameTimer.members)
         }
@@ -114,7 +112,7 @@ class Game {
       world.isPaused = true
       self.isPaused = true
       Ball.freezeMovement()
-      self.isPaused = true
+      Ball.maskTargets()
       
       //testing
     }
@@ -125,6 +123,7 @@ class Game {
       world.isPaused = false
       self.isPaused = false
       Ball.unfreezeMovement()
+      Ball.unmaskTargets()
     }
   }
   
