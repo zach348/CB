@@ -32,13 +32,13 @@ import SpriteKit
 class Game {
   
   static var settingsArr:[Settings] = [
-    Settings(phase: 1, phaseDuration: 20, targetMeanSpeed: 600, targetSpeedSD: 450, shiftDelay: 4, shiftError: 1, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red"),
-    Settings(phase: 2, phaseDuration: 30, targetMeanSpeed: 500, targetSpeedSD: 325, shiftDelay: 7, shiftError: 2, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red"),
-    Settings(phase: 3, phaseDuration: 40, targetMeanSpeed: 400, targetSpeedSD: 200, shiftDelay: 10, shiftError: 3, numTargets: 3, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-red"),
-    Settings(phase: 4, phaseDuration: 50, targetMeanSpeed: 300, targetSpeedSD: 100, shiftDelay: 15, shiftError: 4, numTargets: 4, targetTexture: "sphere-purple", distractorTexture: "sphere-neonGreen", flashTexture: "sphere-red"),
-    Settings(phase: 5, phaseDuration: 60, targetMeanSpeed: 200, targetSpeedSD: 50, shiftDelay: 20, shiftError: 5, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-red")
+    Settings(phase: 1, phaseDuration: 50, targetMeanSpeed: 600, targetSpeedSD: 450, shiftDelay: 4, shiftError: 1, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red"),
+    Settings(phase: 2, phaseDuration: 70, targetMeanSpeed: 500, targetSpeedSD: 325, shiftDelay: 7, shiftError: 2, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red"),
+    Settings(phase: 3, phaseDuration: 80, targetMeanSpeed: 400, targetSpeedSD: 200, shiftDelay: 10, shiftError: 3, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red"),
+    Settings(phase: 4, phaseDuration: 100, targetMeanSpeed: 300, targetSpeedSD: 100, shiftDelay: 15, shiftError: 4, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-red"),
+    Settings(phase: 5, phaseDuration: 120, targetMeanSpeed: 200, targetSpeedSD: 50, shiftDelay: 20, shiftError: 5, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-red")
   ]
-  static var currentSettings:Settings = settingsArr.first! {
+  static var currentSettings:Settings = settingsArr[3] {
     didSet {
       Ball.resetTextures()
       Ball.shiftTargets()
@@ -61,7 +61,6 @@ class Game {
       if let gameTimer = self.timer {
         if self.isPaused {
           gameTimer.stopTimerActions()
-
         }else{
           gameTimer.startTimerActions()
           print(gameTimer.members)
@@ -113,8 +112,8 @@ class Game {
       self.isPaused = true
       Ball.freezeMovement()
       Ball.maskTargets()
-      
       //testing
+      
     }
   }
   

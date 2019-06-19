@@ -95,12 +95,12 @@ class Ball: SKSpriteNode {
   }
   
   class func shiftTargets(){
-    if let world = currentGame.world {
-      world.removeAction(forKey: "blinkBall")
       Ball.clearTargets()
-      Ball.assignRandomTargets().forEach { ball in ball.blinkBall() }
+      Ball.assignRandomTargets().forEach { ball in
+        ball.removeAction(forKey: "blinkBall")
+        ball.blinkBall()
       //testing
-    }
+      }
   }
   
   class func assignRandomTargets() -> [Ball] {

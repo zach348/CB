@@ -51,24 +51,26 @@ struct MotionControl {
   }
   
   private static func wallPush() {
-    if let scene = currentGame.gameScene {
-      for ball in Ball.members {
-        ball.updatePositionHistory()
-        if ball.ballStuckX() {
-          if ball.position.x > scene.size.width {
-            ball.physicsBody?.applyImpulse(CGVector(dx: -3, dy: 0))
-          }else{
-            ball.physicsBody?.applyImpulse(CGVector(dx: 3, dy: 0))
+      if let scene = currentGame.gameScene {
+        for ball in Ball.members {
+          ball.updatePositionHistory()
+          if ball.ballStuckX() {
+            print("wallPush:", currentGame.timer?.elapsedTime)
+            if ball.position.x > scene.size.width {
+              ball.physicsBody?.applyImpulse(CGVector(dx: -3, dy: 0))
+            }else{
+              ball.physicsBody?.applyImpulse(CGVector(dx: 3, dy: 0))
+            }
           }
-        }
-        if ball.ballStuckY() {
-          if ball.position.y > scene.size.height {
-            ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: -3))
-          }else{
-            ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 3))
+          if ball.ballStuckY() {
+            print("wallPush:", currentGame.timer?.elapsedTime)
+            if ball.position.y > scene.size.height {
+              ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: -3))
+            }else{
+              ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 3))
+            }
           }
         }
       }
-    }
   }
 }

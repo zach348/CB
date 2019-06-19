@@ -71,6 +71,7 @@ class Timer {
   }
   
   func startTargetTimer() {
+    print(Game.currentSettings.shiftDelay)
     if let gameWorld = currentGame.world {
       let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
       let targetShift = SKAction.run {
@@ -82,15 +83,13 @@ class Timer {
   }
   
   func stopTimer(timerID:String) {
-    if let world = currentGame.world {
-      if let scene = currentGame.gameScene {
-        if timerID == "gameTimer" || timerID == "targetShiftTimer" {
-          self.members = self.members.filter { $0 != timerID }
-          scene.removeAction(forKey: timerID)
-        }else{
-          world.removeAction(forKey: timerID)
-          self.members = self.members.filter { $0 != timerID }
-        }
+    if let world = currentGame.world, let scene = currentGame.gameScene  {
+      if timerID == "gameTimer" {
+        self.members = self.members.filter { $0 != timerID }
+        scene.removeAction(forKey: timerID)
+      }else{
+        world.removeAction(forKey: timerID)
+        self.members = self.members.filter { $0 != timerID }
       }
     }
   }
