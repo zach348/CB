@@ -33,8 +33,10 @@ class Timer {
   var members:[String]
   var elapsedTime:Double = 0 {
     didSet {
-      self.remainingInPhase = Game.currentSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
-      if self.remainingInPhase <  0 { Game.advancePhase() }
+      if !Ball.blinkFlag {
+        self.remainingInPhase = Game.currentSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
+        if self.remainingInPhase <  0 { Game.advancePhase() }
+      }
     }
   }
   var lastPhaseShiftTime:Double

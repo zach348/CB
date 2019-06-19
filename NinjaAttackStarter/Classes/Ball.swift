@@ -31,6 +31,7 @@ import SpriteKit
 //CLASS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Ball: SKSpriteNode {
   static var members = [Ball]()
+  static var blinkFlag: Bool = false
   
   class func createBall(game: Game, xPos: CGFloat, yPos: CGFloat){
     let ball = Ball()
@@ -236,13 +237,19 @@ class Ball: SKSpriteNode {
   
   func blinkBall(){
     if let currentTexture = self.texture {
+      Ball.blinkFlag = true
       let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
       let resetTexture = SKAction.setTexture(currentTexture)
       let fadeOut = SKAction.fadeOut(withDuration: 0.15)
       let fadeIn = SKAction.fadeIn(withDuration: 0.15)
       let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
       let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
-      self.run(blinkAction, withKey: "blinkBall")
+      let resetFlag = SKAction.run{
+        Ball.blinkFlag = false
+      }
+      let flagSequence = SKAction.sequence([blinkAction, resetFlag])
+      self.run(flagSequence, withKey: "blinkBall")
+      
     }
   }
 }
