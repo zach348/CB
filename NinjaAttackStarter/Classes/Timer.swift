@@ -70,17 +70,20 @@ class Timer {
     }
   }
   
-  func startTargetTimer() {
+  func recursiveTargetTimer() {
     if let gameWorld = currentGame.world {
+      gameWorld.removeAction(forKey: "targetTimer")
       let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
-      print(wait.duration)
-      let targetShift = SKAction.run {
+      let shift = SKAction.run {
         Ball.shiftTargets()
       }
-      self.members.append("targetShiftTimer")
-      gameWorld.run(SKAction.repeatForever(SKAction.sequence([wait,targetShift])), withKey: "targetShiftTimer")
+      let recursiveCall = SKAction.run {
+        self.recursiveTargetTimer()
+      }
+      gameWorld.run(SKAction.sequence([wait, shift, recursiveCall]), withKey: "targetTimer")
     }
   }
+  
   
   func stopTimer(timerID:String) {
     if let world = currentGame.world, let scene = currentGame.gameScene  {
@@ -94,14 +97,16 @@ class Timer {
     }
   }
   
-  func stopTimerActions(){
-    for timer in self.members.filter({ $0 != "gameTimer" }) {
-      self.stopTimer(timerID: timer)
-    }
-  }
   
+  
+//  func stopTimerActions(){
+//    for timer in self.members.filter({ $0 != "gameTimer" }) {
+//      self.stopTimer(timerID: timer)
+//    }
+//  }
+//
   func startTimerActions(){
     self.startMovementTimer()
-    self.startTargetTimer()
+    self.recursiveTargetTimer()
   }
 }

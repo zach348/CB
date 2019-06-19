@@ -41,8 +41,6 @@ class Game {
   static var currentSettings:Settings = settingsArr[0] {
     didSet {
       Ball.resetTextures()
-      print(Ball.getTargets().map({$0.name}))
-      Ball.shiftTargets()
     }
   }
   class func advancePhase(){
