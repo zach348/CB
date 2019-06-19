@@ -171,7 +171,7 @@ class Ball: SKSpriteNode {
   var vectorHistory:[String:CGFloat]
   let game:Game
   init() {
-    let texture = Game.currentSettings.targetTexture
+    let texture = Game.currentSettings.distractorTexture
     self.game = currentGame
     self.isTarget = false
     self.positionHistory = [CGPoint]()

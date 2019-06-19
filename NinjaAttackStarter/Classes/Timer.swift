@@ -60,20 +60,20 @@ class Timer {
   
   //other timers on world node
   func startMovementTimer(){
-    if let world = currentGame.world {
+    if let gameWorld = currentGame.world {
       let wait = SKAction.wait(forDuration: 0.1)
       let correctMovement = SKAction.run {
         MotionControl.correctMovement()
       }
       self.members.append("movementTimer")
-      world.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
+      gameWorld.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
     }
   }
   
   func startTargetTimer() {
-    print(Game.currentSettings.shiftDelay)
     if let gameWorld = currentGame.world {
       let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
+      print(wait.duration)
       let targetShift = SKAction.run {
         Ball.shiftTargets()
       }
