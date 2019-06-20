@@ -150,15 +150,15 @@ class Ball: SKSpriteNode {
   }
   
   class func maskTargets() {
-    self.getTargets().forEach({ target in target.texture = Game.currentSettings.distractorTexture})
+    self.getTargets().forEach({ target in target.texture = Game.currentSettings.distractorTexture })
   }
   
   class func unmaskTargets() {
-    self.getTargets().forEach({ target in target.texture = Game.currentSettings.targetTexture})
+    self.getTargets().forEach({ target in target.texture = Game.currentSettings.targetTexture })
   }
   
   class func resetTextures(){
-    self.members.forEach({ball in ball.texture = ball.isTarget ? Game.currentSettings.targetTexture : Game.currentSettings.distractorTexture})
+    self.members.forEach({ ball in ball.texture = ball.isTarget ? Game.currentSettings.targetTexture : Game.currentSettings.distractorTexture })
   }
 //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
@@ -244,12 +244,9 @@ class Ball: SKSpriteNode {
       let fadeIn = SKAction.fadeIn(withDuration: 0.15)
       let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
       let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
-      let resetFlag = SKAction.run{
-        Ball.blinkFlag = false
-      }
+      let resetFlag = SKAction.run { Ball.blinkFlag = false }
       let flagSequence = SKAction.sequence([blinkAction, resetFlag])
       self.run(flagSequence, withKey: "blinkBall")
-      
     }
   }
 }

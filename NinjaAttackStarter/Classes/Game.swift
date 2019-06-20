@@ -41,6 +41,7 @@ class Game {
   static var currentSettings:Settings = settingsArr[0] {
     didSet {
       Ball.resetTextures()
+      Ball.shiftTargets()
     }
   }
   class func advancePhase(){
@@ -55,18 +56,8 @@ class Game {
   var gameScene:GameScene?
   var timer:Timer?
   var world:SKNode?
-  var isPaused:Bool {
-    didSet {
-      if let gameTimer = self.timer {
-        if self.isPaused {
-//          gameTimer.stopTimerActions()
-        }else{
-//          gameTimer.startTimerActions()
-          print(gameTimer.members)
-        }
-      }
-    }
-  }
+  var isPaused:Bool
+  
   
   init(){
     self.isPaused = false
@@ -112,6 +103,8 @@ class Game {
       Ball.freezeMovement()
       Ball.maskTargets()
       //testing
+      print(self.timer!.members)
+
       
     }
   }

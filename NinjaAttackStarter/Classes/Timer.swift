@@ -75,6 +75,7 @@ class Timer {
   func recursiveTargetTimer() {
     if let gameWorld = currentGame.world {
       gameWorld.removeAction(forKey: "targetTimer")
+      self.members = self.members.filter({ $0 != "targetTimer"})
       let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
       let shift = SKAction.run {
         Ball.shiftTargets()
@@ -82,6 +83,7 @@ class Timer {
       let recursiveCall = SKAction.run {
         self.recursiveTargetTimer()
       }
+      self.members.append("targetTimer")
       gameWorld.run(SKAction.sequence([wait, shift, recursiveCall]), withKey: "targetTimer")
     }
   }
