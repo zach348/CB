@@ -41,7 +41,12 @@ class Game {
   static var currentSettings:Settings = settingsArr[0] {
     didSet {
       Ball.resetTextures()
-      Ball.shiftTargets()
+      if Ball.getTargets().count < Game.currentSettings.numTargets {
+        if let newTarget = Ball.getDistractors().randomElement(){
+          newTarget.isTarget = true
+          newTarget.blinkBall()
+        }
+      }
     }
   }
   
