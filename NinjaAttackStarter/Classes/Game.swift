@@ -44,6 +44,7 @@ class Game {
       Ball.shiftTargets()
     }
   }
+  
   class func advancePhase(){
     if let index = self.settingsArr.firstIndex(where: { setting in setting.phase == self.currentSettings.phase + 1 }), let timer = currentGame.timer {
       if index < self.settingsArr.count {
@@ -97,6 +98,11 @@ class Game {
   }
   
   func pauseGame(){
+    if Ball.blinkFlag {
+      Ball.pendingPause = true
+      print("pending pause")
+      return
+    }
     if let world = self.world {
       world.isPaused = true
       self.isPaused = true
@@ -104,8 +110,6 @@ class Game {
       Ball.maskTargets()
       //testing
       print(self.timer!.members)
-
-      
     }
   }
   

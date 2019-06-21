@@ -31,7 +31,15 @@ import SpriteKit
 //CLASS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Ball: SKSpriteNode {
   static var members = [Ball]()
-  static var blinkFlag: Bool = false
+  static var blinkFlag: Bool = false {
+    didSet {
+      if self.pendingPause && !self.blinkFlag {
+        currentGame.pauseGame()
+        self.pendingPause = false
+      }
+    }
+  }
+  static var pendingPause:Bool = false
   
   class func createBall(game: Game, xPos: CGFloat, yPos: CGFloat){
     let ball = Ball()
