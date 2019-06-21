@@ -77,6 +77,10 @@ class GameScene: SKScene {
     currentGame.setupGame()
     currentGame.startGame()
     
+    //sound...not working properly... low quality file?
+    let backgroundSound = SKAudioNode(fileNamed: "7mindemo.mp3")
+    self.addChild(backgroundSound)
+    backgroundSound.run(SKAction.play())
   }
   
   override func update(_ currentTime: TimeInterval) {
