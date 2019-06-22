@@ -60,11 +60,18 @@ class Game {
   }
   
   class func applyFrequency(hz:Double) {
-    if let world = currentGame.world {
+    if let gameScene = currentGame.gameScene {
       let tone = SKAction.playSoundFileNamed("test.wav", waitForCompletion: false)
-      let wait = SKAction.wait(forDuration: 1/hz)
-      let sequence = SKAction.sequence([wait,tone])
-      world.run(sequence, withKey: "toneLoop")
+      let wait = SKAction.wait(forDuration: 1/hz/2)
+      let systemVal = UIScreen.main.brightness
+      let decrease = SKAction.run({ UIScreen.main.brightness = systemVal * 0.85 })
+      let increase = SKAction.run({ UIScreen.main.brightness = systemVal })
+      let freqGroup = SKAction.group([increase, tone])
+      let sequence = SKAction.sequence([wait, decrease, wait, freqGroup])
+
+      if let gameScene = currentGame.gameScene { gameScene.run(SKAction.repeatForever(sequence)) }
+      
+      gameScene.run(sequence, withKey: "toneLoop")
     }
   }
   
@@ -105,6 +112,7 @@ class Game {
       self.timer?.startTimerActions()
       self.startPauseLoop()
       //testing
+      Game.applyFrequency(hz: 8)
     }
   }
   
