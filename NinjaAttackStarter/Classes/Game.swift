@@ -58,6 +58,17 @@ class Game {
       }
     }
   }
+  
+  class func applyFrequency(hz:Double) {
+    if let world = currentGame.world {
+      let tone = SKAction.playSoundFileNamed("test.wav", waitForCompletion: false)
+      let wait = SKAction.wait(forDuration: 1/hz)
+      let sequence = SKAction.sequence([wait,tone])
+      world.run(sequence, withKey: "toneLoop")
+    }
+  }
+  
+  
 
   var gameScene:GameScene?
   var timer:Timer?
@@ -134,16 +145,6 @@ class Game {
       }
     }
   }
-  
-//  func transitionSettings(){
-//    //timer management
-//    if let gameTimer = currentGame.timer {
-//      gameTimer.stopTimer(timerID: "targetShiftTimer")
-//      gameTimer.members = self.timer!.members.filter { $0 != "targetShiftTimer" }
-//      gameTimer.startTargetTimer()
-//    }
-//    //diagnostics
-//    print(Game.currentSettings.phase)
-//  }
+
 }
 
