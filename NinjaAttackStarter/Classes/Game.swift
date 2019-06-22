@@ -92,13 +92,8 @@ class Game {
       masterTimer.startGameTimer()
       Ball.startMovement()
       self.timer?.startTimerActions()
+      self.startPauseLoop()
       //testing
-      let wait = SKAction.wait(forDuration: 15)
-      let unpauseWait = SKAction.wait(forDuration: 3)
-      let pause = SKAction.run {currentGame.pauseGame()}
-      let unpause = SKAction.run {currentGame.unpauseGame()}
-      let sequence = SKAction.repeatForever(SKAction.sequence([wait,pause,unpauseWait,unpause]))
-      self.gameScene?.run(sequence)
     }
   }
   
@@ -124,6 +119,18 @@ class Game {
       self.isPaused = false
       Ball.unfreezeMovement()
       Ball.unmaskTargets()
+    }
+  }
+  
+  func startPauseLoop(){
+    //pausing loop
+    if let gameScene = self.gameScene {
+      let wait = SKAction.wait(forDuration: 15)
+      let unpauseWait = SKAction.wait(forDuration: 3)
+      let pause = SKAction.run {currentGame.pauseGame()}
+      let unpause = SKAction.run {currentGame.unpauseGame()}
+      let sequence = SKAction.repeatForever(SKAction.sequence([wait,pause,unpauseWait,unpause]))
+      gameScene.run(sequence)
     }
   }
   
