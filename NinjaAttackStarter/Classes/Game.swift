@@ -32,64 +32,118 @@ import SpriteKit
 class Game {
   
   static var settingsArr:[Settings] = [
-    Settings(phase: 1, targetMeanSpeed: 600, targetSpeedSD: 450, shiftDelay: 4, shiftError: 1, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red"),
-    Settings(phase: 2, targetMeanSpeed: 500, targetSpeedSD: 325, shiftDelay: 7, shiftError: 2, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red"),
-    Settings(phase: 3, targetMeanSpeed: 400, targetSpeedSD: 200, shiftDelay: 10, shiftError: 3, numTargets: 3, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-red"),
-    Settings(phase: 4, targetMeanSpeed: 300, targetSpeedSD: 100, shiftDelay: 15, shiftError: 4, numTargets: 4, targetTexture: "sphere-purple", distractorTexture: "sphere-neonGreen", flashTexture: "sphere-red"),
-    Settings(phase: 5, targetMeanSpeed: 200, targetSpeedSD: 50, shiftDelay: 20, shiftError: 5, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-red")
+    Settings(phase: 1, phaseDuration: 50, targetMeanSpeed: 700, targetSpeedSD: 450, shiftDelay: 4, shiftError: 1, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red"),
+    Settings(phase: 2, phaseDuration: 70, targetMeanSpeed: 550, targetSpeedSD: 325, shiftDelay: 7, shiftError: 2, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red"),
+    Settings(phase: 3, phaseDuration: 80, targetMeanSpeed: 425, targetSpeedSD: 200, shiftDelay: 10, shiftError: 3, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red"),
+    Settings(phase: 4, phaseDuration: 100, targetMeanSpeed: 300, targetSpeedSD: 100, shiftDelay: 15, shiftError: 4, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white"),
+    Settings(phase: 5, phaseDuration: 120, targetMeanSpeed: 225, targetSpeedSD: 45, shiftDelay: 20, shiftError: 5, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white")
   ]
-  static var currentSettings:Settings = settingsArr.first!
-
-  func transitionSettings(){
-    //timer management
-    self.timer?.stopTimer(timerID: "targetShiftTimer")
-    self.timer?.members = self.timer!.members.filter { $0 != "targetShiftTimer" }
-    self.timer?.startTargetTimer()
-    
-    
-    
-    //diagnostics
-    print(Game.currentSettings.phase)
+  static var currentSettings:Settings = settingsArr[0] {
+    didSet {
+      Ball.resetTextures()
+      if Ball.getTargets().count < Game.currentSettings.numTargets {
+        if let newTarget = Ball.getDistractors().randomElement(){
+          newTarget.isTarget = true
+          newTarget.blinkBall()
+        }
+      }
+    }
   }
   
+  class func advancePhase(){
+    if let index = self.settingsArr.firstIndex(where: { setting in setting.phase == self.currentSettings.phase + 1 }), let timer = currentGame.timer {
+      if index < self.settingsArr.count {
+        self.currentSettings = self.settingsArr[index]
+        timer.lastPhaseShiftTime = timer.elapsedTime
+      }
+    }
+  }
 
-  var gameScene:GameScene
+  var gameScene:GameScene?
   var timer:Timer?
-  init(gameScene: GameScene){
-    self.gameScene = gameScene
+  var world:SKNode?
+  var isPaused:Bool
+  
+  
+  init(){
+    self.isPaused = false
   }
   
   func setupGame(){
-    //intitializations
-    self.timer = Timer(gameScene: self.gameScene)
-    
+    self.timer = Timer()
+    self.world = SKNode()
+    if let scene = self.gameScene {
+      if let world = self.world { scene.addChild(world) }
     //gamescene formatting
-    gameScene.backgroundColor = .white
-    gameScene.scaleMode = .aspectFit
-    gameScene.physicsBody = SKPhysicsBody(edgeLoopFrom: gameScene.frame)
-    gameScene.physicsWorld.gravity = .zero
-    gameScene.physicsWorld.contactDelegate = gameScene
-    
-    //stimuli
-    Ball.createBalls(num: 10, game: self)
-    self.addMemberstoScene(collection: Ball.members)
+      scene.backgroundColor = .white
+      scene.scaleMode = .aspectFit
+      scene.physicsBody = SKPhysicsBody(edgeLoopFrom: scene.frame)
+      scene.physicsWorld.gravity = .zero
+      scene.physicsWorld.contactDelegate = gameScene
+      
+      //stimuli
+      Ball.createBalls(num: 10, game: self)
+      self.addMemberstoScene(collection: Ball.members)
+    }
   }
   
   func startGame(){
-    self.timer?.startGameTimer()
-    Ball.startMovement()
-    self.timer?.startMovementTimer()
-    self.timer?.startPhaseTimer()
-    self.timer?.startTargetTimer()
-    print(gameScene.size.width)
-    print(gameScene.size)
-    
+    if let masterTimer = currentGame.timer {
+      masterTimer.startGameTimer()
+      Ball.startMovement()
+      self.timer?.startTimerActions()
+      //testing
+      let wait = SKAction.wait(forDuration: 15)
+      let unpauseWait = SKAction.wait(forDuration: 3)
+      let pause = SKAction.run {currentGame.pauseGame()}
+      let unpause = SKAction.run {currentGame.unpauseGame()}
+      let sequence = SKAction.repeatForever(SKAction.sequence([wait,pause,unpauseWait,unpause]))
+      self.gameScene?.run(sequence)
+    }
+  }
+  
+  func pauseGame(){
+    if Ball.blinkFlag {
+      Ball.pendingPause = true
+      print("pending pause")
+      return
+    }
+    if let world = self.world {
+      world.isPaused = true
+      self.isPaused = true
+      Ball.freezeMovement()
+      Ball.maskTargets()
+      //testing
+      print(self.timer!.members)
+    }
+  }
+  
+  func unpauseGame(){
+    if let world = self.world {
+      world.isPaused = false
+      self.isPaused = false
+      Ball.unfreezeMovement()
+      Ball.unmaskTargets()
+    }
   }
   
   func addMemberstoScene(collection: [SKSpriteNode]){
-    for sprite in collection{
-      gameScene.addChild(sprite)
+    if let actionNode = self.world {
+      for sprite in collection{
+        actionNode.addChild(sprite)
+      }
     }
   }
+  
+//  func transitionSettings(){
+//    //timer management
+//    if let gameTimer = currentGame.timer {
+//      gameTimer.stopTimer(timerID: "targetShiftTimer")
+//      gameTimer.members = self.timer!.members.filter { $0 != "targetShiftTimer" }
+//      gameTimer.startTargetTimer()
+//    }
+//    //diagnostics
+//    print(Game.currentSettings.phase)
+//  }
 }
 

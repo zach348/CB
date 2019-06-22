@@ -31,6 +31,7 @@ import SpriteKit
 
 struct Settings {
   let phase:Int
+  let phaseDuration:Double
   let targetMeanSpeed:CGFloat
   let targetSpeedSD:CGFloat
   let shiftDelay:Double
@@ -42,8 +43,9 @@ struct Settings {
   let minSpeed:CGFloat = 300
   let maxSpeed:CGFloat = 1200
   
-  init(phase:Int, targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:Double, shiftError:Double,numTargets:Int, targetTexture:String, distractorTexture:String, flashTexture:String){
+  init(phase:Int, phaseDuration:Double, targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:Double, shiftError:Double,numTargets:Int, targetTexture:String, distractorTexture:String, flashTexture:String){
     self.phase = phase
+    self.phaseDuration = phaseDuration
     self.targetMeanSpeed = targetMeanSpeed
     self.targetSpeedSD = targetSpeedSD
     self.shiftDelay = shiftDelay

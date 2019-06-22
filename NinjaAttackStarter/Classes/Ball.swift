@@ -31,19 +31,30 @@ import SpriteKit
 //CLASS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Ball: SKSpriteNode {
   static var members = [Ball]()
+  static var blinkFlag: Bool = false {
+    didSet {
+      if self.pendingPause && !self.blinkFlag {
+        currentGame.pauseGame()
+        self.pendingPause = false
+      }
+    }
+  }
+  static var pendingPause:Bool = false
   
   class func createBall(game: Game, xPos: CGFloat, yPos: CGFloat){
-    let ball = Ball(game: game)
+    let ball = Ball()
     ball.position.x = xPos
     ball.position.y = yPos
     Ball.members.append(ball)
   }
   
   class func createBalls(num: Int, game: Game){
-    var createBallCounter = 0
-    while createBallCounter < num {
-      createBall(game: game, xPos: game.gameScene.size.width/2, yPos: game.gameScene.size.height/2)
-      createBallCounter += 1
+    if let scene = currentGame.gameScene {
+      var createBallCounter = 0
+      while createBallCounter < num {
+        createBall(game: game, xPos: scene.size.width/2, yPos: scene.size.height/2)
+        createBallCounter += 1
+      }
     }
   }
   
@@ -93,9 +104,12 @@ class Ball: SKSpriteNode {
   }
   
   class func shiftTargets(){
-    GameScene.game?.gameScene.removeAction(forKey: "blinkBall")
-    Ball.clearTargets()
-    Ball.assignRandomTargets().forEach { ball in ball.blinkBall() }
+      Ball.clearTargets()
+      Ball.assignRandomTargets().forEach { ball in
+        ball.removeAction(forKey: "blinkBall")
+        ball.blinkBall()
+      //testing
+      }
   }
   
   class func assignRandomTargets() -> [Ball] {
@@ -130,23 +144,47 @@ class Ball: SKSpriteNode {
       ball.isTarget = false
     }
   }
+  
+  class func freezeMovement(){
+    if let scene = currentGame.gameScene {
+      scene.physicsWorld.speed = 0
+    }
+  }
+  
+  class func unfreezeMovement(){
+    if let scene = currentGame.gameScene {
+      scene.physicsWorld.speed = 1
+    }
+  }
+  
+  class func maskTargets() {
+    self.getTargets().forEach({ target in target.texture = Game.currentSettings.distractorTexture })
+  }
+  
+  class func unmaskTargets() {
+    self.getTargets().forEach({ target in target.texture = Game.currentSettings.targetTexture })
+  }
+  
+  class func resetTextures(){
+    self.members.forEach({ ball in ball.texture = ball.isTarget ? Game.currentSettings.targetTexture : Game.currentSettings.distractorTexture })
+  }
 //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  let game:Game
   var isTarget:Bool {
     didSet {
       if isTarget { self.texture = Game.currentSettings.targetTexture }
       else { self.texture = Game.currentSettings.distractorTexture }
     }
   }
-  var xHistory = [CGFloat]()
-  var yHistory = [CGFloat]()
-  
-  
-  init(game: Game) {
-    let texture = Game.currentSettings.targetTexture
-    self.game = game
+  var positionHistory:[CGPoint]
+  var vectorHistory:[String:CGFloat]
+  let game:Game
+  init() {
+    let texture = Game.currentSettings.distractorTexture
+    self.game = currentGame
     self.isTarget = false
+    self.positionHistory = [CGPoint]()
+    self.vectorHistory = [String:CGFloat]()
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
     self.size = CGSize(width: 50, height: 50)
     self.name = "ball-\(Ball.members.count + 1)"
@@ -162,30 +200,31 @@ class Ball: SKSpriteNode {
   }
 
   required init?(coder aDecoder: NSCoder) {
-    self.game = Game(gameScene: GameScene())
+    self.game = currentGame
     self.isTarget = false
+    self.positionHistory = [CGPoint]()
+    self.vectorHistory = [String:CGFloat]()
     super.init(coder:aDecoder)
   }
+  
   func updatePositionHistory() {
-    self.xHistory.append(self.position.x)
-    self.yHistory.append(self.position.y)
-    if self.xHistory.count > 10 { self.xHistory.removeFirst() }
-    if self.yHistory.count > 10 { self.yHistory.removeFirst() }
+    self.positionHistory.append(self.position)
+    if self.positionHistory.count > 10 { self.positionHistory.removeFirst() }
   }
   
   func ballStuckX() -> Bool {
-    if let lastXVal = self.xHistory.last {
-      for val in self.xHistory {
-        if val != lastXVal { return false }
+    if let lastXVal = self.positionHistory.last?.x {
+      for position in self.positionHistory {
+        if position.x != lastXVal { return false }
       }
     }
     return true
   }
   
   func ballStuckY() -> Bool {
-    if let lastYVal = self.yHistory.last {
-      for val in self.yHistory {
-        if val != lastYVal { return false }
+    if let lastYVal = self.positionHistory.last?.y {
+      for position in self.positionHistory {
+        if position.y != lastYVal { return false }
       }
     }
     return true
@@ -206,13 +245,16 @@ class Ball: SKSpriteNode {
   
   func blinkBall(){
     if let currentTexture = self.texture {
+      Ball.blinkFlag = true
       let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
       let resetTexture = SKAction.setTexture(currentTexture)
       let fadeOut = SKAction.fadeOut(withDuration: 0.15)
       let fadeIn = SKAction.fadeIn(withDuration: 0.15)
-      let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 5)
+      let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
       let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
-      self.run(blinkAction, withKey: "blinkBall")
+      let resetFlag = SKAction.run { Ball.blinkFlag = false }
+      let flagSequence = SKAction.sequence([blinkAction, resetFlag])
+      self.run(flagSequence, withKey: "blinkBall")
     }
   }
 }

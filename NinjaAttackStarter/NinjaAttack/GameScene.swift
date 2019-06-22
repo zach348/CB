@@ -67,19 +67,20 @@ extension CGPoint {
   }
 }
 
+let currentGame:Game = Game()
+
 class GameScene: SKScene {
   // 1
-//  let player = SKSpriteNode(imageNamed: "player")
-  static var game:Game?
-  var game:Game?
-  
+//  let player = SKSpriteNode(imageNamed: "player")  
   override func didMove(to view: SKView) {
+    currentGame.gameScene = self
+    currentGame.setupGame()
+    currentGame.startGame()
     
-    GameScene.game = Game(gameScene: self)
-    GameScene.game?.setupGame()
-    GameScene.game?.startGame()
-    
-  
+    //sound...not working properly... low quality file?
+    let backgroundSound = SKAudioNode(fileNamed: "7mindemo.mp3")
+    self.addChild(backgroundSound)
+    backgroundSound.run(SKAction.play())
   }
   
   override func update(_ currentTime: TimeInterval) {
