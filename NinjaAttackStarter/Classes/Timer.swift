@@ -42,7 +42,7 @@ class Timer {
   var lastPhaseShiftTime:Double
   var remainingInPhase:Double
   init(){
-    self.members = [String]()
+    self.members = []
     self.lastPhaseShiftTime = 0
     self.remainingInPhase = Game.currentSettings.phaseDuration
     currentGame.timer = self
@@ -88,10 +88,9 @@ class Timer {
     }
   }
   
-  
   func stopTimer(timerID:String) {
     if let world = currentGame.world, let scene = currentGame.gameScene  {
-      if timerID == "gameTimer" {
+      if timerID == "gameTimer" || timerID == "frequencyLoop" {
         self.members = self.members.filter { $0 != timerID }
         scene.removeAction(forKey: timerID)
       }else{

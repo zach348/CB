@@ -11,6 +11,7 @@
 		84124FB8229C659B008A1510 /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84124FB7229C659B008A1510 /* Ball.swift */; };
 		8436334022BEED3A00F4BC97 /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8436333F22BEED3A00F4BC97 /* test.wav */; };
 		8436334222BF0F6E00F4BC97 /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8436334122BF0F6D00F4BC97 /* test.mp3 */; };
+		8436334422BF1D1800F4BC97 /* Sensory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8436334322BF1D1800F4BC97 /* Sensory.swift */; };
 		849432AC22A0A57800CCD6CD /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AB22A0A57800CCD6CD /* Game.swift */; };
 		849432AE22A1CB9100CCD6CD /* MotionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AD22A1CB9100CCD6CD /* MotionControl.swift */; };
 		849432B022A329F000CCD6CD /* GlobalFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AF22A329F000CCD6CD /* GlobalFunctions.swift */; };
@@ -32,6 +33,7 @@
 		84124FB7229C659B008A1510 /* Ball.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
 		8436333F22BEED3A00F4BC97 /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = test.wav; path = ../../../../Desktop/test.wav; sourceTree = "<group>"; };
 		8436334122BF0F6D00F4BC97 /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test.mp3; sourceTree = "<group>"; };
+		8436334322BF1D1800F4BC97 /* Sensory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensory.swift; sourceTree = "<group>"; };
 		849432AB22A0A57800CCD6CD /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		849432AD22A1CB9100CCD6CD /* MotionControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionControl.swift; sourceTree = "<group>"; };
 		849432AF22A329F000CCD6CD /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 				849432AF22A329F000CCD6CD /* GlobalFunctions.swift */,
 				84DF3B1122ABF97200AAAA8A /* Extensions.swift */,
 				849432AD22A1CB9100CCD6CD /* MotionControl.swift */,
+				8436334322BF1D1800F4BC97 /* Sensory.swift */,
 				849432AB22A0A57800CCD6CD /* Game.swift */,
 				84CD8ED222A9685100D4B4D2 /* Timer.swift */,
 			);
@@ -210,6 +213,7 @@
 				849432AE22A1CB9100CCD6CD /* MotionControl.swift in Sources */,
 				84124FB8229C659B008A1510 /* Ball.swift in Sources */,
 				D2A5F2211F4A96D0005CD714 /* AppDelegate.swift in Sources */,
+				8436334422BF1D1800F4BC97 /* Sensory.swift in Sources */,
 				84CD8ED322A9685100D4B4D2 /* Timer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
