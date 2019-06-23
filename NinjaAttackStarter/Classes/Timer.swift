@@ -49,9 +49,9 @@ class Timer {
   }
   
   func startGameTimer(){
-    let wait = SKAction.wait(forDuration: 0.1)
+    let wait = SKAction.wait(forDuration: 0.025)
     let count = SKAction.run {
-      self.elapsedTime += 0.1
+      self.elapsedTime += 0.025
     }
   //Master Game block kept at top level/ on gamescene instance
     if let scene = currentGame.gameScene {

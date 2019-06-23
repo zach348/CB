@@ -10,6 +10,7 @@
 		5C2901831F8F6DE700803663 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C2901821F8F6DE700803663 /* LaunchScreen.storyboard */; };
 		84124FB8229C659B008A1510 /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84124FB7229C659B008A1510 /* Ball.swift */; };
 		8436334022BEED3A00F4BC97 /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8436333F22BEED3A00F4BC97 /* test.wav */; };
+		8436334222BF0F6E00F4BC97 /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8436334122BF0F6D00F4BC97 /* test.mp3 */; };
 		849432AC22A0A57800CCD6CD /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AB22A0A57800CCD6CD /* Game.swift */; };
 		849432AE22A1CB9100CCD6CD /* MotionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AD22A1CB9100CCD6CD /* MotionControl.swift */; };
 		849432B022A329F000CCD6CD /* GlobalFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AF22A329F000CCD6CD /* GlobalFunctions.swift */; };
@@ -30,6 +31,7 @@
 		5C2901821F8F6DE700803663 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NinjaAttack/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84124FB7229C659B008A1510 /* Ball.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
 		8436333F22BEED3A00F4BC97 /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = test.wav; path = ../../../../Desktop/test.wav; sourceTree = "<group>"; };
+		8436334122BF0F6D00F4BC97 /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test.mp3; sourceTree = "<group>"; };
 		849432AB22A0A57800CCD6CD /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		849432AD22A1CB9100CCD6CD /* MotionControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionControl.swift; sourceTree = "<group>"; };
 		849432AF22A329F000CCD6CD /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				84AD8BDA22BD953A00DED08C /* 7mindemo.mp3 */,
+				8436334122BF0F6D00F4BC97 /* test.mp3 */,
 				8436333F22BEED3A00F4BC97 /* test.wav */,
 				AFD63F8D203649F800E08C66 /* background-music-aac.caf */,
 				AFD63F8E203649F800E08C66 /* pew-pew-lei.caf */,
@@ -186,6 +189,7 @@
 				5C2901831F8F6DE700803663 /* LaunchScreen.storyboard in Resources */,
 				8436334022BEED3A00F4BC97 /* test.wav in Resources */,
 				AFD63F90203649F800E08C66 /* pew-pew-lei.caf in Resources */,
+				8436334222BF0F6E00F4BC97 /* test.mp3 in Resources */,
 				D2A5F2091F4A9144005CD714 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

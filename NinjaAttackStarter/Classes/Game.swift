@@ -65,12 +65,15 @@ class Game {
       let wait = SKAction.wait(forDuration: 1/hz/2)
       let systemVal = UIScreen.main.brightness
       let decrease = SKAction.run({ UIScreen.main.brightness = systemVal * 0.85 })
-      let increase = SKAction.run({ UIScreen.main.brightness = systemVal })
+      let increase = SKAction.run({
+        UIScreen.main.brightness = systemVal
+        print(currentGame.timer?.elapsedTime)
+      })
       let freqGroup = SKAction.group([increase, tone])
       let sequence = SKAction.sequence([wait, decrease, wait, freqGroup])
 
       if let gameScene = currentGame.gameScene { gameScene.run(SKAction.repeatForever(sequence)) }
-      
+
       gameScene.run(sequence, withKey: "toneLoop")
     }
   }
@@ -112,7 +115,7 @@ class Game {
       self.timer?.startTimerActions()
       self.startPauseLoop()
       //testing
-      Game.applyFrequency(hz: 8)
+      Game.applyFrequency(hz: 20)
     }
   }
   
