@@ -72,6 +72,18 @@ class Timer {
     }
   }
   
+  func startPauseLoop(){
+    //pausing loop
+    if let gameScene = currentGame.gameScene {
+      let wait = SKAction.wait(forDuration: Game.currentSettings.pauseDelay)
+      let unpauseWait = SKAction.wait(forDuration: 3)
+      let pause = SKAction.run {currentGame.pauseGame()}
+      let unpause = SKAction.run {currentGame.unpauseGame()}
+      let sequence = SKAction.repeatForever(SKAction.sequence([wait,pause,unpauseWait,unpause]))
+      gameScene.run(sequence)
+    }
+  }
+  
   func recursiveTargetTimer() {
     if let gameWorld = currentGame.world {
       gameWorld.removeAction(forKey: "targetTimer")

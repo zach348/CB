@@ -32,11 +32,11 @@ import SpriteKit
 class Game {
   
   static var settingsArr:[Settings] = [
-    Settings(phase: 1, phaseDuration: 50, frequency: 18, targetMeanSpeed: 700, targetSpeedSD: 450, shiftDelay: 4, shiftError: 1, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red"),
-    Settings(phase: 2, phaseDuration: 70, frequency: 15, targetMeanSpeed: 550, targetSpeedSD: 325, shiftDelay: 7, shiftError: 2, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red"),
-    Settings(phase: 3, phaseDuration: 80, frequency: 12, targetMeanSpeed: 425, targetSpeedSD: 200, shiftDelay: 10, shiftError: 3, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red"),
-    Settings(phase: 4, phaseDuration: 100, frequency: 9, targetMeanSpeed: 300, targetSpeedSD: 100, shiftDelay: 15, shiftError: 4, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white"),
-    Settings(phase: 5, phaseDuration: 120, frequency: 6, targetMeanSpeed: 225, targetSpeedSD: 45, shiftDelay: 20, shiftError: 5, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white")
+    Settings(phase: 1, phaseDuration: 50, pauseDelay: 5, pauseError: 2, pauseDuration: 3, frequency: 18, targetMeanSpeed: 700, targetSpeedSD: 450, shiftDelay: 4, shiftError: 1, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red"),
+    Settings(phase: 2, phaseDuration: 70, pauseDelay: 5, pauseError: 2, pauseDuration: 7, frequency: 15, targetMeanSpeed: 550, targetSpeedSD: 325, shiftDelay: 7, shiftError: 2, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red"),
+    Settings(phase: 3, phaseDuration: 80, pauseDelay: 5, pauseError: 2, pauseDuration: 12, frequency: 12, targetMeanSpeed: 425, targetSpeedSD: 200, shiftDelay: 10, shiftError: 3, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red"),
+    Settings(phase: 4, phaseDuration: 100, pauseDelay: 5, pauseError: 2, pauseDuration: 15, frequency: 9, targetMeanSpeed: 300, targetSpeedSD: 100, shiftDelay: 15, shiftError: 4, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white"),
+    Settings(phase: 5, phaseDuration: 120, pauseDelay: 5, pauseError: 2, pauseDuration: 18,frequency: 6, targetMeanSpeed: 225, targetSpeedSD: 45, shiftDelay: 20, shiftError: 5, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white")
   ]
   static var currentSettings:Settings = settingsArr[0] {
     didSet {
@@ -127,18 +127,6 @@ class Game {
       self.isPaused = false
       Ball.unfreezeMovement()
       Ball.unmaskTargets()
-    }
-  }
-  
-  func startPauseLoop(){
-    //pausing loop
-    if let gameScene = self.gameScene {
-      let wait = SKAction.wait(forDuration: 15)
-      let unpauseWait = SKAction.wait(forDuration: 3)
-      let pause = SKAction.run {currentGame.pauseGame()}
-      let unpause = SKAction.run {currentGame.unpauseGame()}
-      let sequence = SKAction.repeatForever(SKAction.sequence([wait,pause,unpauseWait,unpause]))
-      gameScene.run(sequence)
     }
   }
   
