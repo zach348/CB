@@ -72,14 +72,20 @@ class Timer {
     }
   }
   
-  func startPauseLoop(){
+  func recursivePauseTimer(){
     //pausing loop
     if let gameScene = currentGame.gameScene {
-      let wait = SKAction.wait(forDuration: Game.currentSettings.pauseDelay)
-      let unpauseWait = SKAction.wait(forDuration: 3)
+      gameScene.removeAction(forKey: "pauseTimer")
+      self.members = self.members.filter({ $0 != "pauseTimer"})
+      let wait = SKAction.wait(forDuration: Game.currentSettings.pauseDelay, withRange: Game.currentSettings.pauseError)
+      let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
       let pause = SKAction.run {currentGame.pauseGame()}
       let unpause = SKAction.run {currentGame.unpauseGame()}
-      let sequence = SKAction.repeatForever(SKAction.sequence([wait,pause,unpauseWait,unpause]))
+      let recursiveCall = SKAction.run {
+        self.recursivePauseTimer()
+      }
+      self.members.append("pauseTimer")
+      let sequence = SKAction.sequence([wait, pause, unpauseWait, unpause, recursiveCall])
       gameScene.run(sequence)
     }
   }
@@ -123,5 +129,6 @@ class Timer {
   func startTimerActions(){
     self.startMovementTimer()
     self.recursiveTargetTimer()
+    self.recursivePauseTimer()
   }
 }

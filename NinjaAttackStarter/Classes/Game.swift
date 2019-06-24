@@ -99,7 +99,6 @@ class Game {
       masterTimer.startGameTimer()
       Ball.startMovement()
       self.timer?.startTimerActions()
-      self.startPauseLoop()
       //testing
       Sensory.applyFrequency()
     }
