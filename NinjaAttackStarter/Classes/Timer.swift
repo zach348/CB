@@ -85,6 +85,7 @@ class Timer {
         self.recursivePauseTimer()
       }
       self.members.append("pauseTimer")
+      print(currentGame.timer?.elapsedTime)
       let sequence = SKAction.sequence([wait, pause, unpauseWait, unpause, recursiveCall])
       gameScene.run(sequence)
     }
