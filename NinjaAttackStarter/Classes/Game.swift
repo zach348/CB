@@ -32,11 +32,11 @@ import SpriteKit
 class Game {
   
   static var settingsArr:[Settings] = [
-    Settings(phase: 1, phaseDuration: 50, pauseDelay: 5, pauseError: 2, pauseDuration: 2, frequency: 18, targetMeanSpeed: 700, targetSpeedSD: 450, shiftDelay: 4, shiftError: 2, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red"),
-    Settings(phase: 2, phaseDuration: 70, pauseDelay: 8, pauseError: 4, pauseDuration: 4, frequency: 15, targetMeanSpeed: 550, targetSpeedSD: 325, shiftDelay: 7, shiftError: 4, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red"),
-    Settings(phase: 3, phaseDuration: 80, pauseDelay: 15, pauseError: 6, pauseDuration: 6, frequency: 12, targetMeanSpeed: 425, targetSpeedSD: 200, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red"),
-    Settings(phase: 4, phaseDuration: 100, pauseDelay: 22, pauseError: 6, pauseDuration: 8, frequency: 9, targetMeanSpeed: 300, targetSpeedSD: 100, shiftDelay: 15, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white"),
-    Settings(phase: 5, phaseDuration: 120, pauseDelay: 30, pauseError: 8, pauseDuration: 10, frequency: 6, targetMeanSpeed: 225, targetSpeedSD: 45, shiftDelay: 20, shiftError: 10, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white")
+    Settings(phase: 1, phaseDuration: 50, pauseDelay: 10, pauseError: 2, pauseDuration: 1.5, frequency: 16, targetMeanSpeed: 650, targetSpeedSD: 375, shiftDelay: 4, shiftError: 2, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red"),
+    Settings(phase: 2, phaseDuration: 70, pauseDelay: 15, pauseError: 4, pauseDuration: 2.5, frequency: 12, targetMeanSpeed: 500, targetSpeedSD: 275, shiftDelay: 7, shiftError: 4, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red"),
+    Settings(phase: 3, phaseDuration: 80, pauseDelay: 22, pauseError: 6, pauseDuration: 5, frequency: 9, targetMeanSpeed: 375, targetSpeedSD: 175, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red"),
+    Settings(phase: 4, phaseDuration: 100, pauseDelay: 30, pauseError: 6, pauseDuration: 7, frequency: 7, targetMeanSpeed: 275, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white"),
+    Settings(phase: 5, phaseDuration: 120, pauseDelay: 35, pauseError: 8, pauseDuration: 8, frequency: 5, targetMeanSpeed: 175, targetSpeedSD: 0, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white")
   ]
   static var currentSettings:Settings = settingsArr[0] {
     didSet {
