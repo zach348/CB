@@ -42,16 +42,16 @@ class Timer {
   var lastPhaseShiftTime:Double
   var remainingInPhase:Double
   init(){
-    self.members = [String]()
+    self.members = []
     self.lastPhaseShiftTime = 0
     self.remainingInPhase = Game.currentSettings.phaseDuration
     currentGame.timer = self
   }
   
   func startGameTimer(){
-    let wait = SKAction.wait(forDuration: 0.1)
+    let wait = SKAction.wait(forDuration: 0.025)
     let count = SKAction.run {
-      self.elapsedTime += 0.1
+      self.elapsedTime += 0.025
     }
   //Master Game block kept at top level/ on gamescene instance
     if let scene = currentGame.gameScene {
@@ -72,6 +72,25 @@ class Timer {
     }
   }
   
+  func recursivePauseTimer(){
+    //pausing loop
+    if let gameScene = currentGame.gameScene {
+      gameScene.removeAction(forKey: "pauseTimer")
+      self.members = self.members.filter({ $0 != "pauseTimer"})
+      let wait = SKAction.wait(forDuration: Game.currentSettings.pauseDelay, withRange: Game.currentSettings.pauseError)
+      let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
+      let pause = SKAction.run {currentGame.pauseGame()}
+      let unpause = SKAction.run {currentGame.unpauseGame()}
+      let recursiveCall = SKAction.run {
+        self.recursivePauseTimer()
+      }
+      self.members.append("pauseTimer")
+      print(currentGame.timer?.elapsedTime)
+      let sequence = SKAction.sequence([wait, pause, unpauseWait, unpause, recursiveCall])
+      gameScene.run(sequence)
+    }
+  }
+  
   func recursiveTargetTimer() {
     if let gameWorld = currentGame.world {
       gameWorld.removeAction(forKey: "targetTimer")
@@ -88,10 +107,9 @@ class Timer {
     }
   }
   
-  
   func stopTimer(timerID:String) {
     if let world = currentGame.world, let scene = currentGame.gameScene  {
-      if timerID == "gameTimer" {
+      if timerID == "gameTimer" || timerID == "frequencyTimer" {
         self.members = self.members.filter { $0 != timerID }
         scene.removeAction(forKey: timerID)
       }else{
@@ -102,15 +120,9 @@ class Timer {
   }
   
   
-  
-//  func stopTimerActions(){
-//    for timer in self.members.filter({ $0 != "gameTimer" }) {
-//      self.stopTimer(timerID: timer)
-//    }
-//  }
-//
   func startTimerActions(){
     self.startMovementTimer()
     self.recursiveTargetTimer()
+    self.recursivePauseTimer()
   }
 }
