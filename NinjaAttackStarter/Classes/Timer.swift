@@ -77,7 +77,9 @@ class Timer {
     if let gameScene = currentGame.gameScene {
       gameScene.removeAction(forKey: "pauseTimer")
       self.members = self.members.filter({ $0 != "pauseTimer"})
-      let wait = SKAction.wait(forDuration: Game.currentSettings.pauseDelay, withRange: Game.currentSettings.pauseError)
+      //pause delay
+      let error = Game.currentSettings.pauseError
+      let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.pauseDelay - error, max: Game.currentSettings.pauseDelay + error)))
       let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
       let pause = SKAction.run {currentGame.pauseGame()}
       let unpause = SKAction.run {currentGame.unpauseGame()}
@@ -85,7 +87,6 @@ class Timer {
         self.recursivePauseTimer()
       }
       self.members.append("pauseTimer")
-      print(currentGame.timer?.elapsedTime)
       let sequence = SKAction.sequence([wait, pause, unpauseWait, unpause, recursiveCall])
       gameScene.run(sequence)
     }
@@ -95,7 +96,9 @@ class Timer {
     if let gameWorld = currentGame.world {
       gameWorld.removeAction(forKey: "targetTimer")
       self.members = self.members.filter({ $0 != "targetTimer"})
-      let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
+      //let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
+      let error = Game.currentSettings.shiftError
+      let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.shiftDelay - error, max: Game.currentSettings.shiftDelay + error)))
       let shift = SKAction.run {
         Ball.shiftTargets()
       }
