@@ -41,9 +41,9 @@ class Game {
   static var currentSettings:Settings = settingsArr[0] {
     didSet {
       if let timer = currentGame.timer {
-        timer.stopTimer(timerID: "frequencyLoop")
+        timer.stopTimer(timerID: "frequencyTimer")
         Sensory.applyFrequency()
-        timer.members.append("frequencyLoop")
+        timer.members.append("frequencyLoopTimer")
       }
       Ball.resetTextures()
       if Ball.getTargets().count < Game.currentSettings.numTargets {

@@ -43,8 +43,8 @@ struct Sensory {
       let freqGroup = SKAction.group([increase, tone])
       let sequence = SKAction.sequence([wait, decrease, wait, freqGroup])
       
-      gameScene.run(SKAction.repeatForever(sequence), withKey: "frequencyLoop")
-      timers.append("frequencyLoop")
+      gameScene.run(SKAction.repeatForever(sequence), withKey: "frequencyTimer")
+      timers.append("frequencyTimer")
     }
   }
 }
