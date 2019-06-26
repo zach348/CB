@@ -168,6 +168,16 @@ class Ball: SKSpriteNode {
   class func resetTextures(){
     self.members.forEach({ ball in ball.texture = ball.isTarget ? Game.currentSettings.targetTexture : Game.currentSettings.distractorTexture })
   }
+  
+  class func enableInteraction() {
+    self.members.forEach({ ball in ball.isUserInteractionEnabled = true })
+  }
+  
+  class func disableInteraction() {
+    self.members.forEach({ ball in ball.isUserInteractionEnabled = false })
+  }
+  
+
 //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   var isTarget:Bool {
@@ -178,6 +188,9 @@ class Ball: SKSpriteNode {
   }
   var positionHistory:[CGPoint]
   var vectorHistory:[String:CGFloat]
+  var emitters:[SKEmitterNode]
+  
+  
   let game:Game
   init() {
     let texture = Game.currentSettings.distractorTexture
@@ -185,10 +198,11 @@ class Ball: SKSpriteNode {
     self.isTarget = false
     self.positionHistory = [CGPoint]()
     self.vectorHistory = [String:CGFloat]()
+    self.emitters = [SKEmitterNode]()
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
     self.size = CGSize(width: 50, height: 50)
     self.name = "ball-\(Ball.members.count + 1)"
-    self.isUserInteractionEnabled = true
+    self.isUserInteractionEnabled = false
     //physics setup
     self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.9)
     self.physicsBody?.isDynamic = true
@@ -205,6 +219,7 @@ class Ball: SKSpriteNode {
     self.isTarget = false
     self.positionHistory = [CGPoint]()
     self.vectorHistory = [String:CGFloat]()
+    self.emitters = [SKEmitterNode]()
     super.init(coder:aDecoder)
   }
   
@@ -259,6 +274,14 @@ class Ball: SKSpriteNode {
     }
   }
   
+  func addEmitter(){
+    if let emitter = SKEmitterNode(fileNamed: "fireflyParticle.sks"){
+      self.emitters.append(emitter)
+      self.addChild(emitter)
+    }
+  }
+
+  
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
     let touch:UITouch = touches.first! as UITouch
     let positionInScene = touch.location(in: self)
@@ -266,6 +289,7 @@ class Ball: SKSpriteNode {
     if let name = touchedNode.name {
       if Ball.getTargets().map({ $0.name}).contains(name) {
         print("Touched")
+        self.addEmitter()
       }
     }
   }

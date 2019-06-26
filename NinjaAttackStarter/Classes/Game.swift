@@ -69,7 +69,11 @@ class Game {
   var gameScene:GameScene?
   var timer:Timer?
   var world:SKNode?
-  var isPaused:Bool
+  var isPaused:Bool {
+    didSet {
+      isPaused == true ? Ball.enableInteraction() : Ball.disableInteraction()
+    }
+  }
   
   
   init(){
