@@ -41,7 +41,7 @@ class Game {
   static var currentSettings:Settings = settingsArr[0] {
     didSet {
       if let timer = currentGame.timer {
-        timer.stopTimer(timerID: "frequencyTimer")
+        timer.stopTimer(timerID: "frequencyLoopTimer")
         Sensory.applyFrequency()
         timer.members.append("frequencyLoopTimer")
       }
