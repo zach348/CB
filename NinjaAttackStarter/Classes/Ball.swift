@@ -188,6 +188,7 @@ class Ball: SKSpriteNode {
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
     self.size = CGSize(width: 50, height: 50)
     self.name = "ball-\(Ball.members.count + 1)"
+    self.isUserInteractionEnabled = true
     //physics setup
     self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.9)
     self.physicsBody?.isDynamic = true
@@ -257,4 +258,16 @@ class Ball: SKSpriteNode {
       self.run(flagSequence, withKey: "blinkBall")
     }
   }
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+    let touch:UITouch = touches.first! as UITouch
+    let positionInScene = touch.location(in: self)
+    let touchedNode = self.atPoint(positionInScene)
+    if let name = touchedNode.name {
+      if Ball.getTargets().map({ $0.name}).contains(name) {
+        print("Touched")
+      }
+    }
+  }
 }
+
