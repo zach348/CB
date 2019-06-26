@@ -18,6 +18,7 @@
 		84AD8BDB22BD953B00DED08C /* 7mindemo.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 84AD8BDA22BD953A00DED08C /* 7mindemo.mp3 */; };
 		84C1D27022C31FC9008E5C7F /* fireflyParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 84C1D26E22C31FC9008E5C7F /* fireflyParticle.sks */; };
 		84C1D27122C31FC9008E5C7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84C1D26F22C31FC9008E5C7F /* Assets.xcassets */; };
+		84C1D27322C343B7008E5C7F /* 01 - Weightless.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 84C1D27222C343B7008E5C7F /* 01 - Weightless.mp3 */; };
 		84CD8ED322A9685100D4B4D2 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CD8ED222A9685100D4B4D2 /* Timer.swift */; };
 		84DF3B1222ABF97200AAAA8A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF3B1122ABF97200AAAA8A /* Extensions.swift */; };
 		84DF3B1422ABFE5C00AAAA8A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DF3B1322ABFE5C00AAAA8A /* Settings.swift */; };
@@ -42,6 +43,7 @@
 		84AD8BDA22BD953A00DED08C /* 7mindemo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 7mindemo.mp3; sourceTree = "<group>"; };
 		84C1D26E22C31FC9008E5C7F /* fireflyParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fireflyParticle.sks; sourceTree = "<group>"; };
 		84C1D26F22C31FC9008E5C7F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		84C1D27222C343B7008E5C7F /* 01 - Weightless.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "01 - Weightless.mp3"; sourceTree = "<group>"; };
 		84CD8ED222A9685100D4B4D2 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		84DF3B1122ABF97200AAAA8A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		84DF3B1322ABFE5C00AAAA8A /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				84AD8BDA22BD953A00DED08C /* 7mindemo.mp3 */,
+				84C1D27222C343B7008E5C7F /* 01 - Weightless.mp3 */,
 				8436334122BF0F6D00F4BC97 /* test.mp3 */,
 				8436333F22BEED3A00F4BC97 /* test.wav */,
 				AFD63F8D203649F800E08C66 /* background-music-aac.caf */,
@@ -195,6 +198,7 @@
 				84AD8BDB22BD953B00DED08C /* 7mindemo.mp3 in Resources */,
 				AFD63F8F203649F800E08C66 /* background-music-aac.caf in Resources */,
 				84C1D27022C31FC9008E5C7F /* fireflyParticle.sks in Resources */,
+				84C1D27322C343B7008E5C7F /* 01 - Weightless.mp3 in Resources */,
 				D2A5F20B1F4A9144005CD714 /* Assets.xcassets in Resources */,
 				84C1D27122C31FC9008E5C7F /* Assets.xcassets in Resources */,
 				5C2901831F8F6DE700803663 /* LaunchScreen.storyboard in Resources */,

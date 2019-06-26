@@ -283,7 +283,7 @@ class Ball: SKSpriteNode {
     if let currentTexture = self.texture {
       Ball.blinkFlag = true
       let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
-      let resetTexture = SKAction.setTexture(currentTexture)
+      let resetTexture = self.isTarget ? SKAction.setTexture(Game.currentSettings.targetTexture) : SKAction.setTexture(Game.currentSettings.distractorTexture)
       let fadeOut = SKAction.fadeOut(withDuration: 0.15)
       let fadeIn = SKAction.fadeIn(withDuration: 0.15)
       let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)

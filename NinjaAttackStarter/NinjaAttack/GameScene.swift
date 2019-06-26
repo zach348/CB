@@ -70,12 +70,15 @@ extension CGPoint {
 let currentGame:Game = Game()
 
 class GameScene: SKScene {
-  // 1
-//  let player = SKSpriteNode(imageNamed: "player")  
+ 
   override func didMove(to view: SKView) {
     currentGame.gameScene = self
     currentGame.setupGame()
     currentGame.startGame()
+    
+//    background track
+//    let backgroundSound = SKAudioNode(fileNamed: "01 - Weightless.mp3")
+//    self.addChild(backgroundSound)
   }
   
   
