@@ -127,6 +127,10 @@ class Ball: SKSpriteNode {
     return newTargets
   }
   
+  class func getBall(name:String) -> Ball {
+    return self.members.first(where: {$0.name == name })!
+  }
+  
   class func getTargets() -> [Ball]{
     return self.members.filter { ball in
       ball.isTarget
@@ -165,6 +169,14 @@ class Ball: SKSpriteNode {
     self.getTargets().forEach({ target in target.texture = Game.currentSettings.targetTexture })
   }
   
+  class func hideBorders(){
+    self.members.forEach({ $0.hideBorder()})
+  }
+  
+  class func showBorders(){
+    self.members.forEach({ $0.showBorder()})
+  }
+  
   class func resetTextures(){
     self.members.forEach({ ball in ball.texture = ball.isTarget ? Game.currentSettings.targetTexture : Game.currentSettings.distractorTexture })
   }
@@ -177,7 +189,8 @@ class Ball: SKSpriteNode {
     self.members.forEach({ ball in ball.isUserInteractionEnabled = false })
   }
   
-
+  
+  
 //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   var isTarget:Bool {
@@ -188,8 +201,7 @@ class Ball: SKSpriteNode {
   }
   var positionHistory:[CGPoint]
   var vectorHistory:[String:CGFloat]
-  var emitters:[SKEmitterNode]
-  
+  var border:SKShapeNode?
   
   let game:Game
   init() {
@@ -198,8 +210,16 @@ class Ball: SKSpriteNode {
     self.isTarget = false
     self.positionHistory = [CGPoint]()
     self.vectorHistory = [String:CGFloat]()
-    self.emitters = [SKEmitterNode]()
+    self.border = SKShapeNode()
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
+    //border
+    self.border = SKShapeNode(circleOfRadius: 24)
+    if let border = self.border {
+      border.fillColor = .clear
+      border.strokeColor = UIColor.red
+      border.lineWidth = 10
+    }
+    
     self.size = CGSize(width: 50, height: 50)
     self.name = "ball-\(Ball.members.count + 1)"
     self.isUserInteractionEnabled = false
@@ -217,9 +237,9 @@ class Ball: SKSpriteNode {
   required init?(coder aDecoder: NSCoder) {
     self.game = currentGame
     self.isTarget = false
+    self.border = SKShapeNode()
     self.positionHistory = [CGPoint]()
     self.vectorHistory = [String:CGFloat]()
-    self.emitters = [SKEmitterNode]()
     super.init(coder:aDecoder)
   }
   
@@ -274,24 +294,25 @@ class Ball: SKSpriteNode {
     }
   }
   
-  func addEmitter(){
-    if let emitter = SKEmitterNode(fileNamed: "fireflyParticle.sks"){
-      self.emitters.append(emitter)
-      self.addChild(emitter)
-    }
+  func showBorder(){
+    if let border = self.border { self.addChild(border) }
   }
-
+  
+  func hideBorder(){
+    if let border = self.border { border.removeFromParent() }
+  }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
     let touch:UITouch = touches.first! as UITouch
     let positionInScene = touch.location(in: self)
     let touchedNode = self.atPoint(positionInScene)
     if let name = touchedNode.name {
-      if Ball.getTargets().map({ $0.name}).contains(name) {
+      if Ball.getTargets().map({$0.name}).contains(name) {
         print("Touched")
-        self.addEmitter()
+        Ball.getBall(name: name).showBorder()
       }
     }
   }
+  
 }
 

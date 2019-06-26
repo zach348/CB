@@ -130,6 +130,7 @@ class Game {
       self.isPaused = false
       Ball.unfreezeMovement()
       Ball.unmaskTargets()
+      Ball.hideBorders()
     }
   }
   
