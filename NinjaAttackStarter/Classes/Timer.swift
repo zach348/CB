@@ -81,14 +81,44 @@ class Timer {
       let error = Game.currentSettings.pauseError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.pauseDelay - error, max: Game.currentSettings.pauseDelay + error)))
       let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
-      let pause = SKAction.run {currentGame.pauseGame()}
-      let unpause = SKAction.run {currentGame.unpauseGame()}
+      let pause = SKAction.run { currentGame.pauseGame()}
+      let unpause = SKAction.run { currentGame.unpauseGame()}
       let recursiveCall = SKAction.run {
         self.recursivePauseTimer()
       }
+      let countdown = SKAction.run {
+        self.pauseCountdownTimer(pauseDuration: unpauseWait.duration)
+      }
       self.members.append("pauseTimer")
-      let sequence = SKAction.sequence([wait, pause, unpauseWait, unpause, recursiveCall])
+      
+      let countGroup = SKAction.group([unpauseWait, countdown])
+      let unpauseGroup = SKAction.group([unpause, recursiveCall])
+      let sequence = SKAction.sequence([wait, pause, countGroup, unpauseGroup])
       gameScene.run(sequence)
+    }
+  }
+  
+  func pauseCountdownTimer(pauseDuration:Double){
+    if let gameScene = currentGame.gameScene {
+      var timerNode: Double = pauseDuration
+      let timerLabel = SKLabelNode()
+      timerLabel.text = "\(String(format: "%.3f", timerNode))"
+      timerLabel.fontColor = SKColor.black
+      timerLabel.fontSize = 40
+      timerLabel.position.x = gameScene.size.width / 2
+      timerLabel.position.y = gameScene.size.height / 8.5
+      timerLabel.zPosition = 3.00
+      gameScene.addChild(timerLabel)
+      
+      let loop = SKAction.repeatForever(SKAction.sequence([SKAction.run {
+        timerNode -= 0.1
+        timerLabel.text = "\(String(format: "%.1f", timerNode))"
+        if timerNode <= 0 {
+          timerLabel.removeFromParent()
+          gameScene.removeAction(forKey: "pauseDurationTimer")
+        }
+        },SKAction.wait(forDuration: 0.1)]))
+      gameScene.run(loop, withKey: "pauseDurationTimer")
     }
   }
   

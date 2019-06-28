@@ -121,7 +121,6 @@ class Game {
       Ball.freezeMovement()
       Ball.maskTargets()
       //testing
-      self.pauseCountdownTimer()
     }
   }
   
@@ -145,31 +144,6 @@ class Game {
       }
     }
   }
-  
-  func pauseCountdownTimer(){
-    if let gameScene = currentGame.gameScene {
-      var timerNode: Double = Game.currentSettings.pauseDuration
-      let timerLabel = SKLabelNode(fontNamed: "STHeitJ-Medium")
-      timerLabel.text = "\(String(format: "%.3f", timerNode))"
-      timerLabel.fontColor = SKColor.black
-      timerLabel.fontSize = 40
-      timerLabel.position.x = gameScene.size.width / 2
-      timerLabel.position.y = gameScene.size.height / 8.5
-      timerLabel.zPosition = 3.00
-      gameScene.addChild(timerLabel)
-      
-      let loop = SKAction.repeatForever(SKAction.sequence([SKAction.run {
-        timerNode -= 0.1
-        timerLabel.text = "\(String(format: "%.1f", timerNode))"
-        if timerNode <= 0 {
-          timerLabel.removeFromParent()
-          gameScene.removeAction(forKey: "pauseDurationTimer")
-        }
-        },SKAction.wait(forDuration: 0.1)]))
-      gameScene.run(loop, withKey: "pauseDurationTimer")
-      }
-
-  } 
 
 }
 
