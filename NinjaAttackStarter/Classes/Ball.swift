@@ -109,6 +109,7 @@ class Ball: SKSpriteNode {
         ball.removeAction(forKey: "blinkBall")
         ball.blinkBall()
       //testing
+        Ball.resetTextures()
       }
   }
   
@@ -280,18 +281,16 @@ class Ball: SKSpriteNode {
   }
   
   func blinkBall(){
-    if let currentTexture = self.texture {
-      Ball.blinkFlag = true
-      let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
-      let resetTexture = self.isTarget ? SKAction.setTexture(Game.currentSettings.targetTexture) : SKAction.setTexture(Game.currentSettings.distractorTexture)
-      let fadeOut = SKAction.fadeOut(withDuration: 0.15)
-      let fadeIn = SKAction.fadeIn(withDuration: 0.15)
-      let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
-      let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
-      let resetFlag = SKAction.run { Ball.blinkFlag = false }
-      let flagSequence = SKAction.sequence([blinkAction, resetFlag])
-      self.run(flagSequence, withKey: "blinkBall")
-    }
+    Ball.blinkFlag = true
+    let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
+    let resetTexture = self.isTarget ? SKAction.setTexture(Game.currentSettings.targetTexture) : SKAction.setTexture(Game.currentSettings.distractorTexture)
+    let fadeOut = SKAction.fadeOut(withDuration: 0.15)
+    let fadeIn = SKAction.fadeIn(withDuration: 0.15)
+    let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
+    let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
+    let resetFlag = SKAction.run { Ball.blinkFlag = false }
+    let flagSequence = SKAction.sequence([blinkAction, resetFlag])
+    self.run(flagSequence, withKey: "blinkBall")
   }
   
   func showBorder(){

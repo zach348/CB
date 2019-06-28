@@ -34,7 +34,7 @@ struct Sensory {
   
   static func applyFrequency() {
     let hz = Game.currentSettings.frequency
-    if let gameScene = currentGame.gameScene, var timers = currentGame.timer?.members {
+    if let gameScene = currentGame.gameScene {
       let tone = SKAction.playSoundFileNamed("test.wav", waitForCompletion: false)
       let wait = SKAction.wait(forDuration: 1/hz/2)
       let systemVal = UIScreen.main.brightness
@@ -44,7 +44,7 @@ struct Sensory {
       let sequence = SKAction.sequence([wait, decrease, wait, freqGroup])
       
       gameScene.run(SKAction.repeatForever(sequence), withKey: "frequencyLoopTimer")
-      timers.append("frequencyLoopTimer")
+      currentGame.timer?.members.append("frequencyLoopTimer")
     }
   }
 }
