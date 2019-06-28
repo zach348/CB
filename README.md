@@ -1,6 +1,4 @@
 # CB
-Ninja Attack Tutorial
-
 Copyright Notices:
 
 This project was orginally built on a tutorial template and may include remnants of associated code. As such, we include  
