@@ -109,7 +109,6 @@ class Ball: SKSpriteNode {
         ball.removeAction(forKey: "blinkBall")
         ball.blinkBall()
       //testing
-        Ball.resetTextures()
       }
   }
   
