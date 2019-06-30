@@ -18,13 +18,13 @@ class Game {
         timer.stopTimer(timerID: "frequencyLoopTimer")
         Sensory.applyFrequency()
       }
-      Ball.resetTextures()
       if Ball.getTargets().count < Game.currentSettings.numTargets {
         if let newTarget = Ball.getDistractors().randomElement(){
           newTarget.isTarget = true
           newTarget.blinkBall()
         }
       }
+      Ball.resetTextures()
     }
   }
   
