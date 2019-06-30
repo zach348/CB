@@ -87,13 +87,32 @@ class Game {
       print("pending pause")
       return
     }
-    if let world = self.world {
-      world.isPaused = true
+    if let gameWorld = self.world {
+      gameWorld.isPaused = true
       self.isPaused = true
       if let timer = self.timer { timer.stopTimer(timerID: "targetTimer" )}
       Ball.freezeMovement()
       Ball.maskTargets()
       //testing
+      self.pauseCountdown()
+    }
+  }
+  
+  func pauseCountdown(){
+    if let gameScene = self.gameScene, let timer = currentGame.timer{
+      let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
+      let unpause = SKAction.run { currentGame.unpauseGame()}
+      let recursiveCall = SKAction.run {
+        timer.recursivePauseTimer()
+      }
+      let countdown = SKAction.run {
+        timer.pauseCountdownTimer(pauseDuration: unpauseWait.duration)
+      }
+      timer.members.append("unpauseTimer")
+      let countGroup = SKAction.group([unpauseWait, countdown])
+      let unpauseGroup = SKAction.group([unpause, recursiveCall])
+      let sequence = SKAction.sequence([countGroup, unpauseGroup])
+      gameScene.run(sequence, withKey: "unpauseTimer")
     }
   }
   
@@ -106,7 +125,6 @@ class Game {
       Ball.unmaskTargets()
       Ball.hideBorders()
       Ball.resetTextures()
-
     }
   }
   

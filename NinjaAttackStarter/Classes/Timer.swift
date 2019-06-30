@@ -53,21 +53,11 @@ class Timer {
       //pause delay
       let error = Game.currentSettings.pauseError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.pauseDelay - error, max: Game.currentSettings.pauseDelay + error)))
-      let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
       let pause = SKAction.run { currentGame.pauseGame()}
-      let unpause = SKAction.run { currentGame.unpauseGame()}
-      let recursiveCall = SKAction.run {
-        self.recursivePauseTimer()
-      }
-      let countdown = SKAction.run {
-        self.pauseCountdownTimer(pauseDuration: unpauseWait.duration)
-      }
-      self.members.append("pauseTimer")
+      let sequence = SKAction.sequence([wait, pause])
       
-      let countGroup = SKAction.group([unpauseWait, countdown])
-      let unpauseGroup = SKAction.group([unpause, recursiveCall])
-      let sequence = SKAction.sequence([wait, pause, countGroup, unpauseGroup])
-      gameScene.run(sequence)
+      self.members.append("pauseTimer")
+      gameScene.run(sequence, withKey: "pauseTimer")
     }
   }
   
