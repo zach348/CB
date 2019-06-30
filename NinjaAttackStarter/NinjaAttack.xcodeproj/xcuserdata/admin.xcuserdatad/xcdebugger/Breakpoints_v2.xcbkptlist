@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/Game.swift"
-            timestampString = "583094270.486195"
+            timestampString = "583599750.104748"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "pauseGame()"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/Game.swift"
-            timestampString = "583094270.486353"
+            timestampString = "583599750.106594"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
             landmarkName = "pauseGame()"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/Game.swift"
-            timestampString = "583094270.486516"
+            timestampString = "583599750.10683"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "14"
+            endingLineNumber = "14"
             landmarkName = "currentSettings"
             landmarkType = "24">
             <Locations>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/Game.swift"
-            timestampString = "583094270.486614"
+            timestampString = "583599750.1070679"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
             landmarkName = "currentSettings"
             landmarkType = "24">
          </BreakpointContent>
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/Game.swift"
-            timestampString = "583094270.48672"
+            timestampString = "583599750.10727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "61"
-            endingLineNumber = "61"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "advancePhase()"
             landmarkType = "7">
          </BreakpointContent>
@@ -122,13 +122,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/Timer.swift"
-            timestampString = "583094270.48689"
+            timestampString = "583599750.1074719"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "75"
+            endingLineNumber = "75"
+            landmarkName = "pauseCountdownTimer(pauseDuration:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

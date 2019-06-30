@@ -1,30 +1,4 @@
-/// Copyright (c) 2019 Razeware LLC
-/// 
-/// Permission is hereby granted, free of charge, to any person obtaining a copy
-/// of this software and associated documentation files (the "Software"), to deal
-/// in the Software without restriction, including without limitation the rights
-/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-/// copies of the Software, and to permit persons to whom the Software is
-/// furnished to do so, subject to the following conditions:
-/// 
-/// The above copyright notice and this permission notice shall be included in
-/// all copies or substantial portions of the Software.
-/// 
-/// Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
-/// distribute, sublicense, create a derivative work, and/or sell copies of the
-/// Software in any work that is designed, intended, or marketed for pedagogical or
-/// instructional purposes related to programming, coding, application development,
-/// or information technology.  Permission for such use, copying, modification,
-/// merger, publication, distribution, sublicensing, creation of derivative works,
-/// or sale is expressly withheld.
-/// 
-/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-/// THE SOFTWARE.
+
 
 import SpriteKit
 
@@ -127,6 +101,10 @@ class Ball: SKSpriteNode {
     return newTargets
   }
   
+  class func getBall(name:String) -> Ball {
+    return self.members.first(where: {$0.name == name })!
+  }
+  
   class func getTargets() -> [Ball]{
     return self.members.filter { ball in
       ball.isTarget
@@ -165,9 +143,28 @@ class Ball: SKSpriteNode {
     self.getTargets().forEach({ target in target.texture = Game.currentSettings.targetTexture })
   }
   
+  class func hideBorders(){
+    self.members.forEach({ $0.hideBorder()})
+  }
+  
+  class func showBorders(){
+    self.members.forEach({ $0.showBorder()})
+  }
+  
   class func resetTextures(){
     self.members.forEach({ ball in ball.texture = ball.isTarget ? Game.currentSettings.targetTexture : Game.currentSettings.distractorTexture })
   }
+  
+  class func enableInteraction() {
+    self.members.forEach({ ball in ball.isUserInteractionEnabled = true })
+  }
+  
+  class func disableInteraction() {
+    self.members.forEach({ ball in ball.isUserInteractionEnabled = false })
+  }
+  
+  
+  
 //INSTANCE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   var isTarget:Bool {
@@ -178,6 +175,8 @@ class Ball: SKSpriteNode {
   }
   var positionHistory:[CGPoint]
   var vectorHistory:[String:CGFloat]
+  var border:SKShapeNode?
+  
   let game:Game
   init() {
     let texture = Game.currentSettings.distractorTexture
@@ -185,9 +184,19 @@ class Ball: SKSpriteNode {
     self.isTarget = false
     self.positionHistory = [CGPoint]()
     self.vectorHistory = [String:CGFloat]()
+    self.border = SKShapeNode()
     super.init(texture: texture, color: UIColor.clear, size: texture.size())
+    //border
+    self.border = SKShapeNode(circleOfRadius: 24)
+    if let border = self.border {
+      border.fillColor = .clear
+      border.strokeColor = UIColor.red
+      border.lineWidth = 10
+    }
+    
     self.size = CGSize(width: 50, height: 50)
     self.name = "ball-\(Ball.members.count + 1)"
+    self.isUserInteractionEnabled = false
     //physics setup
     self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.9)
     self.physicsBody?.isDynamic = true
@@ -202,6 +211,7 @@ class Ball: SKSpriteNode {
   required init?(coder aDecoder: NSCoder) {
     self.game = currentGame
     self.isTarget = false
+    self.border = SKShapeNode()
     self.positionHistory = [CGPoint]()
     self.vectorHistory = [String:CGFloat]()
     super.init(coder:aDecoder)
@@ -244,17 +254,37 @@ class Ball: SKSpriteNode {
   }
   
   func blinkBall(){
-    if let currentTexture = self.texture {
-      Ball.blinkFlag = true
-      let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
-      let resetTexture = SKAction.setTexture(currentTexture)
-      let fadeOut = SKAction.fadeOut(withDuration: 0.15)
-      let fadeIn = SKAction.fadeIn(withDuration: 0.15)
-      let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
-      let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
-      let resetFlag = SKAction.run { Ball.blinkFlag = false }
-      let flagSequence = SKAction.sequence([blinkAction, resetFlag])
-      self.run(flagSequence, withKey: "blinkBall")
+    Ball.blinkFlag = true
+    let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
+    let resetTexture = self.isTarget ? SKAction.setTexture(Game.currentSettings.targetTexture) : SKAction.setTexture(Game.currentSettings.distractorTexture)
+    let fadeOut = SKAction.fadeOut(withDuration: 0.15)
+    let fadeIn = SKAction.fadeIn(withDuration: 0.15)
+    let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
+    let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
+    let resetFlag = SKAction.run { Ball.blinkFlag = false }
+    let flagSequence = SKAction.sequence([blinkAction, resetFlag])
+    self.run(flagSequence, withKey: "blinkBall")
+  }
+  
+  func showBorder(){
+    if let border = self.border { self.addChild(border) }
+  }
+  
+  func hideBorder(){
+    if let border = self.border { border.removeFromParent() }
+  }
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+    let touch:UITouch = touches.first! as UITouch
+    let positionInScene = touch.location(in: self)
+    let touchedNode = self.atPoint(positionInScene)
+    if let name = touchedNode.name {
+      if Ball.getTargets().map({$0.name}).contains(name) {
+        print("Touched")
+        Ball.getBall(name: name).showBorder()
+      }
     }
   }
+  
 }
+

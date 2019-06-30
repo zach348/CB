@@ -1,30 +1,3 @@
-/// Copyright (c) 2019 Razeware LLC
-/// 
-/// Permission is hereby granted, free of charge, to any person obtaining a copy
-/// of this software and associated documentation files (the "Software"), to deal
-/// in the Software without restriction, including without limitation the rights
-/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-/// copies of the Software, and to permit persons to whom the Software is
-/// furnished to do so, subject to the following conditions:
-/// 
-/// The above copyright notice and this permission notice shall be included in
-/// all copies or substantial portions of the Software.
-/// 
-/// Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
-/// distribute, sublicense, create a derivative work, and/or sell copies of the
-/// Software in any work that is designed, intended, or marketed for pedagogical or
-/// instructional purposes related to programming, coding, application development,
-/// or information technology.  Permission for such use, copying, modification,
-/// merger, publication, distribution, sublicensing, creation of derivative works,
-/// or sale is expressly withheld.
-/// 
-/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-/// THE SOFTWARE.
 
 import Foundation
 import SpriteKit
@@ -32,26 +5,26 @@ import SpriteKit
 class Game {
   
   static var settingsArr:[Settings] = [
-    Settings(phase: 1, phaseDuration: 50, pauseDelay: 5, pauseError: 1, pauseDuration: 3, frequency: 18, targetMeanSpeed: 700, targetSpeedSD: 450, shiftDelay: 4, shiftError: 1, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red"),
-    Settings(phase: 2, phaseDuration: 70, pauseDelay: 8, pauseError: 2, pauseDuration: 7, frequency: 15, targetMeanSpeed: 550, targetSpeedSD: 325, shiftDelay: 7, shiftError: 2, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red"),
-    Settings(phase: 3, phaseDuration: 80, pauseDelay: 15, pauseError: 3, pauseDuration: 12, frequency: 12, targetMeanSpeed: 425, targetSpeedSD: 200, shiftDelay: 10, shiftError: 3, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red"),
-    Settings(phase: 4, phaseDuration: 100, pauseDelay: 22, pauseError: 3, pauseDuration: 15, frequency: 9, targetMeanSpeed: 300, targetSpeedSD: 100, shiftDelay: 15, shiftError: 4, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white"),
-    Settings(phase: 5, phaseDuration: 120, pauseDelay: 30, pauseError: 4, pauseDuration: 18,frequency: 6, targetMeanSpeed: 225, targetSpeedSD: 45, shiftDelay: 20, shiftError: 5, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white")
+    Settings(phase: 1, phaseDuration: 50, pauseDelay: 10, pauseError: 2, pauseDuration: 1.5, frequency: 16, toneFile: "tone170hz.wav", targetMeanSpeed: 650, targetSpeedSD: 375, shiftDelay: 4, shiftError: 2, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red"),
+    Settings(phase: 2, phaseDuration: 70, pauseDelay: 15, pauseError: 4, pauseDuration: 2.5, frequency: 12, toneFile: "tone155hz.wav", targetMeanSpeed: 500, targetSpeedSD: 275, shiftDelay: 7, shiftError: 4, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red"),
+    Settings(phase: 3, phaseDuration: 80, pauseDelay: 22, pauseError: 6, pauseDuration: 5, frequency: 9, toneFile: "tone140hz.wav", targetMeanSpeed: 375, targetSpeedSD: 175, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red"),
+    Settings(phase: 4, phaseDuration: 100, pauseDelay: 30, pauseError: 6, pauseDuration: 7, frequency: 7, toneFile: "tone115hz.wav", targetMeanSpeed: 275, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white"),
+    Settings(phase: 5, phaseDuration: 120, pauseDelay: 35, pauseError: 8, pauseDuration: 8, frequency: 5, toneFile: "tone90hz.wav", targetMeanSpeed: 175, targetSpeedSD: 0, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white")
   ]
   static var currentSettings:Settings = settingsArr[0] {
     didSet {
       if let timer = currentGame.timer {
-        timer.stopTimer(timerID: "frequencyTimer")
+        print(currentGame.timer!.members)
+        timer.stopTimer(timerID: "frequencyLoopTimer")
         Sensory.applyFrequency()
-        timer.members.append("frequencyLoopTimer")
       }
-      Ball.resetTextures()
       if Ball.getTargets().count < Game.currentSettings.numTargets {
         if let newTarget = Ball.getDistractors().randomElement(){
           newTarget.isTarget = true
           newTarget.blinkBall()
         }
       }
+      Ball.resetTextures()
     }
   }
   
@@ -69,7 +42,11 @@ class Game {
   var gameScene:GameScene?
   var timer:Timer?
   var world:SKNode?
-  var isPaused:Bool
+  var isPaused:Bool {
+    didSet {
+      isPaused == true ? Ball.enableInteraction() : Ball.disableInteraction()
+    }
+  }
   
   
   init(){
@@ -113,10 +90,10 @@ class Game {
     if let world = self.world {
       world.isPaused = true
       self.isPaused = true
+      if let timer = self.timer { timer.stopTimer(timerID: "targetTimer" )}
       Ball.freezeMovement()
       Ball.maskTargets()
       //testing
-      print(self.timer!.members)
     }
   }
   
@@ -124,8 +101,12 @@ class Game {
     if let world = self.world {
       world.isPaused = false
       self.isPaused = false
+      if let timer = self.timer { timer.recursiveTargetTimer()}
       Ball.unfreezeMovement()
       Ball.unmaskTargets()
+      Ball.hideBorders()
+      Ball.resetTextures()
+
     }
   }
   

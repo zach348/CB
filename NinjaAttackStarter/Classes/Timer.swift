@@ -1,30 +1,3 @@
-/// Copyright (c) 2019 Razeware LLC
-/// 
-/// Permission is hereby granted, free of charge, to any person obtaining a copy
-/// of this software and associated documentation files (the "Software"), to deal
-/// in the Software without restriction, including without limitation the rights
-/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-/// copies of the Software, and to permit persons to whom the Software is
-/// furnished to do so, subject to the following conditions:
-/// 
-/// The above copyright notice and this permission notice shall be included in
-/// all copies or substantial portions of the Software.
-/// 
-/// Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
-/// distribute, sublicense, create a derivative work, and/or sell copies of the
-/// Software in any work that is designed, intended, or marketed for pedagogical or
-/// instructional purposes related to programming, coding, application development,
-/// or information technology.  Permission for such use, copying, modification,
-/// merger, publication, distribution, sublicensing, creation of derivative works,
-/// or sale is expressly withheld.
-/// 
-/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-/// THE SOFTWARE.
 
 import Foundation
 import SpriteKit
@@ -49,9 +22,9 @@ class Timer {
   }
   
   func startGameTimer(){
-    let wait = SKAction.wait(forDuration: 0.025)
+    let wait = SKAction.wait(forDuration: 0.05)
     let count = SKAction.run {
-      self.elapsedTime += 0.025
+      self.elapsedTime += 0.05
     }
   //Master Game block kept at top level/ on gamescene instance
     if let scene = currentGame.gameScene {
@@ -59,7 +32,7 @@ class Timer {
       scene.run(SKAction.repeatForever(SKAction.sequence([wait,count])), withKey: "gameTimer")
     }
   }
-  
+
   //other timers on world node
   func startMovementTimer(){
     if let gameWorld = currentGame.world {
@@ -77,17 +50,48 @@ class Timer {
     if let gameScene = currentGame.gameScene {
       gameScene.removeAction(forKey: "pauseTimer")
       self.members = self.members.filter({ $0 != "pauseTimer"})
-      let wait = SKAction.wait(forDuration: Game.currentSettings.pauseDelay, withRange: Game.currentSettings.pauseError)
+      //pause delay
+      let error = Game.currentSettings.pauseError
+      let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.pauseDelay - error, max: Game.currentSettings.pauseDelay + error)))
       let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
-      let pause = SKAction.run {currentGame.pauseGame()}
-      let unpause = SKAction.run {currentGame.unpauseGame()}
+      let pause = SKAction.run { currentGame.pauseGame()}
+      let unpause = SKAction.run { currentGame.unpauseGame()}
       let recursiveCall = SKAction.run {
         self.recursivePauseTimer()
       }
+      let countdown = SKAction.run {
+        self.pauseCountdownTimer(pauseDuration: unpauseWait.duration)
+      }
       self.members.append("pauseTimer")
-      print(currentGame.timer?.elapsedTime)
-      let sequence = SKAction.sequence([wait, pause, unpauseWait, unpause, recursiveCall])
+      
+      let countGroup = SKAction.group([unpauseWait, countdown])
+      let unpauseGroup = SKAction.group([unpause, recursiveCall])
+      let sequence = SKAction.sequence([wait, pause, countGroup, unpauseGroup])
       gameScene.run(sequence)
+    }
+  }
+  
+  func pauseCountdownTimer(pauseDuration:Double){
+    if let gameScene = currentGame.gameScene {
+      var timerNode: Double = pauseDuration
+      let timerLabel = SKLabelNode()
+      timerLabel.text = "\(String(format: "%.3f", timerNode))"
+      timerLabel.fontColor = SKColor.black
+      timerLabel.fontSize = 40
+      timerLabel.position.x = gameScene.size.width / 2
+      timerLabel.position.y = gameScene.size.height / 8.5
+      timerLabel.zPosition = 3.00
+      gameScene.addChild(timerLabel)
+      
+      let loop = SKAction.repeatForever(SKAction.sequence([SKAction.run {
+        timerNode -= 0.1
+        timerLabel.text = "\(String(format: "%.1f", timerNode))"
+        if timerNode <= 0 {
+          timerLabel.removeFromParent()
+          gameScene.removeAction(forKey: "pauseDurationTimer")
+        }
+        },SKAction.wait(forDuration: 0.1)]))
+      gameScene.run(loop, withKey: "pauseDurationTimer")
     }
   }
   
@@ -95,7 +99,9 @@ class Timer {
     if let gameWorld = currentGame.world {
       gameWorld.removeAction(forKey: "targetTimer")
       self.members = self.members.filter({ $0 != "targetTimer"})
-      let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
+      //let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
+      let error = Game.currentSettings.shiftError
+      let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.shiftDelay - error, max: Game.currentSettings.shiftDelay + error)))
       let shift = SKAction.run {
         Ball.shiftTargets()
       }
@@ -109,7 +115,7 @@ class Timer {
   
   func stopTimer(timerID:String) {
     if let world = currentGame.world, let scene = currentGame.gameScene  {
-      if timerID == "gameTimer" || timerID == "frequencyTimer" {
+      if timerID == "gameTimer" || timerID == "frequencyLoopTimer" {
         self.members = self.members.filter { $0 != timerID }
         scene.removeAction(forKey: timerID)
       }else{
