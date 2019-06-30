@@ -204,7 +204,7 @@ class Ball: SKSpriteNode {
     self.name = "ball-\(Ball.members.count + 1)"
     self.isUserInteractionEnabled = false
     //physics setup
-    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.9)
+    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.95)
     self.physicsBody?.isDynamic = true
     self.physicsBody?.allowsRotation = false
     self.physicsBody?.friction = 0
