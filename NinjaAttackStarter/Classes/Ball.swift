@@ -262,7 +262,9 @@ class Ball: SKSpriteNode {
     let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
     let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
     let resetFlag = SKAction.run { Ball.blinkFlag = false }
-    let flagSequence = SKAction.sequence([blinkAction, resetFlag])
+    let wait = SKAction.wait(forDuration: Double.random(min: 0.5, max: 3))
+    let resetSequence = SKAction.sequence([wait, resetFlag])
+    let flagSequence = SKAction.sequence([blinkAction, resetSequence])
     self.run(flagSequence, withKey: "blinkBall")
   }
   

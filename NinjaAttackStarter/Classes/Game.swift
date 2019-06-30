@@ -24,7 +24,6 @@ class Game {
           newTarget.blinkBall()
         }
       }
-      Ball.resetTextures()
     }
   }
   

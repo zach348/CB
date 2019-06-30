@@ -63,6 +63,8 @@ class Timer {
   
   func pauseCountdown(){
     if let gameScene = currentGame.gameScene {
+      gameScene.removeAction(forKey: "unpauseTimer")
+      self.members = self.members.filter({ $0 != "unpauseTimer"})
       let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
       let unpause = SKAction.run { currentGame.unpauseGame()}
       let recursiveCall = SKAction.run {
@@ -112,6 +114,9 @@ class Timer {
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.shiftDelay - error, max: Game.currentSettings.shiftDelay + error)))
       let shift = SKAction.run {
         Ball.shiftTargets()
+        print("SHIFTTARGETS")
+        print("Delay " + String(wait.duration))
+        print("Setting Value: " + String(Game.currentSettings.shiftDelay))
       }
       let recursiveCall = SKAction.run {
         self.recursiveTargetTimer()
