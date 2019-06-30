@@ -61,6 +61,24 @@ class Timer {
     }
   }
   
+  func pauseCountdown(){
+    if let gameScene = currentGame.gameScene {
+      let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
+      let unpause = SKAction.run { currentGame.unpauseGame()}
+      let recursiveCall = SKAction.run {
+        self.recursivePauseTimer()
+      }
+      let countdown = SKAction.run {
+        self.pauseCountdownTimer(pauseDuration: unpauseWait.duration)
+      }
+      self.members.append("unpauseTimer")
+      let countGroup = SKAction.group([unpauseWait, countdown])
+      let unpauseGroup = SKAction.group([unpause, recursiveCall])
+      let sequence = SKAction.sequence([countGroup, unpauseGroup])
+      gameScene.run(sequence, withKey: "unpauseTimer")
+    }
+  }
+  
   func pauseCountdownTimer(pauseDuration:Double){
     if let gameScene = currentGame.gameScene {
       var timerNode: Double = pauseDuration
