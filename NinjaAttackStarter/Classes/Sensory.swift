@@ -7,8 +7,9 @@ struct Sensory {
   
   static func applyFrequency() {
     let hz = Game.currentSettings.frequency
+    let tone = Game.currentSettings.toneFile
     if let gameScene = currentGame.gameScene {
-      let tone = SKAction.playSoundFileNamed("test.wav", waitForCompletion: false)
+      let tone = SKAction.playSoundFileNamed(tone, waitForCompletion: false)
       let wait = SKAction.wait(forDuration: 1/hz/2)
       let systemVal = UIScreen.main.brightness
       let decrease = SKAction.run({ UIScreen.main.brightness = systemVal * 0.975 })
