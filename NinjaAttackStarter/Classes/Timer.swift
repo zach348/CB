@@ -107,8 +107,6 @@ class Timer {
   
   func recursiveTargetTimer() {
     if let gameWorld = currentGame.world {
-      gameWorld.removeAction(forKey: "targetTimer")
-      self.members = self.members.filter({ $0 != "targetTimer"})
       //let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
       let error = Game.currentSettings.shiftError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.shiftDelay - error, max: Game.currentSettings.shiftDelay + error)))

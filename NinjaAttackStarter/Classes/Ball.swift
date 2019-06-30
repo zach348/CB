@@ -79,6 +79,8 @@ class Ball: SKSpriteNode {
   
   class func shiftTargets(){
     if let gameWorld = currentGame.world, let timer = currentGame.timer {
+      gameWorld.removeAction(forKey: "targetTimer")
+      timer.members = timer.members.filter({ $0 != "targetTimer"})
       Ball.clearTargets()
       Ball.assignRandomTargets().forEach { ball in
         ball.removeAction(forKey: "blinkBall")
