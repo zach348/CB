@@ -24,6 +24,12 @@ class Game {
           newTarget.blinkBall()
         }
       }
+      if currentGame.isPaused {
+        Ball.resetTextures()
+        Ball.maskTargets()
+      }else{
+        Ball.resetTextures()
+      }
     }
   }
   

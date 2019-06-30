@@ -118,11 +118,8 @@ class Timer {
         print("Delay " + String(wait.duration))
         print("Setting Value: " + String(Game.currentSettings.shiftDelay))
       }
-      let recursiveCall = SKAction.run {
-        self.recursiveTargetTimer()
-      }
       self.members.append("targetTimer")
-      gameWorld.run(SKAction.sequence([wait, shift, recursiveCall]), withKey: "targetTimer")
+      gameWorld.run(SKAction.sequence([wait, shift]), withKey: "targetTimer")
     }
   }
   
