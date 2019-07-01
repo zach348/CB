@@ -20,9 +20,7 @@ class GameScene: SKScene {
     currentGame.setupGame()
     currentGame.startGame()
     
-//    background track
-//    let backgroundSound = SKAudioNode(fileNamed: "01 - Weightless.mp3")
-//    self.addChild(backgroundSound)
+
   }
   
   

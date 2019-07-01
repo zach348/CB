@@ -8,7 +8,7 @@ class Timer {
     didSet {
       if !Ball.blinkFlag {
         self.remainingInPhase = Game.currentSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
-        if self.remainingInPhase <  0 { Game.advancePhase() }
+        if self.remainingInPhase <  0 && !currentGame.isPaused && !Ball.blinkFlag { Game.advancePhase() }
       }
     }
   }
@@ -33,10 +33,9 @@ class Timer {
     }
   }
 
-  //other timers on world node
   func startMovementTimer(){
     if let gameWorld = currentGame.world {
-      let wait = SKAction.wait(forDuration: 0.1)
+      let wait = SKAction.wait(forDuration: 0.05)
       let correctMovement = SKAction.run {
         MotionControl.correctMovement()
       }
@@ -107,7 +106,6 @@ class Timer {
   
   func recursiveTargetTimer() {
     if let gameWorld = currentGame.world {
-      //let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
       let error = Game.currentSettings.shiftError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.shiftDelay - error, max: Game.currentSettings.shiftDelay + error)))
       let shift = SKAction.run {
