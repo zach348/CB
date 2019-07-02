@@ -92,7 +92,6 @@ class Game {
     if let gameWorld = self.world, let timer = self.timer {
       gameWorld.isPaused = true
       self.isPaused = true
-      timer.stopTimer(timerID: "targetTimer")
       Ball.freezeMovement()
       Ball.maskTargets()
       //testing
@@ -105,7 +104,6 @@ class Game {
     if let world = self.world {
       world.isPaused = false
       self.isPaused = false
-      if let timer = self.timer { timer.recursiveTargetTimer()}
       Ball.unfreezeMovement()
       Ball.unmaskTargets()
       Ball.hideBorders()
