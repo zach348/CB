@@ -5,9 +5,9 @@ import SpriteKit
 //CLASS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Ball: SKSpriteNode {
   static var members = [Ball]()
-  static var blinkFlag: Bool = false {
+  static var blinkFlags = [Bool]() {
     didSet {
-      if self.pendingPause && !self.blinkFlag {
+      if self.pendingPause && self.blinkFlags.isEmpty {
         currentGame.pauseGame()
         self.pendingPause = false
       }
@@ -107,6 +107,13 @@ class Ball: SKSpriteNode {
       }
     }
     return newTargets
+  }
+  
+  class func addTarget(){
+    if let newTarget = Ball.getDistractors().randomElement(){
+      newTarget.isTarget = true
+      newTarget.blinkBall()
+    }
   }
   
   class func getBall(name:String) -> Ball {
@@ -262,7 +269,7 @@ class Ball: SKSpriteNode {
   }
   
   func blinkBall(){
-    Ball.blinkFlag = true
+    Ball.blinkFlags.append(true)
     let currentTexture = self.texture
     let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
     let resetTexture = SKAction.setTexture(currentTexture!)
@@ -270,7 +277,7 @@ class Ball: SKSpriteNode {
     let fadeIn = SKAction.fadeIn(withDuration: 0.15)
     let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
     let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
-    let resetFlag = SKAction.run { Ball.blinkFlag = false }
+    let resetFlag = SKAction.run { Ball.blinkFlags.removeLast() }
     let wait = SKAction.wait(forDuration: Double.random(min: 0.5, max: 1))
     let resetSequence = SKAction.sequence([wait, resetFlag])
     let flagSequence = SKAction.sequence([blinkAction, resetSequence])
