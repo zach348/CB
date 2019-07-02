@@ -5,9 +5,9 @@ import SpriteKit
 //CLASS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Ball: SKSpriteNode {
   static var members = [Ball]()
-  static var blinkFlag: Bool = false {
+  static var blinkFlags = [Bool]() {
     didSet {
-      if self.pendingPause && !self.blinkFlag {
+      if self.pendingPause && self.blinkFlags.isEmpty {
         currentGame.pauseGame()
         self.pendingPause = false
       }
@@ -78,12 +78,20 @@ class Ball: SKSpriteNode {
   }
   
   class func shiftTargets(){
+    if let gameWorld = currentGame.world, let timer = currentGame.timer {
+      gameWorld.removeAction(forKey: "targetTimer")
+      timer.members = timer.members.filter({ $0 != "targetTimer"})
       Ball.clearTargets()
       Ball.assignRandomTargets().forEach { ball in
         ball.removeAction(forKey: "blinkBall")
         ball.blinkBall()
-      //testing
+        //testing
       }
+      let targetTimer = SKAction.run {
+        timer.recursiveTargetTimer()
+      }
+      gameWorld.run(targetTimer)
+    }
   }
   
   class func assignRandomTargets() -> [Ball] {
@@ -99,6 +107,13 @@ class Ball: SKSpriteNode {
       }
     }
     return newTargets
+  }
+  
+  class func addTarget(){
+    if let newTarget = Ball.getDistractors().randomElement(){
+      newTarget.isTarget = true
+      newTarget.blinkBall()
+    }
   }
   
   class func getBall(name:String) -> Ball {
@@ -198,7 +213,7 @@ class Ball: SKSpriteNode {
     self.name = "ball-\(Ball.members.count + 1)"
     self.isUserInteractionEnabled = false
     //physics setup
-    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.9)
+    self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.95)
     self.physicsBody?.isDynamic = true
     self.physicsBody?.allowsRotation = false
     self.physicsBody?.friction = 0
@@ -254,15 +269,18 @@ class Ball: SKSpriteNode {
   }
   
   func blinkBall(){
-    Ball.blinkFlag = true
+    Ball.blinkFlags.append(true)
+    let currentTexture = self.texture
     let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
-    let resetTexture = self.isTarget ? SKAction.setTexture(Game.currentSettings.targetTexture) : SKAction.setTexture(Game.currentSettings.distractorTexture)
+    let resetTexture = SKAction.setTexture(currentTexture!)
     let fadeOut = SKAction.fadeOut(withDuration: 0.15)
     let fadeIn = SKAction.fadeIn(withDuration: 0.15)
     let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
     let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
-    let resetFlag = SKAction.run { Ball.blinkFlag = false }
-    let flagSequence = SKAction.sequence([blinkAction, resetFlag])
+    let resetFlag = SKAction.run { Ball.blinkFlags.removeLast() }
+    let wait = SKAction.wait(forDuration: Double.random(min: 0.5, max: 1))
+    let resetSequence = SKAction.sequence([wait, resetFlag])
+    let flagSequence = SKAction.sequence([blinkAction, resetSequence])
     self.run(flagSequence, withKey: "blinkBall")
   }
   

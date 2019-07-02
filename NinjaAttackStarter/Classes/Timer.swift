@@ -6,9 +6,9 @@ class Timer {
   var members:[String]
   var elapsedTime:Double = 0 {
     didSet {
-      if !Ball.blinkFlag {
+      if Ball.blinkFlags.isEmpty {
         self.remainingInPhase = Game.currentSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
-        if self.remainingInPhase <  0 { Game.advancePhase() }
+        if self.remainingInPhase <  0 && !currentGame.isPaused { Game.advancePhase() }
       }
     }
   }
@@ -33,10 +33,9 @@ class Timer {
     }
   }
 
-  //other timers on world node
   func startMovementTimer(){
     if let gameWorld = currentGame.world {
-      let wait = SKAction.wait(forDuration: 0.1)
+      let wait = SKAction.wait(forDuration: 0.05)
       let correctMovement = SKAction.run {
         MotionControl.correctMovement()
       }
@@ -53,8 +52,19 @@ class Timer {
       //pause delay
       let error = Game.currentSettings.pauseError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.pauseDelay - error, max: Game.currentSettings.pauseDelay + error)))
-      let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
       let pause = SKAction.run { currentGame.pauseGame()}
+      let sequence = SKAction.sequence([wait, pause])
+      
+      self.members.append("pauseTimer")
+      gameScene.run(sequence, withKey: "pauseTimer")
+    }
+  }
+  
+  func pauseCountdown(){
+    if let gameScene = currentGame.gameScene {
+      gameScene.removeAction(forKey: "unpauseTimer")
+      self.members = self.members.filter({ $0 != "unpauseTimer"})
+      let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
       let unpause = SKAction.run { currentGame.unpauseGame()}
       let recursiveCall = SKAction.run {
         self.recursivePauseTimer()
@@ -62,12 +72,11 @@ class Timer {
       let countdown = SKAction.run {
         self.pauseCountdownTimer(pauseDuration: unpauseWait.duration)
       }
-      self.members.append("pauseTimer")
-      
+      self.members.append("unpauseTimer")
       let countGroup = SKAction.group([unpauseWait, countdown])
       let unpauseGroup = SKAction.group([unpause, recursiveCall])
-      let sequence = SKAction.sequence([wait, pause, countGroup, unpauseGroup])
-      gameScene.run(sequence)
+      let sequence = SKAction.sequence([countGroup, unpauseGroup])
+      gameScene.run(sequence, withKey: "unpauseTimer")
     }
   }
   
@@ -97,19 +106,17 @@ class Timer {
   
   func recursiveTargetTimer() {
     if let gameWorld = currentGame.world {
-      gameWorld.removeAction(forKey: "targetTimer")
-      self.members = self.members.filter({ $0 != "targetTimer"})
-      //let wait = SKAction.wait(forDuration: Game.currentSettings.shiftDelay, withRange: Game.currentSettings.shiftError)
+      self.stopTimer(timerID: "targetTimer")
       let error = Game.currentSettings.shiftError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.shiftDelay - error, max: Game.currentSettings.shiftDelay + error)))
       let shift = SKAction.run {
         Ball.shiftTargets()
-      }
-      let recursiveCall = SKAction.run {
-        self.recursiveTargetTimer()
+        print("SHIFTTARGETS")
+        print("Delay " + String(wait.duration))
+        print("Setting Value: " + String(Game.currentSettings.shiftDelay))
       }
       self.members.append("targetTimer")
-      gameWorld.run(SKAction.sequence([wait, shift, recursiveCall]), withKey: "targetTimer")
+      gameWorld.run(SKAction.sequence([wait, shift]), withKey: "targetTimer")
     }
   }
   
