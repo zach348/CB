@@ -11,9 +11,13 @@ class Ball: SKSpriteNode {
         currentGame.pauseGame()
         self.pendingPause = false
       }
+      if self.pendingShift && self.blinkFlags.isEmpty {
+        self.shiftTargets()
+      }
     }
   }
   static var pendingPause:Bool = false
+  static var pendingShift = false
   
   class func createBall(game: Game, xPos: CGFloat, yPos: CGFloat){
     let ball = Ball()
@@ -76,9 +80,13 @@ class Ball: SKSpriteNode {
       ball.physicsBody?.applyImpulse(vector)
     }
   }
-  
+
   class func shiftTargets(){
-    if let gameWorld = currentGame.world, let timer = currentGame.timer {
+    if !self.blinkFlags.isEmpty {
+      self.pendingShift = true
+      print("pending shift")
+      return
+    }else if let gameWorld = currentGame.world, let timer = currentGame.timer {
       gameWorld.removeAction(forKey: "targetTimer")
       timer.members = timer.members.filter({ $0 != "targetTimer"})
       Ball.clearTargets()

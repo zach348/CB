@@ -17,6 +17,8 @@ class Game {
         print(currentGame.timer!.members)
         timer.stopTimer(timerID: "frequencyLoopTimer")
         Sensory.applyFrequency()
+        timer.stopTimer(timerID: "targetTimer")
+        timer.recursiveTargetTimer()
       }
       if Ball.getTargets().count < Game.currentSettings.numTargets {
         Ball.addTarget()
@@ -24,6 +26,7 @@ class Game {
       if currentGame.isPaused {
         Ball.resetTextures()
         Ball.maskTargets()
+        print("setting isPaused if branch tripped")
       }else{
         Ball.resetTextures()
       }
