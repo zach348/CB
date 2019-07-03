@@ -121,12 +121,12 @@ class Timer {
   }
   
   func stopTimer(timerID:String) {
-    if let world = currentGame.world, let scene = currentGame.gameScene  {
+    if let gameWorld = currentGame.world, let scene = currentGame.gameScene  {
       if timerID == "gameTimer" || timerID == "frequencyLoopTimer" {
         self.members = self.members.filter { $0 != timerID }
         scene.removeAction(forKey: timerID)
       }else{
-        world.removeAction(forKey: timerID)
+        gameWorld.removeAction(forKey: timerID)
         self.members = self.members.filter { $0 != timerID }
       }
     }
