@@ -5,11 +5,12 @@ import SpriteKit
 class Game {
   
   static var settingsArr:[Settings] = [
-    Settings(phase: 1, phaseDuration: 50, pauseDelay: 10, pauseError: 2, pauseDuration: 1.5, frequency: 16, toneFile: "tone200hz.wav", targetMeanSpeed: 650, targetSpeedSD: 375, shiftDelay: 4, shiftError: 2, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red", alpha: 1),
-    Settings(phase: 2, phaseDuration: 70, pauseDelay: 15, pauseError: 4, pauseDuration: 2.5, frequency: 12, toneFile: "tone185hz.wav", targetMeanSpeed: 500, targetSpeedSD: 275, shiftDelay: 7, shiftError: 4, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red", alpha: 1),
-    Settings(phase: 3, phaseDuration: 80, pauseDelay: 22, pauseError: 6, pauseDuration: 4, frequency: 9, toneFile: "tone170hz.wav", targetMeanSpeed: 375, targetSpeedSD: 175, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red", alpha: 1),
-    Settings(phase: 4, phaseDuration: 100, pauseDelay: 30, pauseError: 6, pauseDuration: 5, frequency: 7, toneFile: "tone155hz.wav", targetMeanSpeed: 275, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white", alpha: 1),
-    Settings(phase: 5, phaseDuration: 120, pauseDelay: 35, pauseError: 8, pauseDuration: 6, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 175, targetSpeedSD: 0, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white", alpha: 1)
+    Settings(phase: 1, phaseDuration: 50, pauseDelay: 10, pauseError: 2, pauseDuration: 1.5, frequency: 18, toneFile: "tone200hz.wav", targetMeanSpeed: 650, targetSpeedSD: 375, shiftDelay: 4, shiftError: 2, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", flashTexture: "sphere-red", alpha: 1),
+    Settings(phase: 2, phaseDuration: 70, pauseDelay: 15, pauseError: 4, pauseDuration: 2.5, frequency: 14, toneFile: "tone185hz.wav", targetMeanSpeed: 500, targetSpeedSD: 275, shiftDelay: 7, shiftError: 4, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", flashTexture: "sphere-red", alpha: 1),
+    Settings(phase: 3, phaseDuration: 80, pauseDelay: 22, pauseError: 6, pauseDuration: 4, frequency: 10, toneFile: "tone170hz.wav", targetMeanSpeed: 375, targetSpeedSD: 175, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red", alpha: 1),
+    Settings(phase: 4, phaseDuration: 100, pauseDelay: 30, pauseError: 6, pauseDuration: 5, frequency: 8, toneFile: "tone155hz.wav", targetMeanSpeed: 275, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white", alpha: 1),
+    Settings(phase: 5, phaseDuration: 120, pauseDelay: 35, pauseError: 8, pauseDuration: 6, frequency: 6, toneFile: "tone140hz.wav", targetMeanSpeed: 175, targetSpeedSD: 25, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-gray", flashTexture: "sphere-white", alpha: 1),
+    Settings(phase: 6, phaseDuration: 150, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 100, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-offYellow", distractorTexture: "sphere-black", flashTexture: "sphere-white", alpha: 1)
   ]
   static var currentSettings:Settings = settingsArr[0] {
     didSet {
@@ -26,9 +27,36 @@ class Game {
       if currentGame.isPaused {
         Ball.resetTextures()
         Ball.maskTargets()
-        print("setting isPaused if branch tripped")
       }else{
         Ball.resetTextures()
+      }
+      
+      ///TESTING/////////
+      if self.currentSettings.phase == 2 {
+        if let timer = currentGame.timer, let gameScene = currentGame.gameScene {
+          timer.members.forEach({ loop in
+            if loop != "" {timer.stopTimer(timerID: loop)}
+          })
+          var outerPoints = MotionControl.circlePoints(numPoints: Ball.members.count, centerX: 0, centerY: 0, radius: gameScene.size.height/2)
+          var innerPoints = MotionControl.circlePoints(numPoints: Ball.members.count, centerX: 0, centerY: 0, radius: 70)
+          for index in 0..<Ball.members.count {
+            let ball = Ball.members[index]
+            let outerPoint = outerPoints[index]
+            let innerPoint = innerPoints[index]
+            ball.isTarget = false
+            ball.physicsBody?.velocity.dx = 0
+            ball.physicsBody?.velocity.dy = 0
+            let inWait = SKAction.wait(forDuration: 2)
+            let outWait = SKAction.wait(forDuration: 1)
+            let moveToCenter = SKAction.move(to: innerPoint, duration: 7)
+            let moveOut = SKAction.move(to: outerPoint, duration: 3)
+            let moveIn = SKAction.move(to: innerPoint, duration: 5)
+            let sequence = SKAction.sequence([moveOut,outWait,moveIn,inWait])
+            ball.run(moveToCenter, completion: { ball.run(SKAction.repeatForever(sequence)) })
+          }
+     
+      
+        }
       }
     }
   }
@@ -62,7 +90,10 @@ class Game {
     self.timer = Timer()
     self.world = SKNode()
     if let scene = self.gameScene {
-      if let world = self.world { scene.addChild(world) }
+      if let world = self.world {
+        scene.addChild(world)
+        world.position = CGPoint(x: scene.size.width/2, y: scene.size.height/2)
+      }
     //gamescene formatting
       scene.backgroundColor = .white
       scene.scaleMode = .aspectFit

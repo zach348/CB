@@ -27,12 +27,10 @@ class Ball: SKSpriteNode {
   }
   
   class func createBalls(num: Int, game: Game){
-    if let scene = currentGame.gameScene {
-      var createBallCounter = 0
-      while createBallCounter < num {
-        createBall(game: game, xPos: scene.size.width/2, yPos: scene.size.height/2)
-        createBallCounter += 1
-      }
+    var createBallCounter = 0
+    while createBallCounter < num {
+      createBall(game: game, xPos: 0, yPos: 0)
+      createBallCounter += 1
     }
   }
   
@@ -229,7 +227,7 @@ class Ball: SKSpriteNode {
     //alpha
     self.alpha = Game.currentSettings.alpha
     
-    self.size = CGSize(width: 50, height: 50)
+    self.size = CGSize(width: 40, height: 40)
     self.name = "ball-\(Ball.members.count + 1)"
     self.isUserInteractionEnabled = false
     //physics setup

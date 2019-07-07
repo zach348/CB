@@ -1,5 +1,7 @@
 # CB
-Copyright Notices:
+
+Calibrate, Copyright 6/1/2019, Zachary Cutler
+Additional Copyright Notices:
 
 This project was orginally built on a tutorial template and may include remnants of associated code. As such, we include  
 below a copy of the copyright included in the original tutorial:  

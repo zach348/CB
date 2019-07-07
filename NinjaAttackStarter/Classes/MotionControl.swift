@@ -12,6 +12,22 @@ struct MotionControl {
     self.wallPush()
   }
   
+  //gist
+  public static func circlePoints(numPoints:Int, centerX: CGFloat, centerY: CGFloat, radius: CGFloat, precision:Int = 3) -> [CGPoint] {
+    var points = [CGPoint]()
+    let angle = CGFloat(Double.pi) / CGFloat(numPoints) * 2.0
+    let p = CGFloat(pow(10.0, Double(precision)))
+    
+    for i in 0..<numPoints {
+      let x = centerX - radius * cos(angle * CGFloat(i))
+      let roundedX = Double(round(p * x)) / Double(p)
+      let y = centerY - radius * sin(angle * CGFloat(i))
+      let roundedY = Double(round(p * y)) / Double(p)
+      points.append(CGPoint(x: roundedX, y: roundedY))
+    }
+    return points
+  }
+  
   private static func correctMeanSpeed(){
     let currentMeanSpeed = Ball.mean()
     for ball in Ball.members {
