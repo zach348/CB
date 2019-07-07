@@ -45,11 +45,9 @@ class Timer {
   }
   
   func recursivePauseTimer(){
-    //pausing loop
     if let gameScene = currentGame.gameScene {
       gameScene.removeAction(forKey: "pauseTimer")
       self.members = self.members.filter({ $0 != "pauseTimer"})
-      //pause delay
       let error = Game.currentSettings.pauseError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.pauseDelay - error, max: Game.currentSettings.pauseDelay + error)))
       let pause = SKAction.run { currentGame.pauseGame()}

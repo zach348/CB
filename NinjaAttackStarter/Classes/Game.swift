@@ -10,7 +10,7 @@ class Game {
     Settings(phase: 3, phaseDuration: 80, pauseDelay: 22, pauseError: 6, pauseDuration: 4, frequency: 10, toneFile: "tone170hz.wav", targetMeanSpeed: 375, targetSpeedSD: 175, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red", alpha: 1),
     Settings(phase: 4, phaseDuration: 100, pauseDelay: 30, pauseError: 6, pauseDuration: 5, frequency: 8, toneFile: "tone155hz.wav", targetMeanSpeed: 275, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white", alpha: 1),
     Settings(phase: 5, phaseDuration: 120, pauseDelay: 35, pauseError: 8, pauseDuration: 6, frequency: 6, toneFile: "tone140hz.wav", targetMeanSpeed: 175, targetSpeedSD: 25, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-aqua", distractorTexture: "sphere-gray", flashTexture: "sphere-white", alpha: 1),
-    Settings(phase: 6, phaseDuration: 150, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 100, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white", alpha: 1),
+    Settings(phase: 6, phaseDuration: 20, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 100, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white", alpha: 1),
     Settings(phase: 7, phaseDuration: 180, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 100, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white", alpha: 1)
   ]
   
@@ -30,7 +30,7 @@ class Game {
       }
       
       if self.currentSettings.phase == 7 {
-        MotionControl.circleTransition()
+        MotionControl.circleMovement()
       }
       
       if currentGame.isPaused {
@@ -79,7 +79,7 @@ class Game {
         scene.addChild(world)
         world.position = CGPoint(x: scene.size.width/2, y: scene.size.height/2)
       }
-    //gamescene formatting
+      //gamescene formatting
       scene.backgroundColor = .white
       scene.scaleMode = .aspectFit
       scene.physicsBody = SKPhysicsBody(edgeLoopFrom: scene.frame)
@@ -97,15 +97,14 @@ class Game {
       masterTimer.startGameTimer()
       Ball.startMovement()
       self.timer?.startTimerActions()
-      //testing
       Sensory.applyFrequency()
+      //testing
     }
   }
   
   func pauseGame(){
     if !Ball.blinkFlags.isEmpty {
       Ball.pendingPause = true
-      print("pending pause")
       return
     }
     if let gameWorld = self.world, let timer = self.timer {
@@ -113,8 +112,8 @@ class Game {
       self.isPaused = true
       Ball.freezeMovement()
       Ball.maskTargets()
-      //testing
       timer.pauseCountdown()
+      //testing
     }
   }
   
