@@ -10,60 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/Game.swift"
-            timestampString = "584294655.701067"
+            timestampString = "584320687.880231"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "18"
-            endingLineNumber = "18"
-            landmarkName = "currentSettings"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "globalinit_33_CE43F6228F262B365763D65DC70C19EA_func1"
-                  moduleName = "NinjaAttack"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/admin/NinjaAttack/NinjaAttackStarter/Classes/Game.swift"
-                  timestampString = "582599262.760093"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "41"
-                  endingLineNumber = "41"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "NinjaAttack.Game.currentSettings.unsafeMutableAddressor : NinjaAttack.Settings"
-                  moduleName = "NinjaAttack"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/admin/NinjaAttack/NinjaAttackStarter/Classes/Game.swift"
-                  timestampString = "582599262.762436"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "41"
-                  endingLineNumber = "41"
-                  offsetFromSymbolStart = "20">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Classes/Game.swift"
-            timestampString = "584294655.702775"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
-            landmarkName = "currentSettings"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "currentTrackSettings"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -74,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/Game.swift"
-            timestampString = "584294655.7055711"
+            timestampString = "584320687.883546"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
             landmarkName = "advancePhase()"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/Timer.swift"
-            timestampString = "584294655.7067339"
+            timestampString = "584320687.886429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
+            startingLineNumber = "124"
+            endingLineNumber = "124"
             landmarkName = "pauseCountdownTimer(pauseDuration:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -106,7 +58,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/Ball.swift"
-            timestampString = "584294655.706786"
+            timestampString = "584320687.886971"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "314"

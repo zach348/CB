@@ -7,7 +7,7 @@ class Timer {
   var elapsedTime:Double = 0 {
     didSet {
       if Ball.blinkFlags.isEmpty {
-        self.remainingInPhase = Game.currentSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
+        self.remainingInPhase = Game.currentTrackSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
         if self.remainingInPhase <  0 && !currentGame.isPaused { Game.advancePhase() }
       }
     }
@@ -17,7 +17,7 @@ class Timer {
   init(){
     self.members = []
     self.lastPhaseShiftTime = 0
-    self.remainingInPhase = Game.currentSettings.phaseDuration
+    self.remainingInPhase = Game.currentTrackSettings.phaseDuration
     currentGame.timer = self
   }
   
@@ -44,12 +44,47 @@ class Timer {
     }
   }
   
+  func circleMovement(){
+    print("running")
+    let concentrics = MotionControl.generateConcentrics()
+    for index in 0..<Ball.members.count {
+      let ball = Ball.members[index], incrementalOutDuration = Game.currentRespSettings.outDuration/4, incrementalInDuration = Game.currentRespSettings.inDuration/4
+      var inActions = [SKAction](), outActions = [SKAction](), trajectory = [CGPoint](), legIndices = [Int]()
+      for pointsIndex in stride(from: 0, through: concentrics.count - 1, by: 2){
+        let point = concentrics[pointsIndex][index]
+        trajectory.append(point)
+      }
+      legIndices.append((trajectory.count - 1) / 10 * 4)
+      legIndices.append((trajectory.count - 1) / 10 * 7)
+      legIndices.append((trajectory.count - 1) / 10 * 9)
+      legIndices.append(trajectory.count - 1)
+      
+      for legIndex in legIndices {
+        inActions.append(SKAction.move(to: trajectory[legIndex], duration: incrementalInDuration))
+        outActions.append(SKAction.move(to: trajectory.reversed()[legIndex], duration: incrementalOutDuration))
+      }
+      let moveOutSequence = SKAction.sequence(outActions)
+      let moveInSequence = SKAction.sequence(inActions)
+      let moveInWait = SKAction.wait(forDuration: Game.currentRespSettings.inWait)
+      let moveOutWait = SKAction.wait(forDuration: Game.currentRespSettings.outWait)
+      let moveToCenter = SKAction.move(to: trajectory.first!, duration: Game.currentRespSettings.moveToCenterDuration)
+      let moveToCenterWait = SKAction.wait(forDuration: Game.currentRespSettings.moveCenterWait)
+      let centerSequence = SKAction.sequence([moveToCenter,moveToCenterWait])
+      let finalSequence = SKAction.repeatForever(SKAction.sequence([moveInSequence,moveInWait,moveOutSequence,moveOutWait]))
+      self.members.append("breathLoop")
+      ball.run(SKAction.sequence([centerSequence,finalSequence]), withKey: "breathLoop")
+      //create a speed bleed/transition function
+      ball.physicsBody?.velocity.dx = 0
+      ball.physicsBody?.velocity.dy = 0
+    }
+  }
+  
   func recursivePauseTimer(){
     if let gameScene = currentGame.gameScene {
       gameScene.removeAction(forKey: "pauseTimer")
       self.members = self.members.filter({ $0 != "pauseTimer"})
-      let error = Game.currentSettings.pauseError
-      let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.pauseDelay - error, max: Game.currentSettings.pauseDelay + error)))
+      let error = Game.currentTrackSettings.pauseError
+      let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentTrackSettings.pauseDelay - error, max: Game.currentTrackSettings.pauseDelay + error)))
       let pause = SKAction.run { currentGame.pauseGame()}
       let sequence = SKAction.sequence([wait, pause])
       
@@ -62,7 +97,7 @@ class Timer {
     if let gameScene = currentGame.gameScene {
       gameScene.removeAction(forKey: "unpauseTimer")
       self.members = self.members.filter({ $0 != "unpauseTimer"})
-      let unpauseWait = SKAction.wait(forDuration: Game.currentSettings.pauseDuration)
+      let unpauseWait = SKAction.wait(forDuration: Game.currentTrackSettings.pauseDuration)
       let unpause = SKAction.run { currentGame.unpauseGame()}
       let recursiveCall = SKAction.run {
         self.recursivePauseTimer()
@@ -105,13 +140,13 @@ class Timer {
   func recursiveTargetTimer() {
     if let gameWorld = currentGame.world {
       self.stopTimer(timerID: "targetTimer")
-      let error = Game.currentSettings.shiftError
-      let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentSettings.shiftDelay - error, max: Game.currentSettings.shiftDelay + error)))
+      let error = Game.currentTrackSettings.shiftError
+      let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentTrackSettings.shiftDelay - error, max: Game.currentTrackSettings.shiftDelay + error)))
       let shift = SKAction.run {
         Ball.shiftTargets()
         print("SHIFTTARGETS")
         print("Delay " + String(wait.duration))
-        print("Setting Value: " + String(Game.currentSettings.shiftDelay))
+        print("Setting Value: " + String(Game.currentTrackSettings.shiftDelay))
       }
       self.members.append("targetTimer")
       gameWorld.run(SKAction.sequence([wait, shift]), withKey: "targetTimer")

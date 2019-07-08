@@ -103,7 +103,7 @@ class Ball: SKSpriteNode {
   class func assignRandomTargets() -> [Ball] {
     var newTargets = [Ball]()
     var counter = 0
-    while counter < Game.currentSettings.numTargets {
+    while counter < Game.currentTrackSettings.numTargets {
       let randomIndex = Int.random(min: 0, max: self.members.count - 1)
       let newTarget = self.members[randomIndex]
       if !newTargets.contains(newTarget) {
@@ -158,15 +158,15 @@ class Ball: SKSpriteNode {
   
   class func maskTargets() {
     self.getTargets().forEach({ target in
-      target.texture = Game.currentSettings.distractorTexture
-      target.alpha = Game.currentSettings.alpha
+      target.texture = Game.currentTrackSettings.distractorTexture
+      target.alpha = Game.currentTrackSettings.alpha
     })
   }
   
   class func unmaskTargets() {
     self.getTargets().forEach({ target in
-      target.texture = Game.currentSettings.targetTexture
-      target.alpha = Game.currentSettings.alpha
+      target.texture = Game.currentTrackSettings.targetTexture
+      target.alpha = Game.currentTrackSettings.alpha
     })
   }
   
@@ -180,8 +180,8 @@ class Ball: SKSpriteNode {
   
   class func resetTextures(){
     self.members.forEach({ ball in
-      ball.texture = ball.isTarget ? Game.currentSettings.targetTexture : Game.currentSettings.distractorTexture
-      ball.alpha = Game.currentSettings.alpha
+      ball.texture = ball.isTarget ? Game.currentTrackSettings.targetTexture : Game.currentTrackSettings.distractorTexture
+      ball.alpha = Game.currentTrackSettings.alpha
     })
   }
   
@@ -199,8 +199,8 @@ class Ball: SKSpriteNode {
   
   var isTarget:Bool {
     didSet {
-      if isTarget { self.texture = Game.currentSettings.targetTexture }
-      else { self.texture = Game.currentSettings.distractorTexture }
+      if isTarget { self.texture = Game.currentTrackSettings.targetTexture }
+      else { self.texture = Game.currentTrackSettings.distractorTexture }
     }
   }
   var positionHistory:[CGPoint]
@@ -209,7 +209,7 @@ class Ball: SKSpriteNode {
   
   let game:Game
   init() {
-    let texture = Game.currentSettings.distractorTexture
+    let texture = Game.currentTrackSettings.distractorTexture
     self.game = currentGame
     self.isTarget = false
     self.positionHistory = [CGPoint]()
@@ -225,7 +225,7 @@ class Ball: SKSpriteNode {
     }
     
     //alpha
-    self.alpha = Game.currentSettings.alpha
+    self.alpha = Game.currentTrackSettings.alpha
     
     self.size = CGSize(width: 40, height: 40)
     self.name = "ball-\(Ball.members.count + 1)"
@@ -289,10 +289,10 @@ class Ball: SKSpriteNode {
   func blinkBall(){
     Ball.blinkFlags.append(true)
     if let currentTexture = self.texture{
-      let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
+      let setFlashTexture = SKAction.setTexture(Game.currentTrackSettings.flashTexture)
       let resetTexture = SKAction.setTexture(currentTexture)
       let resetAlpha = SKAction.run {
-        self.alpha = Game.currentSettings.alpha
+        self.alpha = Game.currentTrackSettings.alpha
       }
       let resetSprite = SKAction.group([resetTexture, resetAlpha])
       let fadeOut = SKAction.fadeOut(withDuration: 0.15)
