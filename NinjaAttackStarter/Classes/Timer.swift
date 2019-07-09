@@ -44,8 +44,7 @@ class Timer {
     }
   }
   
-  func circleMovement(){
-    print("running")
+  func circleMovementTimer(){
     let concentrics = MotionControl.generateConcentrics()
     for index in 0..<Ball.members.count {
       let ball = Ball.members[index], incrementalOutDuration = Game.currentRespSettings.outDuration/4, incrementalInDuration = Game.currentRespSettings.inDuration/4

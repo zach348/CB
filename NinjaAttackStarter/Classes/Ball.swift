@@ -306,6 +306,23 @@ class Ball: SKSpriteNode {
       self.run(flagSequence, withKey: "blinkBall")
     }
   }
+    
+  func flickerOutTarget(duration:TimeInterval = 1.0){
+    let off = SKAction.setTexture(Game.currentTrackSettings.distractorTexture)
+    let on = SKAction.setTexture(Game.currentTrackSettings.targetTexture)
+    let waitAction = SKAction.wait(forDuration: duration)
+    if duration < 0.01 {
+      self.run(off)
+    }else{
+      let newDuration = duration * Double.random(min: 0.6, max: 0.7)
+      let recursiveCall = SKAction.run {
+        print("recursion", duration)
+        self.flickerOutTarget(duration:newDuration)
+      }
+      self.run(SKAction.sequence([off,waitAction,on,waitAction]), completion: { self.run(recursiveCall)})
+    }
+  }
+  
   
   func showBorder(){
     if let border = self.border { self.addChild(border) }
@@ -321,7 +338,6 @@ class Ball: SKSpriteNode {
     let touchedNode = self.atPoint(positionInScene)
     if let name = touchedNode.name {
       if Ball.getTargets().map({$0.name}).contains(name) {
-        print("Touched")
         Ball.getBall(name: name).showBorder()
       }
     }

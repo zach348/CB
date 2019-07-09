@@ -31,6 +31,7 @@ import SpriteKit
 
 struct RespSettings {
   let phase:Int
+  let frequency:Double
   let inDuration:TimeInterval
   let inWait:TimeInterval
   let outDuration:TimeInterval
@@ -38,8 +39,9 @@ struct RespSettings {
   let moveToCenterDuration:TimeInterval
   let moveCenterWait:TimeInterval
   
-  init(phase:Int, inDuration:TimeInterval, inWait:TimeInterval, outDuration:TimeInterval, outWait:TimeInterval, moveToCenterDuration:TimeInterval, moveCenterWait:TimeInterval){
+  init(phase:Int, frequency:Double, inDuration:TimeInterval, inWait:TimeInterval, outDuration:TimeInterval, outWait:TimeInterval, moveToCenterDuration:TimeInterval, moveCenterWait:TimeInterval){
     self.phase = phase
+    self.frequency = frequency
     self.inDuration = inDuration
     self.inWait = inWait
     self.outDuration = outDuration

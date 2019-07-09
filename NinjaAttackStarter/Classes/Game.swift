@@ -10,21 +10,38 @@ class Game {
     Settings(phase: 3, phaseDuration: 80, pauseDelay: 22, pauseError: 6, pauseDuration: 4, frequency: 10, toneFile: "tone170hz.wav", targetMeanSpeed: 375, targetSpeedSD: 175, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", flashTexture: "sphere-red", alpha: 1),
     Settings(phase: 4, phaseDuration: 100, pauseDelay: 30, pauseError: 6, pauseDuration: 5, frequency: 8, toneFile: "tone155hz.wav", targetMeanSpeed: 275, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white", alpha: 1),
     Settings(phase: 5, phaseDuration: 120, pauseDelay: 35, pauseError: 8, pauseDuration: 6, frequency: 6, toneFile: "tone140hz.wav", targetMeanSpeed: 175, targetSpeedSD: 25, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-aqua", distractorTexture: "sphere-gray", flashTexture: "sphere-white", alpha: 1),
-    Settings(phase: 6, phaseDuration: 10, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 100, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white", alpha: 1),
+    //messing with duration for dev
+    Settings(phase: 6, phaseDuration: 5, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 75, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white", alpha: 1),
     //Final settings is a dummy phase... used only to trigger the phase property-based trigger for transition into resp
-    Settings(phase: 7, phaseDuration: 180, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 100, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white", alpha: 1)
+    Settings(phase: 7, phaseDuration: 180, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 0, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-orange", alpha: 1)
   ]
   
   static var respSettingsArr:[RespSettings] = [
-    RespSettings(phase: 7, inDuration: 4, inWait: 2, outDuration: 3, outWait: 1.5, moveToCenterDuration: 6, moveCenterWait: 2)
+    RespSettings(phase: 7, frequency: 5, inDuration: 4, inWait: 2, outDuration: 3, outWait: 1.5, moveToCenterDuration: 6, moveCenterWait: 2)
   ]
   
+  //TESTING
   static var respTransition:Bool = false {
     didSet{
+      //logic for transition into resp
       if respTransition {
         if let timer = currentGame.timer {
-          timer.members.forEach({ loop in if loop != "" {timer.stopTimer(timerID: loop)}})
-          timer.circleMovement()
+          //stop targetShift and pause timers
+          timer.members.forEach({ loop in
+            if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" {timer.stopTimer(timerID: loop)}
+          })
+          //implement flicker effect
+          let targetAssignment = SKAction.run({
+            Ball.assignRandomTargets()
+          })
+          let wait = SKAction.wait(forDuration: 2)
+          let flickerAction = SKAction.run {
+            Ball.getTargets().forEach({ball in ball.flickerOutTarget()})
+          }
+          if let world = currentGame.world {world.run(SKAction.sequence([targetAssignment,wait,flickerAction]))}
+         
+          //stop master movement timer prior to calling circleMovementTimer
+//          timer.circleMovementTimer()
         }
       }
     }
@@ -45,7 +62,7 @@ class Game {
       }
       
       if self.currentTrackSettings.phase == 7 {
-        //CIRCLE MOVEMENT HERE//
+        //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
         self.respTransition = true
       }
       
@@ -55,7 +72,6 @@ class Game {
       }else{
         Ball.resetTextures()
       }
-      
       ///TESTING/////////
 
     }
