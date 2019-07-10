@@ -12,12 +12,12 @@ class Game {
     Settings(phase: 5, phaseDuration: 120, pauseDelay: 35, pauseError: 8, pauseDuration: 6, frequency: 6, toneFile: "tone140hz.wav", targetMeanSpeed: 175, targetSpeedSD: 25, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-aqua", distractorTexture: "sphere-gray", flashTexture: "sphere-white", alpha: 1),
     //messing with duration for dev
     Settings(phase: 6, phaseDuration: 5, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 75, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white", alpha: 1),
-    //Final settings is a dummy phase... used only to trigger the phase property-based trigger for transition into resp
-    Settings(phase: 7, phaseDuration: 900, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 0, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-orange", alpha: 1)
+    //Final settings is a dummy phase...
+    Settings(phase: 7, phaseDuration: 900, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 4, toneFile: "tone140hz.wav", targetMeanSpeed: 0, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-orange", alpha: 1)
   ]
   
   static var respSettingsArr:[RespSettings] = [
-    RespSettings(phase: 7, frequency: 5, inDuration: 3.5, inWait: 1.5, outDuration: 5, outWait: 3, moveToCenterDuration: 6, moveCenterWait: 2)
+    RespSettings(phase: 7, frequency: 4, inDuration: 3.5, inWait: 1.5, outDuration: 5, outWait: 3, moveToCenterDuration: 6, moveCenterWait: 2)
   ]
   
   //TESTING
@@ -26,50 +26,55 @@ class Game {
       //logic for transition into resp
       if respTransition {
         if let timer = currentGame.timer, let world = currentGame.world {
-          //stop targetShift and pause timers
-          timer.members.forEach({ loop in
-            if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" {timer.stopTimer(timerID: loop)}
-          })
-          //implement flicker effect
-          Ball.getTargets().forEach({ball in ball.flickerOutTarget()})
-          //stop master movement timer prior to calling circleMovementTimer
-          let wait = SKAction.wait(forDuration: 15)
-          let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
-          let circleAction = SKAction.run({ timer.circleMovementTimer()})
-          world.run(SKAction.sequence([wait,stopMovementTimer,wait,circleAction]))
+         
         }
       }
     }
   }
   ///STARTING POINTS
   static var currentRespSettings:RespSettings = respSettingsArr[0]
-  static var currentTrackSettings:Settings = settingsArr[0] {
-    didSet {
-      if let timer = currentGame.timer {
+  
+  static var currentTrackSettings:Settings = settingsArr[5] {
+   didSet {
+    if self.currentTrackSettings.phase == 7 {
+      //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
+      self.respTransition = true
+    }
+    if let timer = currentGame.timer, let world = currentGame.world {
+      if !self.respTransition {
         print(currentGame.timer!.members)
         timer.stopTimer(timerID: "frequencyLoopTimer")
         Sensory.applyFrequency()
         timer.stopTimer(timerID: "targetTimer")
         timer.recursiveTargetTimer()
-      }
-      if Ball.getTargets().count < Game.currentTrackSettings.numTargets && self.currentTrackSettings.phase < 7 {
-        let numTargets = Game.currentTrackSettings.numTargets - Ball.getTargets().count
-        for _ in 1...numTargets { Ball.addTarget()}
-      }
-      
-      if self.currentTrackSettings.phase == 7 {
-        //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
-        self.respTransition = true
-      }
-      
-      if currentGame.isPaused {
-        Ball.resetTextures()
-        Ball.maskTargets()
+        if Ball.getTargets().count < Game.currentTrackSettings.numTargets && self.currentTrackSettings.phase < 7 {
+          let numTargets = Game.currentTrackSettings.numTargets - Ball.getTargets().count
+          for _ in 1...numTargets { Ball.addTarget()}
+        }
+        if currentGame.isPaused {
+          print("Game is paused branch")
+          Ball.resetTextures()
+          Ball.maskTargets()
+        }else{
+          Ball.resetTextures()
+        }
       }else{
-        Ball.resetTextures()
+        //RESP TRANSITION LOGIC HERE
+        //stop targetShift and pause timers
+        timer.members.forEach({ loop in
+          if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" {timer.stopTimer(timerID: loop)}
+        })
+        Sensory.applyFrequency()
+        //implement flicker effect
+        Ball.assignRandomTargets()
+        Ball.getTargets().forEach({ball in ball.flickerOutTarget()})
+        //stop master movement timer prior to calling circleMovementTimer
+        let wait = SKAction.wait(forDuration: 15)
+        let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
+        let circleAction = SKAction.run({ timer.circleMovementTimer()})
+        world.run(SKAction.sequence([wait,stopMovementTimer,wait,circleAction]))
       }
-      ///TESTING/////////
-
+     }
     }
   }
   
