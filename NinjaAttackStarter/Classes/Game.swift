@@ -43,9 +43,7 @@ class Game {
     if let timer = currentGame.timer, let world = currentGame.world {
       if !self.respTransition {
         print(currentGame.timer!.members)
-        timer.stopTimer(timerID: "frequencyLoopTimer")
         Sensory.applyFrequency()
-        timer.stopTimer(timerID: "targetTimer")
         timer.recursiveTargetTimer()
         if Ball.getTargets().count < Game.currentTrackSettings.numTargets && self.currentTrackSettings.phase < 7 {
           let numTargets = Game.currentTrackSettings.numTargets - Ball.getTargets().count
@@ -66,8 +64,9 @@ class Game {
         })
         Sensory.applyFrequency()
         //implement flicker effect
-        Ball.assignRandomTargets()
         Ball.getTargets().forEach({ball in ball.flickerOutTarget()})
+        //bleed speed off stimuli
+        timer.bleedSpeedTimer()
         //stop master movement timer prior to calling circleMovementTimer
         let wait = SKAction.wait(forDuration: 15)
         let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})

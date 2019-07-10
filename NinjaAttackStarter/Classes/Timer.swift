@@ -33,11 +33,22 @@ class Timer {
     }
   }
 
-  func startMovementTimer(){
+  func movementTimer(){
     if let gameWorld = currentGame.world {
       let wait = SKAction.wait(forDuration: 0.05)
       let correctMovement = SKAction.run {
         MotionControl.correctMovement()
+      }
+      self.members.append("movementTimer")
+      gameWorld.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
+    }
+  }
+  
+  func bleedSpeedTimer(){
+    if let gameWorld = currentGame.world {
+      let wait = SKAction.wait(forDuration: 0.05)
+      let correctMovement = SKAction.run {
+        MotionControl.bleedSpeed()
       }
       self.members.append("movementTimer")
       gameWorld.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
@@ -166,7 +177,7 @@ class Timer {
   
   
   func startTimerActions(){
-    self.startMovementTimer()
+    self.movementTimer()
     self.recursiveTargetTimer()
     self.recursivePauseTimer()
   }

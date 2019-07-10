@@ -40,6 +40,15 @@ struct MotionControl {
     return points
   }
   
+  ///TRACK FUNCTIONS
+  public static func bleedSpeed(factor:CGFloat = 0.98){
+    for ball in Ball.members {
+      ball.modifySpeed(factor: factor)
+    }
+    if let timer = currentGame.timer { if Ball.mean() < 20 { timer.stopTimer(timerID: "movementTimer")}}
+  }
+  
+  
   private static func correctMeanSpeed(){
     let currentMeanSpeed = Ball.mean()
     for ball in Ball.members {
