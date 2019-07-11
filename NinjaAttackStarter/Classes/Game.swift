@@ -11,30 +11,18 @@ class Game {
     Settings(phase: 4, phaseDuration: 100, pauseDelay: 30, pauseError: 6, pauseDuration: 5, frequency: 8, toneFile: "tone155hz.wav", targetMeanSpeed: 275, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", flashTexture: "sphere-white", alpha: 1),
     Settings(phase: 5, phaseDuration: 120, pauseDelay: 35, pauseError: 8, pauseDuration: 6, frequency: 6, toneFile: "tone140hz.wav", targetMeanSpeed: 175, targetSpeedSD: 25, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-aqua", distractorTexture: "sphere-gray", flashTexture: "sphere-white", alpha: 1),
     //messing with duration for dev
-    Settings(phase: 6, phaseDuration: 5, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 75, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white", alpha: 1),
+    Settings(phase: 6, phaseDuration: 120, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 4.5, toneFile: "tone140hz.wav", targetMeanSpeed: 75, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-white", alpha: 1),
     //Final settings is a dummy phase...
-    Settings(phase: 7, phaseDuration: 900, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 4, toneFile: "tone140hz.wav", targetMeanSpeed: 0, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-orange", alpha: 1)
+    Settings(phase: 7, phaseDuration: 900, pauseDelay: 40, pauseError: 10, pauseDuration: 7, frequency: 3.5, toneFile: "tone140hz.wav", targetMeanSpeed: 0, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-black", flashTexture: "sphere-orange", alpha: 1)
   ]
-  
   static var respSettingsArr:[RespSettings] = [
-    RespSettings(phase: 7, frequency: 4, inDuration: 3.5, inWait: 1.5, outDuration: 5, outWait: 3, moveToCenterDuration: 6, moveCenterWait: 2)
+    RespSettings(phase: 7, frequency: 4, inDuration: 3.5, inWait: 1.5, outDuration: 5, outWait: 2.5, moveToCenterDuration: 12, moveCenterWait: 2)
   ]
-  
-  //TESTING
-  static var respTransition:Bool = false {
-    didSet{
-      //logic for transition into resp
-      if respTransition {
-        if let timer = currentGame.timer, let world = currentGame.world {
-         
-        }
-      }
-    }
-  }
+  static var respTransition:Bool = false
   ///STARTING POINTS
   static var currentRespSettings:RespSettings = respSettingsArr[0]
   
-  static var currentTrackSettings:Settings = settingsArr[5] {
+  static var currentTrackSettings:Settings = settingsArr[0] {
    didSet {
     if self.currentTrackSettings.phase == 7 {
       //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
@@ -62,16 +50,17 @@ class Game {
         timer.members.forEach({ loop in
           if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" {timer.stopTimer(timerID: loop)}
         })
-        Sensory.applyFrequency()
-        //implement flicker effect
+        Sensory.applyFrequency(frequency: Game.currentRespSettings.frequency)
+        //flicker effect
         Ball.getTargets().forEach({ball in ball.flickerOutTarget()})
-        //bleed speed off stimuli
-        timer.bleedSpeedTimer()
-        //stop master movement timer prior to calling circleMovementTimer
-        let wait = SKAction.wait(forDuration: 15)
+        //bleed speed and stop master movement timer prior to calling circleMovementTimer
+        let bleedSpeed = SKAction.run {
+          timer.bleedSpeedTimer()
+        }
+        let wait = SKAction.wait(forDuration: 8)
         let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
         let circleAction = SKAction.run({ timer.circleMovementTimer()})
-        world.run(SKAction.sequence([wait,stopMovementTimer,wait,circleAction]))
+        world.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
       }
      }
     }
