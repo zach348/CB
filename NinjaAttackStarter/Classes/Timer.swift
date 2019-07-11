@@ -154,9 +154,6 @@ class Timer {
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentTrackSettings.shiftDelay - error, max: Game.currentTrackSettings.shiftDelay + error)))
       let shift = SKAction.run {
         Ball.shiftTargets()
-        print("SHIFTTARGETS")
-        print("Delay " + String(wait.duration))
-        print("Setting Value: " + String(Game.currentTrackSettings.shiftDelay))
       }
       self.members.append("targetTimer")
       gameWorld.run(SKAction.sequence([wait, shift]), withKey: "targetTimer")

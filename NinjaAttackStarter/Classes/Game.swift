@@ -30,7 +30,6 @@ class Game {
     }
     if let timer = currentGame.timer, let world = currentGame.world {
       if !self.respTransition {
-        print(currentGame.timer!.members)
         Sensory.applyFrequency()
         timer.recursiveTargetTimer()
         if Ball.getTargets().count < Game.currentTrackSettings.numTargets && self.currentTrackSettings.phase < 7 {

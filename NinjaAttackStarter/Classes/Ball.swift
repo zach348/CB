@@ -56,20 +56,6 @@ class Ball: SKSpriteNode {
     return sqrt(sumSq/count)
   }
   
-  class func logStats(){
-    var speedCollection = [CGFloat]()
-    for ball in Ball.members{
-      speedCollection.append(ball.currentSpeed())
-      print("BALL STATS")
-      print("Dx: \(ball.physicsBody!.velocity.dx)")
-      print("Dy: \(ball.physicsBody!.velocity.dy)")
-      print("Speed: \(ball.currentSpeed())")
-    }
-    print("GROUP STATS")
-    print("Mean Speed: \(Ball.mean())")
-    print("Speed SD: \(Ball.standardDev())")
-  }
-  
  class func startMovement(){
     for ball in Ball.members {
       let xVec = CGFloat.random(min: -75, max: 75)
