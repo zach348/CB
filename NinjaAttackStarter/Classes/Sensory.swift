@@ -5,9 +5,9 @@ import SpriteKit
 
 struct Sensory {
   
-  static func applyFrequency() {
-    let hz = Game.currentSettings.frequency
-    let tone = Game.currentSettings.toneFile
+  static func applyFrequency(frequency:Double = Game.currentTrackSettings.frequency) {
+    let hz = frequency
+    let tone = Game.currentTrackSettings.toneFile
     if let gameScene = currentGame.gameScene {
       let tone = SKAction.playSoundFileNamed(tone, waitForCompletion: false)
       let wait = SKAction.wait(forDuration: 1/hz/2)
@@ -22,4 +22,5 @@ struct Sensory {
     }
   }
 }
+
 

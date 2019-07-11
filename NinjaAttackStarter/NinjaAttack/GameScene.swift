@@ -19,7 +19,6 @@ class GameScene: SKScene {
     currentGame.gameScene = self
     currentGame.setupGame()
     currentGame.startGame()
-    
 
   }
   

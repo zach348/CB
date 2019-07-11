@@ -12,13 +12,50 @@ struct MotionControl {
     self.wallPush()
   }
   
+  ///////////RESP//////////////////////////////////
+  
+  public static func generateConcentrics() -> [[CGPoint]] {
+    var concentricCircles = [[CGPoint]]()
+    if let gameScene = currentGame.gameScene {
+      for radius in 70...Int(gameScene.size.height/2) {
+        concentricCircles.append(MotionControl.circlePoints(numPoints: Ball.members.count, anchorX: 0, anchorY: 0, radius: CGFloat(radius)))
+      }
+    }
+    return concentricCircles
+  }
+  
+  //gist
+  public static func circlePoints(numPoints:Int, anchorX: CGFloat, anchorY: CGFloat, radius: CGFloat, precision:Int = 3) -> [CGPoint] {
+    var points = [CGPoint]()
+    let angle = CGFloat(Double.pi) / CGFloat(numPoints) * 2.0
+    let p = CGFloat(pow(10.0, Double(precision)))
+    
+    for i in 0..<numPoints {
+      let x = anchorX - radius * cos(angle * CGFloat(i))
+      let roundedX = Double(round(p * x)) / Double(p)
+      let y = anchorY - radius * sin(angle * CGFloat(i))
+      let roundedY = Double(round(p * y)) / Double(p)
+      points.append(CGPoint(x: roundedX, y: roundedY))
+    }
+    return points
+  }
+  
+  ///TRACK FUNCTIONS
+  public static func bleedSpeed(factor:CGFloat = 0.99){
+    for ball in Ball.members {
+      ball.modifySpeed(factor: CGFloat.random(min: factor-0.02, max: factor))
+    }
+    if let timer = currentGame.timer { if Ball.mean() < 40 { timer.stopTimer(timerID: "movementTimer")}}
+  }
+  
+  
   private static func correctMeanSpeed(){
     let currentMeanSpeed = Ball.mean()
     for ball in Ball.members {
-      if currentMeanSpeed < Game.currentSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentSettings.maxSpeed {
+      if currentMeanSpeed < Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed {
         ball.modifySpeed(factor: 1.02)
       }
-      else if currentMeanSpeed > Game.currentSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentSettings.minSpeed {
+      else if currentMeanSpeed > Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed {
         ball.modifySpeed(factor: 0.98)
       }
     }
@@ -27,16 +64,16 @@ struct MotionControl {
   private static func correctSpeedSD(){
     let currentSD = Ball.standardDev()
     for ball in Ball.members {
-      if currentSD < Game.currentSettings.targetSpeedSD {
-        if ball.currentSpeed() > Game.currentSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentSettings.maxSpeed {
+      if currentSD < Game.currentTrackSettings.targetSpeedSD {
+        if ball.currentSpeed() > Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed {
           ball.modifySpeed(factor: 1.02)
-        }else if ball.currentSpeed() < Game.currentSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentSettings.minSpeed{
+        }else if ball.currentSpeed() < Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed{
           ball.modifySpeed(factor: 0.98)
         }
-      }else if currentSD > Game.currentSettings.targetSpeedSD{
-        if ball.currentSpeed() > Game.currentSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentSettings.minSpeed {
+      }else if currentSD > Game.currentTrackSettings.targetSpeedSD{
+        if ball.currentSpeed() > Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed {
           ball.modifySpeed(factor: 0.98)
-        }else if ball.currentSpeed() < Game.currentSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentSettings.maxSpeed{
+        }else if ball.currentSpeed() < Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed{
           ball.modifySpeed(factor: 1.02)
         }
       }
@@ -45,8 +82,8 @@ struct MotionControl {
   
   private static func correctSpeedRange(){
     for ball in Ball.members {
-      if ball.currentSpeed() < Game.currentSettings.minSpeed {ball.modifySpeed(factor: 1.01)}
-      else if ball.currentSpeed() > Game.currentSettings.maxSpeed {ball.modifySpeed(factor: 0.99)}
+      if ball.currentSpeed() < Game.currentTrackSettings.minSpeed {ball.modifySpeed(factor: 1.01)}
+      else if ball.currentSpeed() > Game.currentTrackSettings.maxSpeed {ball.modifySpeed(factor: 0.99)}
     }
   }
   

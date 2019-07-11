@@ -1,11 +1,4 @@
-# CB
-
-Calibrate, Copyright 6/1/2019, Zachary Cutler
-Additional Copyright Notices:
-
-This project was orginally built on a tutorial template and may include remnants of associated code. As such, we include  
-below a copy of the copyright included in the original tutorial:  
-/// Copyright (c) 2018 Razeware LLC
+/// Copyright (c) 2019 Razeware LLC
 /// 
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
@@ -32,3 +25,28 @@ below a copy of the copyright included in the original tutorial:
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
+
+import Foundation
+import SpriteKit
+
+struct RespSettings {
+  let phase:Int
+  let frequency:Double
+  let inDuration:TimeInterval
+  let inWait:TimeInterval
+  let outDuration:TimeInterval
+  let outWait:TimeInterval
+  let moveToCenterDuration:TimeInterval
+  let moveCenterWait:TimeInterval
+  
+  init(phase:Int, frequency:Double, inDuration:TimeInterval, inWait:TimeInterval, outDuration:TimeInterval, outWait:TimeInterval, moveToCenterDuration:TimeInterval, moveCenterWait:TimeInterval){
+    self.phase = phase
+    self.frequency = frequency
+    self.inDuration = inDuration
+    self.inWait = inWait
+    self.outDuration = outDuration
+    self.outWait = outWait
+    self.moveToCenterDuration = moveToCenterDuration
+    self.moveCenterWait = moveCenterWait
+  }
+}

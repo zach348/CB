@@ -27,12 +27,10 @@ class Ball: SKSpriteNode {
   }
   
   class func createBalls(num: Int, game: Game){
-    if let scene = currentGame.gameScene {
-      var createBallCounter = 0
-      while createBallCounter < num {
-        createBall(game: game, xPos: scene.size.width/2, yPos: scene.size.height/2)
-        createBallCounter += 1
-      }
+    var createBallCounter = 0
+    while createBallCounter < num {
+      createBall(game: game, xPos: 0, yPos: 0)
+      createBallCounter += 1
     }
   }
   
@@ -105,7 +103,7 @@ class Ball: SKSpriteNode {
   class func assignRandomTargets() -> [Ball] {
     var newTargets = [Ball]()
     var counter = 0
-    while counter < Game.currentSettings.numTargets {
+    while counter < Game.currentTrackSettings.numTargets {
       let randomIndex = Int.random(min: 0, max: self.members.count - 1)
       let newTarget = self.members[randomIndex]
       if !newTargets.contains(newTarget) {
@@ -159,11 +157,17 @@ class Ball: SKSpriteNode {
   }
   
   class func maskTargets() {
-    self.getTargets().forEach({ target in target.texture = Game.currentSettings.distractorTexture })
+    self.getTargets().forEach({ target in
+      target.texture = Game.currentTrackSettings.distractorTexture
+      target.alpha = Game.currentTrackSettings.alpha
+    })
   }
   
   class func unmaskTargets() {
-    self.getTargets().forEach({ target in target.texture = Game.currentSettings.targetTexture })
+    self.getTargets().forEach({ target in
+      target.texture = Game.currentTrackSettings.targetTexture
+      target.alpha = Game.currentTrackSettings.alpha
+    })
   }
   
   class func hideBorders(){
@@ -175,7 +179,10 @@ class Ball: SKSpriteNode {
   }
   
   class func resetTextures(){
-    self.members.forEach({ ball in ball.texture = ball.isTarget ? Game.currentSettings.targetTexture : Game.currentSettings.distractorTexture })
+    self.members.forEach({ ball in
+      ball.texture = ball.isTarget ? Game.currentTrackSettings.targetTexture : Game.currentTrackSettings.distractorTexture
+      ball.alpha = Game.currentTrackSettings.alpha
+    })
   }
   
   class func enableInteraction() {
@@ -192,8 +199,8 @@ class Ball: SKSpriteNode {
   
   var isTarget:Bool {
     didSet {
-      if isTarget { self.texture = Game.currentSettings.targetTexture }
-      else { self.texture = Game.currentSettings.distractorTexture }
+      if isTarget { self.texture = Game.currentTrackSettings.targetTexture }
+      else { self.texture = Game.currentTrackSettings.distractorTexture }
     }
   }
   var positionHistory:[CGPoint]
@@ -202,7 +209,7 @@ class Ball: SKSpriteNode {
   
   let game:Game
   init() {
-    let texture = Game.currentSettings.distractorTexture
+    let texture = Game.currentTrackSettings.distractorTexture
     self.game = currentGame
     self.isTarget = false
     self.positionHistory = [CGPoint]()
@@ -217,7 +224,10 @@ class Ball: SKSpriteNode {
       border.lineWidth = 10
     }
     
-    self.size = CGSize(width: 50, height: 50)
+    //alpha
+    self.alpha = Game.currentTrackSettings.alpha
+    
+    self.size = CGSize(width: 40, height: 40)
     self.name = "ball-\(Ball.members.count + 1)"
     self.isUserInteractionEnabled = false
     //physics setup
@@ -278,19 +288,40 @@ class Ball: SKSpriteNode {
   
   func blinkBall(){
     Ball.blinkFlags.append(true)
-    let currentTexture = self.texture
-    let setFlashTexture = SKAction.setTexture(Game.currentSettings.flashTexture)
-    let resetTexture = SKAction.setTexture(currentTexture!)
-    let fadeOut = SKAction.fadeOut(withDuration: 0.15)
-    let fadeIn = SKAction.fadeIn(withDuration: 0.15)
-    let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
-    let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetTexture])
-    let resetFlag = SKAction.run { Ball.blinkFlags.removeLast() }
-    let wait = SKAction.wait(forDuration: Double.random(min: 0.5, max: 1))
-    let resetSequence = SKAction.sequence([wait, resetFlag])
-    let flagSequence = SKAction.sequence([blinkAction, resetSequence])
-    self.run(flagSequence, withKey: "blinkBall")
+    if let currentTexture = self.texture{
+      let setFlashTexture = SKAction.setTexture(Game.currentTrackSettings.flashTexture)
+      let resetTexture = SKAction.setTexture(currentTexture)
+      let resetAlpha = SKAction.run {
+        self.alpha = Game.currentTrackSettings.alpha
+      }
+      let resetSprite = SKAction.group([resetTexture, resetAlpha])
+      let fadeOut = SKAction.fadeOut(withDuration: 0.15)
+      let fadeIn = SKAction.fadeIn(withDuration: 0.15)
+      let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
+      let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetSprite])
+      let resetFlag = SKAction.run { Ball.blinkFlags.removeLast() }
+      let wait = SKAction.wait(forDuration: Double.random(min: 0.5, max: 1))
+      let resetSequence = SKAction.sequence([wait, resetFlag])
+      let flagSequence = SKAction.sequence([blinkAction, resetSequence])
+      self.run(flagSequence, withKey: "blinkBall")
+    }
   }
+    
+  func flickerOutTarget(duration:TimeInterval = 0.75){
+    let off = SKAction.setTexture(Game.currentTrackSettings.distractorTexture)
+    let on = SKAction.setTexture(Game.currentTrackSettings.targetTexture)
+    let waitAction = SKAction.wait(forDuration: duration)
+    if duration < 0.01 {
+      self.run(off)
+    }else{
+      let newDuration = duration * Double.random(min: 0.8, max: 0.85)
+      let recursiveCall = SKAction.run {
+        self.flickerOutTarget(duration:newDuration)
+      }
+      self.run(SKAction.sequence([off,waitAction,on,waitAction]), completion: { self.run(recursiveCall)})
+    }
+  }
+  
   
   func showBorder(){
     if let border = self.border { self.addChild(border) }
@@ -306,7 +337,6 @@ class Ball: SKSpriteNode {
     let touchedNode = self.atPoint(positionInScene)
     if let name = touchedNode.name {
       if Ball.getTargets().map({$0.name}).contains(name) {
-        print("Touched")
         Ball.getBall(name: name).showBorder()
       }
     }
