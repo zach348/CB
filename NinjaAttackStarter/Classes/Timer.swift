@@ -92,7 +92,7 @@ class Timer {
     }
   }
   
-  func recursivePauseTimer(){
+  func pauseTimer(){
     if let gameScene = currentGame.gameScene {
       gameScene.removeAction(forKey: "pauseTimer")
       self.members = self.members.filter({ $0 != "pauseTimer"})
@@ -113,7 +113,7 @@ class Timer {
       let unpauseWait = SKAction.wait(forDuration: Game.currentTrackSettings.pauseDuration)
       let unpause = SKAction.run { currentGame.unpauseGame()}
       let recursiveCall = SKAction.run {
-        self.recursivePauseTimer()
+        self.pauseTimer()
       }
       let countdown = SKAction.run {
         self.pauseCountdownTimer(pauseDuration: unpauseWait.duration)
@@ -150,7 +150,7 @@ class Timer {
     }
   }
   
-  func recursiveTargetTimer() {
+  func targetTimer() {
     if let gameWorld = currentGame.world {
       self.stopTimer(timerID: "targetTimer")
       let error = Game.currentTrackSettings.shiftError
@@ -178,7 +178,7 @@ class Timer {
   
   func startTimerActions(){
     self.movementTimer()
-    self.recursiveTargetTimer()
-    self.recursivePauseTimer()
+    self.targetTimer()
+    self.pauseTimer()
   }
 }

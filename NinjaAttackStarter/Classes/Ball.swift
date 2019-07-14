@@ -80,7 +80,7 @@ class Ball: SKSpriteNode {
         //testing
       }
       let targetTimer = SKAction.run {
-        timer.recursiveTargetTimer()
+        timer.targetTimer()
       }
       gameWorld.run(targetTimer)
     }

@@ -30,36 +30,9 @@ class Game {
     }
     if let timer = currentGame.timer, let world = currentGame.world {
       if !self.respTransition {
-        Sensory.applyFrequency()
-        timer.recursiveTargetTimer()
-        if Ball.getTargets().count < Game.currentTrackSettings.numTargets && self.currentTrackSettings.phase < 7 {
-          let numTargets = Game.currentTrackSettings.numTargets - Ball.getTargets().count
-          for _ in 1...numTargets { Ball.addTarget()}
-        }
-        if currentGame.isPaused {
-          print("Game is paused branch")
-          Ball.resetTextures()
-          Ball.maskTargets()
-        }else{
-          Ball.resetTextures()
-        }
+        self.transitionTrackPhase(timer:timer)
       }else{
-        //RESP TRANSITION LOGIC HERE
-        //stop targetShift and pause timers
-        timer.members.forEach({ loop in
-          if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" {timer.stopTimer(timerID: loop)}
-        })
-        Sensory.applyFrequency(frequency: Game.currentRespSettings.frequency)
-        //flicker effect
-        Ball.getTargets().forEach({ball in ball.flickerOutTarget()})
-        //bleed speed and stop master movement timer prior to calling circleMovementTimer
-        let bleedSpeed = SKAction.run {
-          timer.bleedSpeedTimer()
-        }
-        let wait = SKAction.wait(forDuration: 8)
-        let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
-        let circleAction = SKAction.run({ timer.circleMovementTimer()})
-        world.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
+        self.transitionRespPhase(timer: timer, world: world)
       }
      }
     }
@@ -76,6 +49,40 @@ class Game {
       }
       //TESTING
     }
+  }
+  
+  class func transitionTrackPhase(timer:Timer){
+    Sensory.applyFrequency()
+    timer.targetTimer()
+    if Ball.getTargets().count < Game.currentTrackSettings.numTargets && self.currentTrackSettings.phase < 7 {
+      let numTargets = Game.currentTrackSettings.numTargets - Ball.getTargets().count
+      for _ in 1...numTargets { Ball.addTarget()}
+    }
+    //        TESTING DELETION
+    //        if currentGame.isPaused {
+    //          print("Game is paused branch")
+    //          Ball.resetTextures()
+    //          Ball.maskTargets()
+    //        }else{
+    Ball.resetTextures()
+    //        }
+  }
+  
+  class func transitionRespPhase(timer:Timer, world:SKNode){
+    timer.members.forEach({ loop in
+      if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" {timer.stopTimer(timerID: loop)}
+    })
+    Sensory.applyFrequency(frequency: Game.currentRespSettings.frequency)
+    //flicker effect
+    Ball.getTargets().forEach({ball in ball.flickerOutTarget()})
+    //bleed speed and stop master movement timer prior to calling circleMovementTimer
+    let bleedSpeed = SKAction.run {
+      timer.bleedSpeedTimer()
+    }
+    let wait = SKAction.wait(forDuration: 8)
+    let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
+    let circleAction = SKAction.run({ timer.circleMovementTimer()})
+    world.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
   }
   
   
