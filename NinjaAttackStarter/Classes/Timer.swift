@@ -44,11 +44,14 @@ class Timer {
     }
   }
   
-  func bleedSpeedTimer(){
-    if let gameWorld = currentGame.world {
+  func bleedSpeedTimer(loopDelay:Double = 0.05, factor:CGFloat = 0.99, factorError:CGFloat = 0.02){
+    if let gameWorld = currentGame.world, let timer = currentGame.timer {
       let wait = SKAction.wait(forDuration: 0.05)
       let correctMovement = SKAction.run {
-        MotionControl.bleedSpeed()
+        for ball in Ball.members {
+          ball.modifySpeed(factor: CGFloat.random(min: factor-0.02, max: factor))
+        }
+        if Ball.mean() < 30 { timer.stopTimer(timerID: "movementTimer")}
       }
       self.members.append("movementTimer")
       gameWorld.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
