@@ -206,7 +206,7 @@ class Ball: SKSpriteNode {
     self.border = SKShapeNode(circleOfRadius: 24)
     if let border = self.border {
       border.fillColor = .clear
-      border.strokeColor = UIColor.red
+      border.strokeColor = Game.currentTrackSettings.borderColor
       border.lineWidth = 10
     }
     

@@ -133,6 +133,7 @@ class Timer {
       timerLabel.text = "\(String(format: "%.3f", timerNode))"
       timerLabel.fontColor = SKColor.black
       timerLabel.fontSize = 40
+      timerLabel.fontName = "AvenirNext-Bold"
       timerLabel.position.x = gameScene.size.width / 2
       timerLabel.position.y = gameScene.size.height / 8.5
       timerLabel.zPosition = 3.00
