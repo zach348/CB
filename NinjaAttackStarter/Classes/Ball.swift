@@ -300,7 +300,7 @@ class Ball: SKSpriteNode {
     if duration < 0.01 {
       self.run(off)
     }else{
-      let newDuration = duration * Double.random(min: 0.8, max: 0.85)
+      let newDuration = duration * Double.random(min: 0.85, max: 0.85)
       let recursiveCall = SKAction.run {
         self.flickerOutTarget(duration:newDuration)
       }

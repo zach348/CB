@@ -35,7 +35,7 @@ class Timer {
 
   func movementTimer(){
     if let gameWorld = currentGame.world {
-      let wait = SKAction.wait(forDuration: 0.05)
+      let wait = SKAction.wait(forDuration: 0.0125)
       let correctMovement = SKAction.run {
         MotionControl.correctMovement()
       }
