@@ -25,7 +25,9 @@ class GameScene: SKScene {
   
   
   override func update(_ currentTime: TimeInterval) {
-
+    for ball in Ball.members {
+      print(ball.currentSpeed())
+    }
   }
 }
 
