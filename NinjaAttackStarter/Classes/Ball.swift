@@ -56,20 +56,6 @@ class Ball: SKSpriteNode {
     return sqrt(sumSq/count)
   }
   
-  class func logStats(){
-    var speedCollection = [CGFloat]()
-    for ball in Ball.members{
-      speedCollection.append(ball.currentSpeed())
-      print("BALL STATS")
-      print("Dx: \(ball.physicsBody!.velocity.dx)")
-      print("Dy: \(ball.physicsBody!.velocity.dy)")
-      print("Speed: \(ball.currentSpeed())")
-    }
-    print("GROUP STATS")
-    print("Mean Speed: \(Ball.mean())")
-    print("Speed SD: \(Ball.standardDev())")
-  }
-  
  class func startMovement(){
     for ball in Ball.members {
       let xVec = CGFloat.random(min: -75, max: 75)
@@ -94,7 +80,7 @@ class Ball: SKSpriteNode {
         //testing
       }
       let targetTimer = SKAction.run {
-        timer.recursiveTargetTimer()
+        timer.targetTimer()
       }
       gameWorld.run(targetTimer)
     }
@@ -220,7 +206,7 @@ class Ball: SKSpriteNode {
     self.border = SKShapeNode(circleOfRadius: 24)
     if let border = self.border {
       border.fillColor = .clear
-      border.strokeColor = UIColor.red
+      border.strokeColor = Game.currentTrackSettings.borderColor
       border.lineWidth = 10
     }
     
@@ -314,7 +300,7 @@ class Ball: SKSpriteNode {
     if duration < 0.01 {
       self.run(off)
     }else{
-      let newDuration = duration * Double.random(min: 0.8, max: 0.85)
+      let newDuration = duration * Double.random(min: 0.85, max: 0.85)
       let recursiveCall = SKAction.run {
         self.flickerOutTarget(duration:newDuration)
       }

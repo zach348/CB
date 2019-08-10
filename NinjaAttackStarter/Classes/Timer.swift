@@ -35,7 +35,7 @@ class Timer {
 
   func movementTimer(){
     if let gameWorld = currentGame.world {
-      let wait = SKAction.wait(forDuration: 0.05)
+      let wait = SKAction.wait(forDuration: 0.0125)
       let correctMovement = SKAction.run {
         MotionControl.correctMovement()
       }
@@ -44,11 +44,14 @@ class Timer {
     }
   }
   
-  func bleedSpeedTimer(){
-    if let gameWorld = currentGame.world {
+  func bleedSpeedTimer(loopDelay:Double = 0.05, factor:CGFloat = 0.99, factorError:CGFloat = 0.02){
+    if let gameWorld = currentGame.world, let timer = currentGame.timer {
       let wait = SKAction.wait(forDuration: 0.05)
       let correctMovement = SKAction.run {
-        MotionControl.bleedSpeed()
+        for ball in Ball.members {
+          ball.modifySpeed(factor: CGFloat.random(min: factor-0.02, max: factor))
+        }
+        if Ball.mean() < 30 { timer.stopTimer(timerID: "movementTimer")}
       }
       self.members.append("movementTimer")
       gameWorld.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
@@ -89,7 +92,7 @@ class Timer {
     }
   }
   
-  func recursivePauseTimer(){
+  func pauseTimer(){
     if let gameScene = currentGame.gameScene {
       gameScene.removeAction(forKey: "pauseTimer")
       self.members = self.members.filter({ $0 != "pauseTimer"})
@@ -110,7 +113,7 @@ class Timer {
       let unpauseWait = SKAction.wait(forDuration: Game.currentTrackSettings.pauseDuration)
       let unpause = SKAction.run { currentGame.unpauseGame()}
       let recursiveCall = SKAction.run {
-        self.recursivePauseTimer()
+        self.pauseTimer()
       }
       let countdown = SKAction.run {
         self.pauseCountdownTimer(pauseDuration: unpauseWait.duration)
@@ -130,6 +133,7 @@ class Timer {
       timerLabel.text = "\(String(format: "%.3f", timerNode))"
       timerLabel.fontColor = SKColor.black
       timerLabel.fontSize = 40
+      timerLabel.fontName = "AvenirNext-Bold"
       timerLabel.position.x = gameScene.size.width / 2
       timerLabel.position.y = gameScene.size.height / 8.5
       timerLabel.zPosition = 3.00
@@ -147,16 +151,13 @@ class Timer {
     }
   }
   
-  func recursiveTargetTimer() {
+  func targetTimer() {
     if let gameWorld = currentGame.world {
       self.stopTimer(timerID: "targetTimer")
       let error = Game.currentTrackSettings.shiftError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentTrackSettings.shiftDelay - error, max: Game.currentTrackSettings.shiftDelay + error)))
       let shift = SKAction.run {
         Ball.shiftTargets()
-        print("SHIFTTARGETS")
-        print("Delay " + String(wait.duration))
-        print("Setting Value: " + String(Game.currentTrackSettings.shiftDelay))
       }
       self.members.append("targetTimer")
       gameWorld.run(SKAction.sequence([wait, shift]), withKey: "targetTimer")
@@ -178,7 +179,7 @@ class Timer {
   
   func startTimerActions(){
     self.movementTimer()
-    self.recursiveTargetTimer()
-    self.recursivePauseTimer()
+    self.targetTimer()
+    self.pauseTimer()
   }
 }

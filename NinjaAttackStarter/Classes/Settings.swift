@@ -17,12 +17,21 @@ struct Settings {
   let numTargets:Int
   let targetTexture:SKTexture
   let distractorTexture:SKTexture
+  let borderColor:UIColor
   let flashTexture:SKTexture
   let alpha:CGFloat
-  let minSpeed:CGFloat = 300
-  let maxSpeed:CGFloat = 1200
+  var minSpeed:CGFloat {
+    get {
+      return self.targetMeanSpeed - 5*self.targetSpeedSD
+    }
+  }
+  var maxSpeed:CGFloat {
+    get {
+      return self.targetMeanSpeed + 5*self.targetSpeedSD
+    }
+  }
   
-  init(phase:Int, phaseDuration:Double, pauseDelay:Double, pauseError:Double, pauseDuration:Double, frequency:Double, toneFile:String, targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:Double, shiftError:Double,numTargets:Int, targetTexture:String, distractorTexture:String, flashTexture:String, alpha:CGFloat){
+  init(phase:Int, phaseDuration:Double, pauseDelay:Double, pauseError:Double, pauseDuration:Double, frequency:Double, toneFile:String, targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:Double, shiftError:Double,numTargets:Int, targetTexture:String, distractorTexture:String, borderColor:UIColor, flashTexture:String, alpha:CGFloat){
     self.phase = phase
     self.phaseDuration = phaseDuration
     self.pauseDelay = pauseDelay
@@ -37,6 +46,7 @@ struct Settings {
     self.numTargets = numTargets
     self.targetTexture = SKTexture(imageNamed: targetTexture)
     self.distractorTexture = SKTexture(imageNamed: distractorTexture)
+    self.borderColor = borderColor
     self.flashTexture = SKTexture(imageNamed: flashTexture)
     self.alpha = alpha
   }
