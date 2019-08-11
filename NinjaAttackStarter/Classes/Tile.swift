@@ -40,16 +40,22 @@ class Tile: SKShapeNode {
   }
   
   class func createTiles(){
-    var positions = [CGPoint]()
     let width = currentGame.gameScene!.frame.width
     let height = currentGame.gameScene!.frame.height
+    var yVal = (0 + height/2) - (height/3)
     
-    var nextPoint = CGPoint(x: 0 - (width/2), y: (0 + height/2) - (height/3))
+    var nextPoint = CGPoint(x: 0 - (width/2), y: yVal)
     var lastPoint:CGPoint
-    for num in 1...5 {
-      self.createTile(position: nextPoint , tileName: "tile\(num)")
-      lastPoint = nextPoint
-      nextPoint = CGPoint(x: lastPoint.x + width/5, y: lastPoint.y)
+    var tileCount = 1
+    for row in 1...3 {
+      for tile in 1...5 {
+        self.createTile(position: nextPoint , tileName: "tile\(tileCount)")
+        lastPoint = nextPoint
+        nextPoint = CGPoint(x: lastPoint.x + width/5, y: lastPoint.y)
+        tileCount += 1
+      }
+      yVal -= height/3
+      nextPoint = CGPoint(x: 0 - (width/2), y: yVal)
     }
   }
   
@@ -61,6 +67,7 @@ class Tile: SKShapeNode {
     self.fillColor = SKColor.white
     self.strokeColor = SKColor.black
     self.lineWidth = 5
+    self.alpha = 0.1
   }
   
   required init?(coder aDecoder: NSCoder) {
