@@ -155,9 +155,13 @@ class Game {
   }
   
   func addMemberstoScene(collection: [SKSpriteNode]){
-    if let actionNode = self.world {
+    if let world = self.world {
       for sprite in collection{
-        actionNode.addChild(sprite)
+        world.addChild(sprite)
+      }
+      Tile.createTiles()
+      for tile in Tile.members {
+        world.addChild(tile)
       }
     }
   }
