@@ -4,6 +4,8 @@ import SpriteKit
 
 struct Settings {
   let phase:Int
+  let missesAllowed:Int
+  let requiredStreak:Int
   let phaseDuration:Double
   let pauseDelay:Double
   let pauseError:Double
@@ -31,8 +33,10 @@ struct Settings {
     }
   }
   
-  init(phase:Int, phaseDuration:Double, pauseDelay:Double, pauseError:Double, pauseDuration:Double, frequency:Double, toneFile:String, targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:Double, shiftError:Double,numTargets:Int, targetTexture:String, distractorTexture:String, borderColor:UIColor, flashTexture:String, alpha:CGFloat){
+  init(phase:Int, missesAllowed:Int, requiredStreak:Int, phaseDuration:Double, pauseDelay:Double, pauseError:Double, pauseDuration:Double, frequency:Double, toneFile:String, targetMeanSpeed:CGFloat, targetSpeedSD:CGFloat, shiftDelay:Double, shiftError:Double,numTargets:Int, targetTexture:String, distractorTexture:String, borderColor:UIColor, flashTexture:String, alpha:CGFloat){
     self.phase = phase
+    self.missesAllowed = missesAllowed
+    self.requiredStreak = requiredStreak
     self.phaseDuration = phaseDuration
     self.pauseDelay = pauseDelay
     self.pauseError = pauseError
