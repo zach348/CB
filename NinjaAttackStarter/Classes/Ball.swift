@@ -19,6 +19,9 @@ class Ball: SKSpriteNode {
   static var pendingPause:Bool = false
   static var pendingShift = false
   
+  class func ballStats(){
+    print("Mean Speed:", self.mean(), "SD:", self.standardDev())
+  }
   class func createBall(game: Game, xPos: CGFloat, yPos: CGFloat){
     let ball = Ball()
     ball.position.x = xPos
@@ -321,9 +324,25 @@ class Ball: SKSpriteNode {
     let touch:UITouch = touches.first! as UITouch
     let positionInScene = touch.location(in: self)
     let touchedNode = self.atPoint(positionInScene)
-    if let name = touchedNode.name {
-      if Ball.getTargets().map({$0.name}).contains(name) {
-        Ball.getBall(name: name).showBorder()
+    if let name = touchedNode.name, let gameScene = currentGame.gameScene {
+      if currentGame.missesRemaining >= 0 {
+        if Ball.getTargets().map({$0.name}).contains(name) {
+          Ball.getBall(name: name).showBorder()
+          Ball.getBall(name: name).texture = Game.currentTrackSettings.targetTexture
+          currentGame.foundTargets += 1
+          if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
+            currentGame.successHistory.append(true)
+            gameScene.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
+          }
+        }else{
+          gameScene.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))
+          currentGame.missesRemaining -= 1
+          print("miss!")
+        }
+      }else{
+        if let gameScene = currentGame.gameScene{ gameScene.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))}
+
+        print("no attempts remaining")
       }
     }
   }
