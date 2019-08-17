@@ -325,7 +325,7 @@ class Ball: SKSpriteNode {
     let positionInScene = touch.location(in: self)
     let touchedNode = self.atPoint(positionInScene)
     if let name = touchedNode.name, let gameScene = currentGame.gameScene {
-      if currentGame.missesRemaining >= 0 {
+      if !currentGame.failedAttempt {
         if Ball.getTargets().map({$0.name}).contains(name) {
           Ball.getBall(name: name).showBorder()
           Ball.getBall(name: name).texture = Game.currentTrackSettings.targetTexture
@@ -336,13 +336,15 @@ class Ball: SKSpriteNode {
           }
         }else{
           gameScene.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))
+          currentGame.failedAttempt = true
+          currentGame.successHistory.append(false)
+          //irrelevant for now
           currentGame.missesRemaining -= 1
           print("miss!")
         }
       }else{
         if let gameScene = currentGame.gameScene{ gameScene.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))}
-
-        print("no attempts remaining")
+        print("failed attempt")
       }
     }
   }

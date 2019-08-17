@@ -108,9 +108,12 @@ class Game {
       }
     }
   }
+  //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
+  
   var foundTargets = 0
   var streakAchieved = false
+  var failedAttempt = false
   
   var isPaused:Bool {
     didSet {
@@ -166,6 +169,8 @@ class Game {
       Ball.freezeMovement()
       Ball.maskTargets()
       currentGame.foundTargets = 0
+      currentGame.failedAttempt = false
+      //irrelevant for now
       currentGame.missesRemaining = Game.currentTrackSettings.missesAllowed
       //
       timer.pauseCountdown()
