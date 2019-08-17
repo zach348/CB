@@ -332,18 +332,24 @@ class Ball: SKSpriteNode {
           currentGame.foundTargets += 1
           if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
             currentGame.successHistory.append(true)
-            gameScene.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
+            gameScene.run(SKAction.run({
+              Sensory.audioNodes["correct"]?.run(SKAction.play())
+            }))
           }
         }else{
-          gameScene.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))
           currentGame.failedAttempt = true
           currentGame.successHistory.append(false)
+          gameScene.run(SKAction.run({
+            Sensory.audioNodes["incorrect"]!.run(SKAction.play())
+          }))
           //irrelevant for now
           currentGame.missesRemaining -= 1
           print("miss!")
         }
       }else{
-        if let gameScene = currentGame.gameScene{ gameScene.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))}
+        gameScene.run(SKAction.run({
+          Sensory.audioNodes["incorrect"]?.run(SKAction.play())
+        }))
         print("failed attempt")
       }
     }
