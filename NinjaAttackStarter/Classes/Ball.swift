@@ -335,10 +335,17 @@ class Ball: SKSpriteNode {
             gameScene.run(SKAction.run({
               Sensory.audioNodes["correct"]?.run(SKAction.play())
             }))
+            for ball in currentGame.statusBalls {
+              if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
+                ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
+                return
+              }
+            }
           }
         }else{
           currentGame.failedAttempt = true
           currentGame.successHistory.append(false)
+          currentGame.resetStatusBalls()
           gameScene.run(SKAction.run({
             Sensory.audioNodes["incorrect"]!.run(SKAction.play())
           }))

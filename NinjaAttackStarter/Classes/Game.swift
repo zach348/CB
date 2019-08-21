@@ -54,6 +54,10 @@ class Game {
   class func transitionTrackPhase(timer:Timer){
     currentGame.streakAchieved = false
     currentGame.successHistory = [Bool]()
+    currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
+    for (_, node) in Sensory.audioNodes {
+      node.run(SKAction.changeVolume(by: Float(-0.225), duration: 0))
+    }
     Sensory.applyFrequency()
     timer.targetTimer()
     if Ball.getTargets().count < Game.currentTrackSettings.numTargets && self.currentTrackSettings.phase < 6 {
@@ -103,7 +107,7 @@ class Game {
           self.streakAchieved = true
           if let gameScene = currentGame.gameScene {
             gameScene.run(SKAction.run({
-              Sensory.audioNodes["correct"]?.run(SKAction.play())
+              Sensory.audioNodes["streak"]?.run(SKAction.play())
             }))
           }
         }
@@ -116,6 +120,8 @@ class Game {
   var foundTargets = 0
   var streakAchieved = false
   var failedAttempt = false
+  
+  var statusBalls = [SKSpriteNode]()
   
   var isPaused:Bool {
     didSet {
@@ -151,7 +157,7 @@ class Game {
         scene.addChild(incorrectSound)
         scene.addChild(streakSound)
       }
-    
+      self.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
 
       //stimuli
       Ball.createBalls(num: 12, game: self)
@@ -202,6 +208,14 @@ class Game {
     }
   }
   
+  func resetStatusBalls(){
+    self.statusBalls.forEach({ ball in ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-black")))})
+  }
+  
+  
+  
+  private
+  
   func addMemberstoScene(collections: [[SKNode]]){
     if let world = self.world {
       for collection in collections {
@@ -211,6 +225,22 @@ class Game {
       }
     }
   }
-
+  
+  func createStatusBalls(num:Int){
+    self.statusBalls.forEach({ball in ball.removeFromParent()})
+    self.statusBalls = [SKSpriteNode]()
+    if let gameScene = currentGame.gameScene {
+      for _ in 1...num {
+        let xPosition = self.statusBalls.isEmpty ? gameScene.size.width / 15 : self.statusBalls.last!.position.x + 20
+        let statusBall = SKSpriteNode(imageNamed: "sphere-black")
+        statusBall.size = CGSize(width: 15, height: 15)
+        statusBall.zPosition = -1
+        statusBall.position.x = xPosition
+        statusBall.position.y = gameScene.size.height / 9 * 8
+        self.statusBalls.append(statusBall)
+        gameScene.addChild(statusBall)
+      }
+    }
+  }
 }
 

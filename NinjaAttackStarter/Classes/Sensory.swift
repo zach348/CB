@@ -1,6 +1,8 @@
 
 import Foundation
 import SpriteKit
+import AudioToolbox
+import UIKit
 
 
 struct Sensory {
@@ -27,8 +29,7 @@ struct Sensory {
       gameScene.run(SKAction.repeatForever(sequence), withKey: "frequencyLoopTimer")
       currentGame.timer?.members.append("frequencyLoopTimer")
     }
-  }
-  
+  }  
   
 }
 
