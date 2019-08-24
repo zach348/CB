@@ -8,9 +8,13 @@ import UIKit
 struct Sensory {
   
   static var audioNodes: [String: SKAudioNode] = [
-        "correct": SKAudioNode(fileNamed: "correct_sound"),
-        "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
-        "streak": SKAudioNode(fileNamed: "streak_sound")
+    "correct": SKAudioNode(fileNamed: "correct_sound"),
+    "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
+    "streak": SKAudioNode(fileNamed: "streak_sound")
+  ]
+  
+  static var emitterNodes: [String: SKEmitterNode] = [
+    "streakParticles": SKEmitterNode(fileNamed: "spark")!
   ]
   
   static func applyFrequency() {

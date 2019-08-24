@@ -327,21 +327,13 @@ class Ball: SKSpriteNode {
     if let name = touchedNode.name, let gameScene = currentGame.gameScene {
       if !currentGame.failedAttempt {
         if Ball.getTargets().map({$0.name}).contains(name) {
-          Ball.getBall(name: name).showBorder()
-          Ball.getBall(name: name).texture = Game.currentTrackSettings.targetTexture
+          let foundTarget = Ball.getBall(name: name)
+          foundTarget.showBorder()
+          foundTarget.run(SKAction.setTexture(Game.currentTrackSettings.targetTexture))
           currentGame.foundTargets += 1
-          if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-            currentGame.successHistory.append(true)
-            gameScene.run(SKAction.run({
-              Sensory.audioNodes["correct"]?.run(SKAction.play())
-            }))
-            for ball in currentGame.statusBalls {
-              if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
-                ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
-                return
-              }
-            }
-          }
+          gameScene.run(SKAction.run({
+            Sensory.audioNodes["correct"]?.run(SKAction.play())
+          }))
         }else{
           currentGame.failedAttempt = true
           currentGame.successHistory.append(false)

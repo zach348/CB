@@ -117,9 +117,25 @@ class Game {
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
   
-  var foundTargets = 0
+  var foundTargets = 0 {
+    didSet {
+      if self.foundTargets == Game.currentTrackSettings.numTargets {
+        currentGame.successHistory.append(true)
+        for ball in currentGame.statusBalls {
+          if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
+            ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
+            break
+          }
+        }
+      }
+    }
+  }
   var streakAchieved = false
-  var failedAttempt = false
+  var failedAttempt = false {
+    didSet {
+      if self.failedAttempt { self.successHistory.append(false)}
+    }
+  }
   
   var statusBalls = [SKSpriteNode]()
   
