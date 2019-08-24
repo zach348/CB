@@ -35,7 +35,7 @@ class Timer {
 
   func movementTimer(){
     if let gameWorld = currentGame.world {
-      let wait = SKAction.wait(forDuration: 0.0125)
+      let wait = SKAction.wait(forDuration: 0.025)
       let correctMovement = SKAction.run {
         MotionControl.correctMovement()
       }
@@ -136,7 +136,7 @@ class Timer {
       timerLabel.fontName = "AvenirNext-Bold"
       timerLabel.position.x = gameScene.size.width / 2
       timerLabel.position.y = gameScene.size.height / 8.5
-      timerLabel.zPosition = 3.00
+      timerLabel.zPosition = -0.50
       gameScene.addChild(timerLabel)
       
       let loop = SKAction.repeatForever(SKAction.sequence([SKAction.run {

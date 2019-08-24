@@ -5,11 +5,11 @@ import SpriteKit
 class Game {
   
   static var settingsArr:[Settings] = [
-    Settings(phase: 1, missesAllowed: 0, requiredStreak: 5, phaseDuration: 50, pauseDelay: 10, pauseError: 2, pauseDuration: 2, frequency: 18, toneFile: "tone200hz.wav", targetMeanSpeed: 650, targetSpeedSD: 325, shiftDelay: 4, shiftError: 2, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", borderColor: UIColor.cyan, flashTexture: "sphere-red", alpha: 1),
-    Settings(phase: 2, missesAllowed: 0, requiredStreak: 5,  phaseDuration: 70, pauseDelay: 15, pauseError: 4, pauseDuration: 3, frequency: 14, toneFile: "tone185hz.wav", targetMeanSpeed: 525, targetSpeedSD: 275, shiftDelay: 7, shiftError: 4, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", borderColor: UIColor.cyan, flashTexture: "sphere-red", alpha: 1),
-    Settings(phase: 3, missesAllowed: 0, requiredStreak: 5, phaseDuration: 90, pauseDelay: 22, pauseError: 6, pauseDuration: 5, frequency: 10, toneFile: "tone170hz.wav", targetMeanSpeed: 400, targetSpeedSD: 175, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", borderColor: UIColor.cyan,flashTexture: "sphere-red", alpha: 1),
-    Settings(phase: 4, missesAllowed: 0, requiredStreak: 5, phaseDuration: 120, pauseDelay: 30, pauseError: 6, pauseDuration: 6, frequency: 8, toneFile: "tone155hz.wav", targetMeanSpeed: 300, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
-    Settings(phase: 5, missesAllowed: 0, requiredStreak: 5, phaseDuration: 120, pauseDelay: 35, pauseError: 8, pauseDuration: 7, frequency: 6, toneFile: "tone140hz.wav", targetMeanSpeed: 225, targetSpeedSD: 0, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-gray", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
+    Settings(phase: 1, missesAllowed: 0, requiredStreak: 5, phaseDuration: 50, pauseDelay: 10, pauseError: 2, pauseDuration: 2, frequency: 16, toneFile: "tone200hz.wav", targetMeanSpeed: 650, targetSpeedSD: 325, shiftDelay: 4, shiftError: 2, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", borderColor: UIColor.cyan, flashTexture: "sphere-red", alpha: 1),
+    Settings(phase: 2, missesAllowed: 0, requiredStreak: 5,  phaseDuration: 70, pauseDelay: 15, pauseError: 4, pauseDuration: 3, frequency: 12, toneFile: "tone185hz.wav", targetMeanSpeed: 525, targetSpeedSD: 275, shiftDelay: 7, shiftError: 4, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", borderColor: UIColor.cyan, flashTexture: "sphere-red", alpha: 1),
+    Settings(phase: 3, missesAllowed: 0, requiredStreak: 5, phaseDuration: 90, pauseDelay: 22, pauseError: 6, pauseDuration: 5, frequency: 9, toneFile: "tone170hz.wav", targetMeanSpeed: 400, targetSpeedSD: 175, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", borderColor: UIColor.cyan,flashTexture: "sphere-red", alpha: 1),
+    Settings(phase: 4, missesAllowed: 0, requiredStreak: 4, phaseDuration: 120, pauseDelay: 30, pauseError: 6, pauseDuration: 6, frequency: 6, toneFile: "tone155hz.wav", targetMeanSpeed: 300, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
+    Settings(phase: 5, missesAllowed: 0, requiredStreak: 3, phaseDuration: 120, pauseDelay: 35, pauseError: 8, pauseDuration: 7, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 225, targetSpeedSD: 0, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-gray", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
     //messing with duration for dev
     Settings(phase: 6, missesAllowed: 0, requiredStreak: 3, phaseDuration: 900, pauseDelay: 40, pauseError: 10, pauseDuration: 8, frequency: 4.5, toneFile: "tone140hz.wav", targetMeanSpeed: 175, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-gray", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
     //Final settings is a dummy phase...
@@ -54,6 +54,10 @@ class Game {
   class func transitionTrackPhase(timer:Timer){
     currentGame.streakAchieved = false
     currentGame.successHistory = [Bool]()
+    currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
+    for (_, node) in Sensory.audioNodes {
+      node.run(SKAction.changeVolume(by: Float(-0.225), duration: 0))
+    }
     Sensory.applyFrequency()
     timer.targetTimer()
     if Ball.getTargets().count < Game.currentTrackSettings.numTargets && self.currentTrackSettings.phase < 6 {
@@ -95,34 +99,57 @@ class Game {
   var gameScene:GameScene?
   var timer:Timer?
   var world:SKNode?
-  
+  var statusBalls = [SKSpriteNode]()
+  //currently unused setting variable
+  var missesRemaining = Game.currentTrackSettings.missesAllowed
   var successHistory = [Bool]() {
     didSet {
       if successHistory.count >= Game.currentTrackSettings.requiredStreak {
         if !successHistory.dropFirst(successHistory.count - Game.currentTrackSettings.requiredStreak).contains(false) {
           self.streakAchieved = true
-          if let gameScene = currentGame.gameScene {
-            gameScene.run(SKAction.playSoundFileNamed("streak_sound", waitForCompletion: false))
+        }
+      }
+    }
+  }
+  var foundTargets = 0 {
+    didSet {
+      if self.foundTargets == Game.currentTrackSettings.numTargets {
+        currentGame.successHistory.append(true)
+        for ball in currentGame.statusBalls {
+          if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
+            ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
+            break
           }
         }
       }
     }
   }
-  var missesRemaining = Game.currentTrackSettings.missesAllowed
-  var foundTargets = 0
-  var streakAchieved = false
-  
+  var streakAchieved = false {
+    didSet {
+      if self.streakAchieved {
+        if let gameScene = currentGame.gameScene {
+          gameScene.run(SKAction.run({
+            Sensory.audioNodes["streak"]?.run(SKAction.play())
+          }))
+        }
+      }
+    }
+  }
+  var failedAttempt = false {
+    didSet {
+      if self.failedAttempt { self.successHistory.append(false)}
+    }
+  }
   var isPaused:Bool {
     didSet {
       isPaused == true ? Ball.enableInteraction() : Ball.disableInteraction()
     }
   }
   
-  
   init(){
     self.isPaused = false
   }
-  
+
   func setupGame(){
     self.timer = Timer()
     self.world = SKNode()
@@ -138,6 +165,16 @@ class Game {
       scene.physicsWorld.gravity = .zero
       scene.physicsWorld.contactDelegate = gameScene
       
+      if let correctSound = Sensory.audioNodes["correct"], let incorrectSound = Sensory.audioNodes["incorrect"], let streakSound = Sensory.audioNodes["streak"] {
+        correctSound.autoplayLooped = false
+        incorrectSound.autoplayLooped = false
+        streakSound.autoplayLooped = false
+        scene.addChild(correctSound)
+        scene.addChild(incorrectSound)
+        scene.addChild(streakSound)
+      }
+      self.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
+
       //stimuli
       Ball.createBalls(num: 12, game: self)
       Tile.createTiles()
@@ -166,6 +203,8 @@ class Game {
       Ball.freezeMovement()
       Ball.maskTargets()
       currentGame.foundTargets = 0
+      currentGame.failedAttempt = false
+      //irrelevant for now
       currentGame.missesRemaining = Game.currentTrackSettings.missesAllowed
       //
       timer.pauseCountdown()
@@ -185,6 +224,14 @@ class Game {
     }
   }
   
+  func resetStatusBalls(){
+    self.statusBalls.forEach({ ball in ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-black")))})
+  }
+  
+  
+  
+  private
+  
   func addMemberstoScene(collections: [[SKNode]]){
     if let world = self.world {
       for collection in collections {
@@ -194,6 +241,22 @@ class Game {
       }
     }
   }
-
+  
+  func createStatusBalls(num:Int){
+    self.statusBalls.forEach({ball in ball.removeFromParent()})
+    self.statusBalls = [SKSpriteNode]()
+    if let gameScene = currentGame.gameScene {
+      for _ in 1...num {
+        let xPosition = self.statusBalls.isEmpty ? gameScene.size.width / 15 : self.statusBalls.last!.position.x + 20
+        let statusBall = SKSpriteNode(imageNamed: "sphere-black")
+        statusBall.size = CGSize(width: 15, height: 15)
+        statusBall.zPosition = -1
+        statusBall.position.x = xPosition
+        statusBall.position.y = gameScene.size.height / 9 * 8
+        self.statusBalls.append(statusBall)
+        gameScene.addChild(statusBall)
+      }
+    }
+  }
 }
 
