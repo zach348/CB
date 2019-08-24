@@ -99,24 +99,18 @@ class Game {
   var gameScene:GameScene?
   var timer:Timer?
   var world:SKNode?
-  
+  var statusBalls = [SKSpriteNode]()
+  //currently unused setting variable
+  var missesRemaining = Game.currentTrackSettings.missesAllowed
   var successHistory = [Bool]() {
     didSet {
       if successHistory.count >= Game.currentTrackSettings.requiredStreak {
         if !successHistory.dropFirst(successHistory.count - Game.currentTrackSettings.requiredStreak).contains(false) {
           self.streakAchieved = true
-          if let gameScene = currentGame.gameScene {
-            gameScene.run(SKAction.run({
-              Sensory.audioNodes["streak"]?.run(SKAction.play())
-            }))
-          }
         }
       }
     }
   }
-  //currently unused setting variable
-  var missesRemaining = Game.currentTrackSettings.missesAllowed
-  
   var foundTargets = 0 {
     didSet {
       if self.foundTargets == Game.currentTrackSettings.numTargets {
@@ -130,26 +124,32 @@ class Game {
       }
     }
   }
-  var streakAchieved = false
+  var streakAchieved = false {
+    didSet {
+      if self.streakAchieved {
+        if let gameScene = currentGame.gameScene {
+          gameScene.run(SKAction.run({
+            Sensory.audioNodes["streak"]?.run(SKAction.play())
+          }))
+        }
+      }
+    }
+  }
   var failedAttempt = false {
     didSet {
       if self.failedAttempt { self.successHistory.append(false)}
     }
   }
-  
-  var statusBalls = [SKSpriteNode]()
-  
   var isPaused:Bool {
     didSet {
       isPaused == true ? Ball.enableInteraction() : Ball.disableInteraction()
     }
   }
   
-  
   init(){
     self.isPaused = false
   }
-  
+
   func setupGame(){
     self.timer = Timer()
     self.world = SKNode()

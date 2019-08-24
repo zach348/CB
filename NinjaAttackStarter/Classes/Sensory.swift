@@ -13,10 +13,6 @@ struct Sensory {
     "streak": SKAudioNode(fileNamed: "streak_sound")
   ]
   
-  static var emitterNodes: [String: SKEmitterNode] = [
-    "streakParticles": SKEmitterNode(fileNamed: "spark")!
-  ]
-  
   static func applyFrequency() {
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
