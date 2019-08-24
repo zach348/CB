@@ -353,6 +353,5 @@ class Ball: SKSpriteNode {
       }
     }
   }
-  
 }
 
