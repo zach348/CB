@@ -16,14 +16,14 @@ struct Sensory {
   static func foundTargetFeedback(foundTarget:Ball){
     switch Game.currentTrackSettings.phase {
     case 1,2:
-      self.addParticles(sprite: foundTarget, emitterFile: "spark.sks")
+      self.addParticles(sprite: foundTarget, emitterFile: "red_spark.sks")
       foundTarget.showBorder()
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       foundTarget.run(SKAction.run({
         self.audioNodes["correct"]?.run(SKAction.play())
       }))
     case 3:
-      self.addParticles(sprite: foundTarget, emitterFile: "spark.sks")
+      self.addParticles(sprite: foundTarget, emitterFile: "red_spark.sks")
     default:
       break
     }
