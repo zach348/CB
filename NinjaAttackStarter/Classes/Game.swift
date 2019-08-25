@@ -143,7 +143,15 @@ class Game {
   }
   var isPaused:Bool {
     didSet {
-      isPaused == true ? Ball.enableInteraction() : Ball.disableInteraction()
+      if let worldTimer = currentGame.worldTimer {
+        if isPaused {
+          Ball.enableInteraction()
+          worldTimer.isPaused = true
+        }else{
+          Ball.disableInteraction()
+          worldTimer.isPaused = false
+        }
+      }
     }
   }
   
@@ -200,8 +208,7 @@ class Game {
       Ball.pendingPause = true
       return
     }
-    if let worldTimer = self.worldTimer, let timer = self.timer {
-      worldTimer.isPaused = true
+    if let timer = self.timer {
       self.isPaused = true
       Ball.freezeMovement()
       Ball.maskTargets()
@@ -217,15 +224,12 @@ class Game {
   
   
   func unpauseGame(){
-    if let worldTimer = self.worldTimer {
-      worldTimer.isPaused = false
-      self.isPaused = false
-      Ball.removeEmitters()
-      Ball.unfreezeMovement()
-      Ball.unmaskTargets()
-      Ball.hideBorders()
-      Ball.resetTextures()
-    }
+    self.isPaused = false
+    Ball.removeEmitters()
+    Ball.unfreezeMovement()
+    Ball.unmaskTargets()
+    Ball.hideBorders()
+    Ball.resetTextures()
   }
   
   func resetStatusBalls(){
