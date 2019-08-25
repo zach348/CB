@@ -159,6 +159,12 @@ class Ball: SKSpriteNode {
     })
   }
   
+  class func removeEmitters(){
+    for ball in self.members {
+      ball.removeParticles()
+    }
+  }
+  
   class func hideBorders(){
     self.members.forEach({ $0.hideBorder()})
   }
@@ -303,20 +309,6 @@ class Ball: SKSpriteNode {
   func hideBorder(){
     if let border = self.border { border.removeFromParent() }
   }
-  
-  func foundTargetFeedback(){
-    switch Game.currentTrackSettings.phase {
-    case 1,2,3,4,5,6,7:
-      Sensory.addParticles(sprite: self, emitterFile: "spark.sks")
-      self.showBorder()
-      self.texture = Game.currentTrackSettings.targetTexture
-      self.run(SKAction.run({
-        Sensory.audioNodes["correct"]?.run(SKAction.play())
-      }))
-    default:
-      break
-    }
-  }
 
   func flickerOutTarget(duration:TimeInterval = 0.75){
     let off = SKAction.setTexture(Game.currentTrackSettings.distractorTexture)
@@ -333,12 +325,18 @@ class Ball: SKSpriteNode {
     }
   }
   
+  func removeParticles(){
+    for node in self.children {
+      if node is SKEmitterNode { node.removeFromParent() }
+    }
+  }
+  
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
     if let gameScene = currentGame.gameScene {
       if !currentGame.failedAttempt {
         if Ball.getTargets().contains(self) {
           currentGame.foundTargets += 1
-          self.foundTargetFeedback()
+          Sensory.foundTargetFeedback(foundTarget: self)
         }else{
           currentGame.failedAttempt = true
           currentGame.successHistory.append(false)

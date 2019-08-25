@@ -220,6 +220,7 @@ class Game {
     if let worldTimer = self.worldTimer {
       worldTimer.isPaused = false
       self.isPaused = false
+      Ball.removeEmitters()
       Ball.unfreezeMovement()
       Ball.unmaskTargets()
       Ball.hideBorders()

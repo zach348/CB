@@ -13,6 +13,21 @@ struct Sensory {
     "streak": SKAudioNode(fileNamed: "streak_sound")
   ]
   
+  static func foundTargetFeedback(foundTarget:Ball){
+    switch Game.currentTrackSettings.phase {
+    case 1,2:
+      self.addParticles(sprite: foundTarget, emitterFile: "spark.sks")
+      foundTarget.showBorder()
+      foundTarget.texture = Game.currentTrackSettings.targetTexture
+      foundTarget.run(SKAction.run({
+        self.audioNodes["correct"]?.run(SKAction.play())
+      }))
+    case 3:
+      self.addParticles(sprite: foundTarget, emitterFile: "spark.sks")
+    default:
+      break
+    }
+  }
   static func addParticles(sprite:SKSpriteNode, emitterFile:String, duration:TimeInterval = 0){
     if let emitter = SKEmitterNode(fileNamed: emitterFile){
       let addEmitter = SKAction.run {
