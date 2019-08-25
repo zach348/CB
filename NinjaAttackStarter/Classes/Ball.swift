@@ -295,7 +295,26 @@ class Ball: SKSpriteNode {
       self.run(flagSequence, withKey: "blinkBall")
     }
   }
-    
+  
+  func showBorder(){
+    if let border = self.border { self.addChild(border) }
+  }
+  
+  func hideBorder(){
+    if let border = self.border { border.removeFromParent() }
+  }
+  
+  func foundTargetFeedback(){
+    switch Game.currentTrackSettings.phase {
+    case 1,2,3,4,5,6,7:
+      Sensory.addParticles(target: self, emitterFile: "spark.sks")
+      self.showBorder()
+      self.texture = Game.currentTrackSettings.targetTexture
+    default:
+      break
+    }
+  }
+
   func flickerOutTarget(duration:TimeInterval = 0.75){
     let off = SKAction.setTexture(Game.currentTrackSettings.distractorTexture)
     let on = SKAction.setTexture(Game.currentTrackSettings.targetTexture)
@@ -309,15 +328,6 @@ class Ball: SKSpriteNode {
       }
       self.run(SKAction.sequence([off,waitAction,on,waitAction]), completion: { self.run(recursiveCall)})
     }
-  }
-  
-  
-  func showBorder(){
-    if let border = self.border { self.addChild(border) }
-  }
-  
-  func hideBorder(){
-    if let border = self.border { border.removeFromParent() }
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){

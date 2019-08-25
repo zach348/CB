@@ -238,8 +238,8 @@ class Game {
   func addMemberstoScene(collections: [[SKNode]]){
     if let spriteWorld = self.spriteWorld {
       for collection in collections {
-        for node in collection{
-          spriteWorld.addChild(node)
+        for sprite in collection{
+          spriteWorld.addChild(sprite)
         }
       }
     }

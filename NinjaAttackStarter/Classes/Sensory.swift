@@ -13,6 +13,24 @@ struct Sensory {
     "streak": SKAudioNode(fileNamed: "streak_sound")
   ]
   
+  static func addParticles(target:SKSpriteNode, emitterFile:String, duration:TimeInterval = 0){
+    let target = target
+    if let emitter = SKEmitterNode(fileNamed: emitterFile){
+      let addEmitter = SKAction.run {
+        target.addChild(emitter)
+      }
+      if duration > 0 {
+        let wait = SKAction.wait(forDuration: duration)
+        let removeEmitter = SKAction.run {
+          emitter.removeFromParent()
+        }
+        target.run(SKAction.sequence([addEmitter,wait,removeEmitter]))
+      }else{
+        target.run(addEmitter)
+      }
+    }
+  }
+  
   static func applyFrequency() {
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
