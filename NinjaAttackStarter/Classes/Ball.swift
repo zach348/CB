@@ -73,8 +73,8 @@ class Ball: SKSpriteNode {
       self.pendingShift = true
       print("pending shift")
       return
-    }else if let gameWorld = currentGame.world, let timer = currentGame.timer {
-      gameWorld.removeAction(forKey: "targetTimer")
+    }else if let worldTimer = currentGame.worldTimer, let timer = currentGame.timer {
+      worldTimer.removeAction(forKey: "targetTimer")
       timer.members = timer.members.filter({ $0 != "targetTimer"})
       Ball.clearTargets()
       Ball.assignRandomTargets().forEach { ball in
@@ -85,7 +85,7 @@ class Ball: SKSpriteNode {
       let targetTimer = SKAction.run {
         timer.targetTimer()
       }
-      gameWorld.run(targetTimer)
+      worldTimer.run(targetTimer)
     }
   }
   

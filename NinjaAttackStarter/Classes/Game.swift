@@ -29,9 +29,9 @@ class Game {
       //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
       self.respActive = true
     }
-    if let timer = currentGame.timer, let world = currentGame.world {
+    if let timer = currentGame.timer, let worldTimer = currentGame.worldTimer {
       if self.respActive {
-        self.transitionRespPhase(timer: timer, world: world)
+        self.transitionRespPhase(timer: timer, worldTimer: worldTimer)
       }else{
         self.transitionTrackPhase(timer:timer)
       }
@@ -70,7 +70,7 @@ class Game {
     Ball.resetTextures()
   }
   
-  class func transitionRespPhase(timer:Timer, world:SKNode){
+  class func transitionRespPhase(timer:Timer, worldTimer:SKNode){
 
     Sensory.applyFrequency()
     let circleAction = SKAction.run({ timer.circleMovementTimer()})
@@ -88,9 +88,9 @@ class Game {
       let wait = SKAction.wait(forDuration: 5)
       let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
 
-      world.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
+      worldTimer.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
     }else{
-      world.run(SKAction.sequence([circleAction]))
+      worldTimer.run(SKAction.sequence([circleAction]))
     }
   }
   
@@ -98,7 +98,8 @@ class Game {
 
   var gameScene:GameScene?
   var timer:Timer?
-  var world:SKNode?
+  var worldTimer:SKNode?
+  var spriteWorld:SKNode?
   var statusBalls = [SKSpriteNode]()
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
@@ -152,11 +153,13 @@ class Game {
 
   func setupGame(){
     self.timer = Timer()
-    self.world = SKNode()
+    self.worldTimer = SKNode()
+    self.spriteWorld = SKNode()
     if let scene = self.gameScene {
-      if let world = self.world {
-        scene.addChild(world)
-        world.position = CGPoint(x: scene.size.width/2, y: scene.size.height/2)
+      if let worldTimer = self.worldTimer, let spriteWorld = currentGame.spriteWorld {
+        scene.addChild(worldTimer)
+        scene.addChild(spriteWorld)
+        spriteWorld.position = CGPoint(x: scene.size.width/2, y: scene.size.height/2)
       }
       //gamescene formatting
       scene.backgroundColor = .white
@@ -197,8 +200,8 @@ class Game {
       Ball.pendingPause = true
       return
     }
-    if let gameWorld = self.world, let timer = self.timer {
-      gameWorld.isPaused = true
+    if let worldTimer = self.worldTimer, let timer = self.timer {
+      worldTimer.isPaused = true
       self.isPaused = true
       Ball.freezeMovement()
       Ball.maskTargets()
@@ -214,8 +217,8 @@ class Game {
   
   
   func unpauseGame(){
-    if let world = self.world {
-      world.isPaused = false
+    if let worldTimer = self.worldTimer {
+      worldTimer.isPaused = false
       self.isPaused = false
       Ball.unfreezeMovement()
       Ball.unmaskTargets()
@@ -233,10 +236,10 @@ class Game {
   private
   
   func addMemberstoScene(collections: [[SKNode]]){
-    if let world = self.world {
+    if let spriteWorld = self.spriteWorld {
       for collection in collections {
         for node in collection{
-          world.addChild(node)
+          spriteWorld.addChild(node)
         }
       }
     }
