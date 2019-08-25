@@ -307,9 +307,12 @@ class Ball: SKSpriteNode {
   func foundTargetFeedback(){
     switch Game.currentTrackSettings.phase {
     case 1,2,3,4,5,6,7:
-      Sensory.addParticles(target: self, emitterFile: "spark.sks")
+      Sensory.addParticles(sprite: self, emitterFile: "spark.sks")
       self.showBorder()
       self.texture = Game.currentTrackSettings.targetTexture
+      self.run(SKAction.run({
+        Sensory.audioNodes["correct"]?.run(SKAction.play())
+      }))
     default:
       break
     }
@@ -331,19 +334,11 @@ class Ball: SKSpriteNode {
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
-    let touch:UITouch = touches.first! as UITouch
-    let positionInScene = touch.location(in: self)
-    let touchedNode = self.atPoint(positionInScene)
-    if let name = touchedNode.name, let gameScene = currentGame.gameScene {
+    if let gameScene = currentGame.gameScene {
       if !currentGame.failedAttempt {
-        if Ball.getTargets().map({$0.name}).contains(name) {
-          let foundTarget = Ball.getBall(name: name)
-          foundTarget.showBorder()
-          foundTarget.run(SKAction.setTexture(Game.currentTrackSettings.targetTexture))
+        if Ball.getTargets().contains(self) {
           currentGame.foundTargets += 1
-          gameScene.run(SKAction.run({
-            Sensory.audioNodes["correct"]?.run(SKAction.play())
-          }))
+          self.foundTargetFeedback()
         }else{
           currentGame.failedAttempt = true
           currentGame.successHistory.append(false)

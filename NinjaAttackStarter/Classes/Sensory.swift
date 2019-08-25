@@ -13,20 +13,19 @@ struct Sensory {
     "streak": SKAudioNode(fileNamed: "streak_sound")
   ]
   
-  static func addParticles(target:SKSpriteNode, emitterFile:String, duration:TimeInterval = 0){
-    let target = target
+  static func addParticles(sprite:SKSpriteNode, emitterFile:String, duration:TimeInterval = 0){
     if let emitter = SKEmitterNode(fileNamed: emitterFile){
       let addEmitter = SKAction.run {
-        target.addChild(emitter)
+        sprite.addChild(emitter)
       }
       if duration > 0 {
         let wait = SKAction.wait(forDuration: duration)
         let removeEmitter = SKAction.run {
           emitter.removeFromParent()
         }
-        target.run(SKAction.sequence([addEmitter,wait,removeEmitter]))
+        sprite.run(SKAction.sequence([addEmitter,wait,removeEmitter]))
       }else{
-        target.run(addEmitter)
+        sprite.run(addEmitter)
       }
     }
   }
