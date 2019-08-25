@@ -23,18 +23,34 @@ struct Sensory {
         self.audioNodes["correct"]?.run(SKAction.play())
       }))
     case 3:
-      self.addParticles(sprite: foundTarget, emitterFile: "red_spark.sks")
+      foundTarget.showBorder()
+      foundTarget.texture = Game.currentTrackSettings.targetTexture
+      foundTarget.run(SKAction.run({
+        self.audioNodes["correct"]?.run(SKAction.play())
+      }))
+    case 4:
+      foundTarget.texture = Game.currentTrackSettings.targetTexture
+      foundTarget.run(SKAction.run({
+        self.audioNodes["correct"]?.run(SKAction.play())
+      }))
+    case 5:
+      foundTarget.texture = Game.currentTrackSettings.targetTexture
     default:
       break
     }
   }
   
   static func missedTargetFeedback(){
-    if let gameScene = currentGame.gameScene {
-      gameScene.run(SKAction.run({
-        Sensory.audioNodes["incorrect"]!.run(SKAction.play())
-      }))
-      AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+    switch Game.currentTrackSettings.phase {
+    case 1:
+      if let gameScene = currentGame.gameScene {
+        gameScene.run(SKAction.run({
+          Sensory.audioNodes["incorrect"]!.run(SKAction.play())
+        }))
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+      }
+    default:
+      break
     }
   }
   
