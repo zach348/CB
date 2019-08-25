@@ -13,26 +13,32 @@ struct Sensory {
     "streak": SKAudioNode(fileNamed: "streak_sound")
   ]
   
-  static func foundTargetFeedback(foundTarget:Ball){
+  static func foundTargetsFeedback(foundTarget:Ball){
     switch Game.currentTrackSettings.phase {
     case 1,2:
       self.addParticles(sprite: foundTarget, emitterFile: "red_spark.sks")
       foundTarget.showBorder()
       foundTarget.texture = Game.currentTrackSettings.targetTexture
-      foundTarget.run(SKAction.run({
-        self.audioNodes["correct"]?.run(SKAction.play())
-      }))
+      if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
+        foundTarget.run(SKAction.run({
+          self.audioNodes["correct"]?.run(SKAction.play())
+        }))
+      }
     case 3:
       foundTarget.showBorder()
       foundTarget.texture = Game.currentTrackSettings.targetTexture
-      foundTarget.run(SKAction.run({
-        self.audioNodes["correct"]?.run(SKAction.play())
-      }))
+      if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
+        foundTarget.run(SKAction.run({
+          self.audioNodes["correct"]?.run(SKAction.play())
+        }))
+      }
     case 4:
       foundTarget.texture = Game.currentTrackSettings.targetTexture
-      foundTarget.run(SKAction.run({
-        self.audioNodes["correct"]?.run(SKAction.play())
-      }))
+      if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
+        foundTarget.run(SKAction.run({
+          self.audioNodes["correct"]?.run(SKAction.play())
+        }))
+      }
     case 5:
       foundTarget.texture = Game.currentTrackSettings.targetTexture
     default:
@@ -41,16 +47,34 @@ struct Sensory {
   }
   
   static func missedTargetFeedback(){
-    switch Game.currentTrackSettings.phase {
-    case 1:
-      if let gameScene = currentGame.gameScene {
+    if let gameScene = currentGame.gameScene {
+      switch Game.currentTrackSettings.phase {
+      case 1,2:
         gameScene.run(SKAction.run({
           Sensory.audioNodes["incorrect"]!.run(SKAction.play())
         }))
         AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+      case 3,4:
+        gameScene.run(SKAction.run({
+          Sensory.audioNodes["incorrect"]!.run(SKAction.play())
+        }))
+      default:
+        break
       }
-    default:
-      break
+
+    }
+  }
+  
+  static func streakAchievedFeedback(){
+    if let gameScene = currentGame.gameScene {
+      switch Game.currentTrackSettings.phase {
+      case 1,2,3,4:
+        gameScene.run(SKAction.run({
+          Sensory.audioNodes["streak"]?.run(SKAction.play())
+        }))
+      default:
+        break
+      }
     }
   }
   

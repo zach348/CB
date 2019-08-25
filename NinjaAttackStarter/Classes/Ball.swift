@@ -335,7 +335,7 @@ class Ball: SKSpriteNode {
     if !currentGame.failedAttempt {
       if Ball.getTargets().contains(self) {
         currentGame.foundTargets += 1
-        Sensory.foundTargetFeedback(foundTarget: self)
+        Sensory.foundTargetsFeedback(foundTarget: self)
       }else{
         currentGame.failedAttempt = true
         currentGame.successHistory.append(false)

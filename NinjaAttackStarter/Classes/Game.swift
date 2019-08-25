@@ -56,7 +56,7 @@ class Game {
     currentGame.successHistory = [Bool]()
     currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
     for (_, node) in Sensory.audioNodes {
-      node.run(SKAction.changeVolume(by: Float(-0.225), duration: 0))
+      node.run(SKAction.changeVolume(by: Float(-0.3), duration: 0))
     }
     Sensory.applyFrequency()
     timer.targetTimer()
@@ -128,11 +128,7 @@ class Game {
   var streakAchieved = false {
     didSet {
       if self.streakAchieved {
-        if let gameScene = currentGame.gameScene {
-          gameScene.run(SKAction.run({
-            Sensory.audioNodes["streak"]?.run(SKAction.play())
-          }))
-        }
+        Sensory.streakAchievedFeedback()
       }
     }
   }
