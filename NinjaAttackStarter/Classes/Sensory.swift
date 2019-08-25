@@ -28,6 +28,16 @@ struct Sensory {
       break
     }
   }
+  
+  static func missedTargetFeedback(){
+    if let gameScene = currentGame.gameScene {
+      gameScene.run(SKAction.run({
+        Sensory.audioNodes["incorrect"]!.run(SKAction.play())
+      }))
+      AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+    }
+  }
+  
   static func addParticles(sprite:SKSpriteNode, emitterFile:String, duration:TimeInterval = 0){
     if let emitter = SKEmitterNode(fileNamed: emitterFile){
       let addEmitter = SKAction.run {

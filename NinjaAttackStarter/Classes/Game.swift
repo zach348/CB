@@ -222,7 +222,6 @@ class Game {
     }
   }
   
-  
   func unpauseGame(){
     self.isPaused = false
     Ball.removeEmitters()

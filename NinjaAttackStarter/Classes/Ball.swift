@@ -332,29 +332,24 @@ class Ball: SKSpriteNode {
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
-    if let gameScene = currentGame.gameScene {
-      if !currentGame.failedAttempt {
-        if Ball.getTargets().contains(self) {
-          currentGame.foundTargets += 1
-          Sensory.foundTargetFeedback(foundTarget: self)
-        }else{
-          currentGame.failedAttempt = true
-          currentGame.successHistory.append(false)
-          currentGame.resetStatusBalls()
-          gameScene.run(SKAction.run({
-            Sensory.audioNodes["incorrect"]!.run(SKAction.play())
-          }))
-          //irrelevant for now
-          currentGame.missesRemaining -= 1
-          print("miss!")
-        }
+    if !currentGame.failedAttempt {
+      if Ball.getTargets().contains(self) {
+        currentGame.foundTargets += 1
+        Sensory.foundTargetFeedback(foundTarget: self)
       }else{
-        gameScene.run(SKAction.run({
-          Sensory.audioNodes["incorrect"]?.run(SKAction.play())
-        }))
-        print("failed attempt")
+        currentGame.failedAttempt = true
+        currentGame.successHistory.append(false)
+        currentGame.resetStatusBalls()
+        Sensory.missedTargetFeedback()
+        //irrelevant for now
+        currentGame.missesRemaining -= 1
+        print("miss!")
       }
+    }else{
+      Sensory.missedTargetFeedback()
+      print("failed attempt")
     }
   }
 }
+
 
