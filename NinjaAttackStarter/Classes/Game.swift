@@ -116,12 +116,6 @@ class Game {
     didSet {
       if self.foundTargets == Game.currentTrackSettings.numTargets {
         currentGame.successHistory.append(true)
-        for ball in currentGame.statusBalls {
-          if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
-            ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
-            break
-          }
-        }
       }
     }
   }
@@ -228,10 +222,18 @@ class Game {
   }
   
   func resetStatusBalls(){
-    self.statusBalls.forEach({ ball in ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-black")))})
+    self.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
   }
   
-  
+  func incrementStatusBalls(emitter:Bool = false) {
+    for ball in self.statusBalls {
+      if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
+        ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
+        if emitter { Sensory.addParticles(sprite: ball, emitterFile: "ball_fire")}
+        break
+      }
+    }
+  }
   
   private
   

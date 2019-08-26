@@ -23,6 +23,7 @@ struct Sensory {
         foundTarget.run(SKAction.run({
           self.audioNodes["correct"]?.run(SKAction.play())
         }))
+        currentGame.incrementStatusBalls(emitter: true)
       }
     case 3:
       foundTarget.showBorder()
@@ -31,6 +32,7 @@ struct Sensory {
         foundTarget.run(SKAction.run({
           self.audioNodes["correct"]?.run(SKAction.play())
         }))
+        currentGame.incrementStatusBalls()
       }
     case 4:
       foundTarget.texture = Game.currentTrackSettings.targetTexture
@@ -38,9 +40,11 @@ struct Sensory {
         foundTarget.run(SKAction.run({
           self.audioNodes["correct"]?.run(SKAction.play())
         }))
+        currentGame.incrementStatusBalls()
       }
     case 5:
       foundTarget.texture = Game.currentTrackSettings.targetTexture
+      currentGame.incrementStatusBalls()
     default:
       break
     }
@@ -61,7 +65,6 @@ struct Sensory {
       default:
         break
       }
-
     }
   }
   
