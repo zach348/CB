@@ -166,8 +166,9 @@ class Game {
       scene.physicsWorld.gravity = .zero
       scene.physicsWorld.contactDelegate = gameScene
       
-      for (_, audioNode) in Sensory.audioNodes {
+      for (name, audioNode) in Sensory.audioNodes {
         audioNode.autoplayLooped = false
+        if name == "blip" {audioNode.run(SKAction.changeVolume(by: -0.9, duration: 0))}
         scene.addChild(audioNode)
       }
       
@@ -199,6 +200,7 @@ class Game {
       self.isPaused = true
       Ball.freezeMovement()
       Ball.maskTargets()
+      Ball.resetFoundTargets()
       currentGame.foundTargets = 0
       currentGame.failedAttempt = false
       //irrelevant for now

@@ -74,15 +74,13 @@ class Ball: SKSpriteNode {
       print("pending shift")
       return
     }else if let worldTimer = currentGame.worldTimer, let timer = currentGame.timer {
-      worldTimer.removeAction(forKey: "targetTimer")
-      timer.members = timer.members.filter({ $0 != "targetTimer"})
+      timer.stopTimer(timerID: "targetTimer")
       Ball.clearTargets()
       Ball.assignRandomTargets().forEach { ball in
         ball.removeAction(forKey: "blinkBall")
         ball.blinkBall()
         //testing
       }
-      if Game.currentTrackSettings.phase == 1 { Sensory.playRadarBlip(count: 2)}
       let targetTimer = SKAction.run {
         timer.targetTimer()
       }
@@ -181,6 +179,12 @@ class Ball: SKSpriteNode {
     })
   }
   
+  class func resetFoundTargets(){
+    for ball in self.members {
+      ball.foundTarget = false
+    }
+  }
+  
   class func enableInteraction() {
     self.members.forEach({ ball in ball.isUserInteractionEnabled = true })
   }
@@ -202,6 +206,7 @@ class Ball: SKSpriteNode {
   var positionHistory:[CGPoint]
   var vectorHistory:[String:CGFloat]
   var border:SKShapeNode?
+  var foundTarget = false
   
   let game:Game
   init() {
@@ -292,7 +297,7 @@ class Ball: SKSpriteNode {
       }
       let resetSprite = SKAction.group([resetTexture, resetAlpha])
       let fadeOut = SKAction.fadeOut(withDuration: 0.15)
-      let fadeIn = SKAction.fadeIn(withDuration: 0.15)
+      let fadeIn = SKAction.group([SKAction.fadeIn(withDuration: 0.15), SKAction.run({ if Game.currentTrackSettings.phase == 1 {Sensory.playRadarBlip(count: 1)}})])
       let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
       let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetSprite])
       let resetFlag = SKAction.run { Ball.blinkFlags.removeLast() }
@@ -333,9 +338,11 @@ class Ball: SKSpriteNode {
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+    if self.foundTarget { return }
     if !currentGame.failedAttempt {
       if Ball.getTargets().contains(self) {
         currentGame.foundTargets += 1
+        self.foundTarget = true
         Sensory.foundTargetsFeedback(foundTarget: self)
       }else{
         currentGame.failedAttempt = true
