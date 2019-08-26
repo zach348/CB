@@ -82,6 +82,7 @@ class Ball: SKSpriteNode {
         ball.blinkBall()
         //testing
       }
+      if Game.currentTrackSettings.phase == 1 { Sensory.playRadarBlip(count: 2)}
       let targetTimer = SKAction.run {
         timer.targetTimer()
       }

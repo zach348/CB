@@ -10,7 +10,8 @@ struct Sensory {
   static var audioNodes: [String: SKAudioNode] = [
     "correct": SKAudioNode(fileNamed: "correct_sound"),
     "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
-    "streak": SKAudioNode(fileNamed: "streak_sound")
+    "streak": SKAudioNode(fileNamed: "streak_sound"),
+    "blip": SKAudioNode(fileNamed: "radar_blip")
   ]
   
   static func foundTargetsFeedback(foundTarget:Ball){
@@ -68,6 +69,8 @@ struct Sensory {
     }
   }
   
+  
+  
   static func streakAchievedFeedback(){
     if let gameScene = currentGame.gameScene {
       switch Game.currentTrackSettings.phase {
@@ -95,6 +98,15 @@ struct Sensory {
       }else{
         sprite.run(addEmitter)
       }
+    }
+  }
+  
+  static func playRadarBlip(count:Int){
+    if let gameScene = currentGame.gameScene {
+      let playSound = SKAction.run({
+        self.audioNodes["blip"]?.run(SKAction.play())
+      })
+      gameScene.run(SKAction.repeat(playSound, count: count))
     }
   }
   

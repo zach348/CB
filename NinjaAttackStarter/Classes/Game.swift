@@ -166,14 +166,11 @@ class Game {
       scene.physicsWorld.gravity = .zero
       scene.physicsWorld.contactDelegate = gameScene
       
-      if let correctSound = Sensory.audioNodes["correct"], let incorrectSound = Sensory.audioNodes["incorrect"], let streakSound = Sensory.audioNodes["streak"] {
-        correctSound.autoplayLooped = false
-        incorrectSound.autoplayLooped = false
-        streakSound.autoplayLooped = false
-        scene.addChild(correctSound)
-        scene.addChild(incorrectSound)
-        scene.addChild(streakSound)
+      for (_, audioNode) in Sensory.audioNodes {
+        audioNode.autoplayLooped = false
+        scene.addChild(audioNode)
       }
+      
       self.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
 
       //stimuli

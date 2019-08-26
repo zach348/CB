@@ -19,6 +19,7 @@
 		84BD93042313243A0068E47D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84BD93022313243A0068E47D /* Assets.xcassets */; };
 		84BD930723134D4F0068E47D /* ball_fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 84BD930523134D4F0068E47D /* ball_fire.sks */; };
 		84BD930823134D4F0068E47D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84BD930623134D4F0068E47D /* Assets.xcassets */; };
+		84BD930A231372650068E47D /* radar_blip.wav in Resources */ = {isa = PBXBuildFile; fileRef = 84BD9309231372650068E47D /* radar_blip.wav */; };
 		84C153922300636700C60973 /* TIle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C153912300636700C60973 /* TIle.swift */; };
 		84C15396230610E800C60973 /* wrong_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 84C15395230610E800C60973 /* wrong_sound.wav */; };
 		84C153982306116900C60973 /* input_error.wav in Resources */ = {isa = PBXBuildFile; fileRef = 84C153972306116900C60973 /* input_error.wav */; };
@@ -56,6 +57,7 @@
 		84BD93022313243A0068E47D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84BD930523134D4F0068E47D /* ball_fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ball_fire.sks; sourceTree = "<group>"; };
 		84BD930623134D4F0068E47D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		84BD9309231372650068E47D /* radar_blip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = radar_blip.wav; sourceTree = "<group>"; };
 		84C153912300636700C60973 /* TIle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIle.swift; sourceTree = "<group>"; };
 		84C15395230610E800C60973 /* wrong_sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = wrong_sound.wav; sourceTree = "<group>"; };
 		84C153972306116900C60973 /* input_error.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = input_error.wav; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				84C15395230610E800C60973 /* wrong_sound.wav */,
 				84C153992306141500C60973 /* correct_sound.wav */,
 				84C153972306116900C60973 /* input_error.wav */,
+				84BD9309231372650068E47D /* radar_blip.wav */,
 				84C1539B23061FD900C60973 /* streak_sound.wav */,
 				AFD63F8D203649F800E08C66 /* background-music-aac.caf */,
 				AFD63F8E203649F800E08C66 /* pew-pew-lei.caf */,
@@ -259,6 +262,7 @@
 				84C1D2C522C83186008E5C7F /* tone155hz.wav in Resources */,
 				846E09A622CBAF49005A1C27 /* tone185hz.wav in Resources */,
 				84C15396230610E800C60973 /* wrong_sound.wav in Resources */,
+				84BD930A231372650068E47D /* radar_blip.wav in Resources */,
 				D2A5F2091F4A9144005CD714 /* Main.storyboard in Resources */,
 				84BD93032313243A0068E47D /* red_spark.sks in Resources */,
 			);
