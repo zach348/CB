@@ -23,7 +23,7 @@ class Game {
   ///STARTING POINTS
   static var currentRespSettings:RespSettings = respSettingsArr[0]
   
-  static var currentTrackSettings:Settings = settingsArr[0] {
+  static var currentTrackSettings:Settings = settingsArr[4] {
    didSet {
     if self.currentTrackSettings.phase == 6 {
       //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
@@ -79,7 +79,13 @@ class Game {
       timer.members.forEach({ loop in
         if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" {timer.stopTimer(timerID: loop)}
       })
-      Ball.getTargets().forEach({ball in ball.flickerOutTarget()})
+      for ball in Ball.getTargets(){
+        Sensory.flickerOffTexture(sprite: ball, onTexture: Game.currentTrackSettings.targetTexture, offTexture: Game.currentTrackSettings.distractorTexture)
+      }
+      
+      for statusBall in currentGame.statusBalls {
+        Sensory.flickerOffAlpha(sprite: statusBall, startingAlpha: statusBall.alpha, endingAlpha: 0)
+      }
       
       //bleed speed and stop master movement timer prior to calling circleMovementTimer
       let bleedSpeed = SKAction.run {
@@ -229,7 +235,7 @@ class Game {
       if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
         ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
         if emitter { Sensory.addParticles(sprite: ball, emitterFile: "ball_fire")}
-        break
+        return
       }
     }
   }

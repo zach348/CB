@@ -315,21 +315,6 @@ class Ball: SKSpriteNode {
   func hideBorder(){
     if let border = self.border { border.removeFromParent() }
   }
-
-  func flickerOutTarget(duration:TimeInterval = 0.75){
-    let off = SKAction.setTexture(Game.currentTrackSettings.distractorTexture)
-    let on = SKAction.setTexture(Game.currentTrackSettings.targetTexture)
-    let waitAction = SKAction.wait(forDuration: duration)
-    if duration < 0.01 {
-      self.run(off)
-    }else{
-      let newDuration = duration * Double.random(min: 0.85, max: 0.85)
-      let recursiveCall = SKAction.run {
-        self.flickerOutTarget(duration:newDuration)
-      }
-      self.run(SKAction.sequence([off,waitAction,on,waitAction]), completion: { self.run(recursiveCall)})
-    }
-  }
   
   func removeParticles(){
     for node in self.children {

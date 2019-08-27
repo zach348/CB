@@ -31,7 +31,7 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
         foundTarget.run(SKAction.run({
-          self.audioNodes["correct"]?.run(SKAction.play())
+          Sensory.audioNodes["correct"]?.run(SKAction.play())
         }))
         currentGame.incrementStatusBalls()
       }
@@ -39,13 +39,15 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
         foundTarget.run(SKAction.run({
-          self.audioNodes["correct"]?.run(SKAction.play())
+          Sensory.audioNodes["correct"]?.run(SKAction.play())
         }))
         currentGame.incrementStatusBalls()
       }
     case 5:
       foundTarget.texture = Game.currentTrackSettings.targetTexture
-      currentGame.incrementStatusBalls()
+      if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
+        currentGame.incrementStatusBalls()
+      }
     default:
       break
     }
@@ -98,6 +100,36 @@ struct Sensory {
       }else{
         sprite.run(addEmitter)
       }
+    }
+  }
+  
+  static func flickerOffTexture(sprite:SKSpriteNode, onTexture:SKTexture, offTexture:SKTexture, duration:TimeInterval = 0.75){
+    let off = SKAction.setTexture(offTexture)
+    let on = SKAction.setTexture(onTexture)
+    let waitAction = SKAction.wait(forDuration: duration)
+    if duration < 0.01 {
+      sprite.run(off)
+    }else{
+      let newDuration = duration * Double.random(min: 0.85, max: 0.85)
+      let recursiveCall = SKAction.run {
+        self.flickerOffTexture(sprite: sprite, onTexture: onTexture, offTexture: offTexture, duration:newDuration)
+      }
+      sprite.run(SKAction.sequence([off,waitAction,on,waitAction]), completion: { sprite.run(recursiveCall)})
+    }
+  }
+  
+  static func flickerOffAlpha(sprite:SKSpriteNode, startingAlpha:CGFloat, endingAlpha:CGFloat, duration:TimeInterval = 0.75){
+    let off = SKAction.fadeOut(withDuration: 0)
+    let on = SKAction.fadeIn(withDuration: 0)
+    let waitAction = SKAction.wait(forDuration: duration)
+    if duration < 0.01 {
+      sprite.run(off)
+    }else{
+      let newDuration = duration * Double.random(min: 0.85, max: 0.85)
+      let recursiveCall = SKAction.run {
+        self.flickerOffAlpha(sprite: sprite, startingAlpha: startingAlpha, endingAlpha: endingAlpha, duration:newDuration)
+      }
+      sprite.run(SKAction.sequence([off,waitAction,on,waitAction]), completion: { sprite.run(recursiveCall)})
     }
   }
   
