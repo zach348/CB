@@ -71,8 +71,6 @@ struct Sensory {
     }
   }
   
-  
-  
   static func streakAchievedFeedback(){
     if let gameScene = currentGame.gameScene {
       switch Game.currentTrackSettings.phase {
@@ -100,6 +98,34 @@ struct Sensory {
       }else{
         sprite.run(addEmitter)
       }
+    }
+  }
+  
+  static func blinkBall(ball:Ball){
+    Ball.blinkFlags.append(true)
+    if let currentTexture = ball.texture{
+      let setFlashTexture = SKAction.setTexture(Game.currentTrackSettings.flashTexture)
+      let resetTexture = SKAction.setTexture(currentTexture)
+      let resetAlpha = SKAction.run {
+        ball.alpha = Game.currentTrackSettings.alpha
+      }
+      let resetSprite = SKAction.group([resetTexture, resetAlpha])
+      let fadeOut = SKAction.fadeOut(withDuration: 0.15)
+      let fadeIn = SKAction.group([SKAction.fadeIn(withDuration: 0.15), SKAction.run({
+        switch Game.currentTrackSettings.phase {
+        case 1,2:
+          Sensory.playRadarBlip(count: 1)
+        default:
+          break
+        }
+      })])
+      let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
+      let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetSprite])
+      let resetFlag = SKAction.run { Ball.blinkFlags.removeLast() }
+      let wait = SKAction.wait(forDuration: Double.random(min: 0.5, max: 1))
+      let resetSequence = SKAction.sequence([wait, resetFlag])
+      let flagSequence = SKAction.sequence([blinkAction, resetSequence])
+      ball.run(flagSequence, withKey: "blinkBall")
     }
   }
   
@@ -158,8 +184,7 @@ struct Sensory {
       gameScene.run(SKAction.repeatForever(sequence), withKey: "frequencyLoopTimer")
       currentGame.timer?.members.append("frequencyLoopTimer")
     }
-  }  
-  
+  }
 }
 
 

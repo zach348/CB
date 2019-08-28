@@ -23,7 +23,7 @@ class Game {
   ///STARTING POINTS
   static var currentRespSettings:RespSettings = respSettingsArr[0]
   
-  static var currentTrackSettings:Settings = settingsArr[4] {
+  static var currentTrackSettings:Settings = settingsArr[0] {
    didSet {
     if self.currentTrackSettings.phase == 6 {
       //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
