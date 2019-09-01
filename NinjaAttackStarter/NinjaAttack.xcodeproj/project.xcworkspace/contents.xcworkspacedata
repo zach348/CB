@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/admin/NinjaAttack/NinjaAttackStarter/red_spark.sks">
-   </FileRef>
-   <FileRef
       location = "self:../NinjaAttack/NinjaAttack">
    </FileRef>
 </Workspace>

@@ -22,7 +22,6 @@ class Game {
   static var initialRespTransition = true
   ///STARTING POINTS
   static var currentRespSettings:RespSettings = respSettingsArr[0]
-  
   static var currentTrackSettings:Settings = settingsArr[0] {
    didSet {
     if self.currentTrackSettings.phase == 6 {
@@ -151,6 +150,8 @@ class Game {
       }
     }
   }
+  
+  var bpm:Int = -1
   
   init(){
     self.isPaused = false

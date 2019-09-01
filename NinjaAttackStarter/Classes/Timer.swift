@@ -151,7 +151,7 @@ class Timer {
     }
   }
   
-  func targetTimer() {
+  func targetTimer(){
     if let worldTimer = currentGame.worldTimer {
       self.stopTimer(timerID: "targetTimer")
       let error = Game.currentTrackSettings.shiftError
@@ -164,9 +164,21 @@ class Timer {
     }
   }
   
+  func dataTimer(){
+    if let scene = currentGame.gameScene {
+      self.stopTimer(timerID: "dataTimer")
+      let wait = SKAction.wait(forDuration: 0.25)
+      let addRecord = SKAction.run {
+        DataStore.addRecord()
+      }
+      self.members.append("dataTimer")
+      scene.run(SKAction.sequence([wait,addRecord]), withKey: "dataTimer")
+    }
+  }
+  
   func stopTimer(timerID:String) {
     if let worldTimer = currentGame.worldTimer, let scene = currentGame.gameScene  {
-      if timerID == "gameTimer" || timerID == "frequencyLoopTimer" || timerID == "pauseTimer" {
+      if timerID == "gameTimer" || timerID == "frequencyLoopTimer" || timerID == "pauseTimer" || timerID == "dataTimer" {
         self.members = self.members.filter { $0 != timerID }
         scene.removeAction(forKey: timerID)
       }else{
@@ -181,5 +193,6 @@ class Timer {
     self.movementTimer()
     self.targetTimer()
     self.pauseTimer()
+    self.dataTimer()
   }
 }
