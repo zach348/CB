@@ -49,7 +49,7 @@ class HRMViewController: NSObject{
   func onHeartRateReceived(_ heartRate: Int) {
     print("BPM: \(heartRate)")
     currentGame.bpm = heartRate
-    print(DataStore.records)
+    print(DataStore.records.last)
   }
 }
 

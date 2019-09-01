@@ -35,7 +35,7 @@ struct DataStore {
   let shiftDelay:Double
   let shiftError:Double
   let numTargets:Int
-  let numDistractors:Int
+  let ballCount:Int
   let targetTexture:String
   let distractorTexture:String
   
@@ -57,7 +57,7 @@ struct DataStore {
     self.shiftDelay = Game.currentTrackSettings.shiftDelay
     self.shiftError = Game.currentTrackSettings.shiftError
     self.numTargets = Game.currentTrackSettings.numTargets
-    self.numDistractors = Ball.members.count - Game.currentTrackSettings.numTargets
+    self.ballCount = Ball.members.count
     self.targetTexture = Game.currentTrackSettings.targetTexture.description
     self.distractorTexture = Game.currentTrackSettings.distractorTexture.description
   }
