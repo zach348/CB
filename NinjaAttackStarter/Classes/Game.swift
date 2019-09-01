@@ -106,6 +106,7 @@ class Game {
   var timer:Timer?
   var worldTimer:SKNode?
   var spriteWorld:SKNode?
+  var hrController:HRMViewController?
   var statusBalls = [SKSpriteNode]()
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
@@ -159,6 +160,8 @@ class Game {
     self.timer = Timer()
     self.worldTimer = SKNode()
     self.spriteWorld = SKNode()
+    self.hrController = HRMViewController()
+    
     if let scene = self.gameScene {
       if let worldTimer = self.worldTimer, let spriteWorld = currentGame.spriteWorld {
         scene.addChild(worldTimer)
