@@ -34,18 +34,18 @@ class Timer {
   }
 
   func movementTimer(){
-    if let gameWorld = currentGame.world {
+    if let worldTimer = currentGame.worldTimer {
       let wait = SKAction.wait(forDuration: 0.025)
       let correctMovement = SKAction.run {
         MotionControl.correctMovement()
       }
       self.members.append("movementTimer")
-      gameWorld.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
+      worldTimer.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
     }
   }
   
   func bleedSpeedTimer(loopDelay:Double = 0.05, factor:CGFloat = 0.99, factorError:CGFloat = 0.02){
-    if let gameWorld = currentGame.world, let timer = currentGame.timer {
+    if let worldTimer = currentGame.worldTimer, let timer = currentGame.timer {
       let wait = SKAction.wait(forDuration: 0.05)
       let correctMovement = SKAction.run {
         for ball in Ball.members {
@@ -54,7 +54,7 @@ class Timer {
         if Ball.mean() < 30 { timer.stopTimer(timerID: "movementTimer")}
       }
       self.members.append("movementTimer")
-      gameWorld.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
+      worldTimer.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
     }
   }
   
@@ -152,7 +152,7 @@ class Timer {
   }
   
   func targetTimer() {
-    if let gameWorld = currentGame.world {
+    if let worldTimer = currentGame.worldTimer {
       self.stopTimer(timerID: "targetTimer")
       let error = Game.currentTrackSettings.shiftError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentTrackSettings.shiftDelay - error, max: Game.currentTrackSettings.shiftDelay + error)))
@@ -160,17 +160,17 @@ class Timer {
         Ball.shiftTargets()
       }
       self.members.append("targetTimer")
-      gameWorld.run(SKAction.sequence([wait, shift]), withKey: "targetTimer")
+      worldTimer.run(SKAction.sequence([wait, shift]), withKey: "targetTimer")
     }
   }
   
   func stopTimer(timerID:String) {
-    if let gameWorld = currentGame.world, let scene = currentGame.gameScene  {
+    if let worldTimer = currentGame.worldTimer, let scene = currentGame.gameScene  {
       if timerID == "gameTimer" || timerID == "frequencyLoopTimer" || timerID == "pauseTimer" {
         self.members = self.members.filter { $0 != timerID }
         scene.removeAction(forKey: timerID)
       }else{
-        gameWorld.removeAction(forKey: timerID)
+        worldTimer.removeAction(forKey: timerID)
         self.members = self.members.filter { $0 != timerID }
       }
     }

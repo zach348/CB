@@ -29,9 +29,9 @@ class Game {
       //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
       self.respActive = true
     }
-    if let timer = currentGame.timer, let world = currentGame.world {
+    if let timer = currentGame.timer, let worldTimer = currentGame.worldTimer {
       if self.respActive {
-        self.transitionRespPhase(timer: timer, world: world)
+        self.transitionRespPhase(timer: timer, worldTimer: worldTimer)
       }else{
         self.transitionTrackPhase(timer:timer)
       }
@@ -56,7 +56,7 @@ class Game {
     currentGame.successHistory = [Bool]()
     currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
     for (_, node) in Sensory.audioNodes {
-      node.run(SKAction.changeVolume(by: Float(-0.225), duration: 0))
+      node.run(SKAction.changeVolume(by: Float(-0.3), duration: 0))
     }
     Sensory.applyFrequency()
     timer.targetTimer()
@@ -70,7 +70,7 @@ class Game {
     Ball.resetTextures()
   }
   
-  class func transitionRespPhase(timer:Timer, world:SKNode){
+  class func transitionRespPhase(timer:Timer, worldTimer:SKNode){
 
     Sensory.applyFrequency()
     let circleAction = SKAction.run({ timer.circleMovementTimer()})
@@ -79,7 +79,13 @@ class Game {
       timer.members.forEach({ loop in
         if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" {timer.stopTimer(timerID: loop)}
       })
-      Ball.getTargets().forEach({ball in ball.flickerOutTarget()})
+      for ball in Ball.getTargets(){
+        Sensory.flickerOffTexture(sprite: ball, onTexture: Game.currentTrackSettings.targetTexture, offTexture: Game.currentTrackSettings.distractorTexture)
+      }
+      
+      for statusBall in currentGame.statusBalls {
+        Sensory.flickerOffAlpha(sprite: statusBall, startingAlpha: statusBall.alpha, endingAlpha: 0)
+      }
       
       //bleed speed and stop master movement timer prior to calling circleMovementTimer
       let bleedSpeed = SKAction.run {
@@ -88,9 +94,9 @@ class Game {
       let wait = SKAction.wait(forDuration: 5)
       let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
 
-      world.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
+      worldTimer.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
     }else{
-      world.run(SKAction.sequence([circleAction]))
+      worldTimer.run(SKAction.sequence([circleAction]))
     }
   }
   
@@ -98,7 +104,8 @@ class Game {
 
   var gameScene:GameScene?
   var timer:Timer?
-  var world:SKNode?
+  var worldTimer:SKNode?
+  var spriteWorld:SKNode?
   var statusBalls = [SKSpriteNode]()
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
@@ -115,23 +122,13 @@ class Game {
     didSet {
       if self.foundTargets == Game.currentTrackSettings.numTargets {
         currentGame.successHistory.append(true)
-        for ball in currentGame.statusBalls {
-          if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
-            ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
-            break
-          }
-        }
       }
     }
   }
   var streakAchieved = false {
     didSet {
       if self.streakAchieved {
-        if let gameScene = currentGame.gameScene {
-          gameScene.run(SKAction.run({
-            Sensory.audioNodes["streak"]?.run(SKAction.play())
-          }))
-        }
+        Sensory.streakAchievedFeedback()
       }
     }
   }
@@ -142,7 +139,15 @@ class Game {
   }
   var isPaused:Bool {
     didSet {
-      isPaused == true ? Ball.enableInteraction() : Ball.disableInteraction()
+      if let worldTimer = currentGame.worldTimer {
+        if isPaused {
+          Ball.enableInteraction()
+          worldTimer.isPaused = true
+        }else{
+          Ball.disableInteraction()
+          worldTimer.isPaused = false
+        }
+      }
     }
   }
   
@@ -152,11 +157,13 @@ class Game {
 
   func setupGame(){
     self.timer = Timer()
-    self.world = SKNode()
+    self.worldTimer = SKNode()
+    self.spriteWorld = SKNode()
     if let scene = self.gameScene {
-      if let world = self.world {
-        scene.addChild(world)
-        world.position = CGPoint(x: scene.size.width/2, y: scene.size.height/2)
+      if let worldTimer = self.worldTimer, let spriteWorld = currentGame.spriteWorld {
+        scene.addChild(worldTimer)
+        scene.addChild(spriteWorld)
+        spriteWorld.position = CGPoint(x: scene.size.width/2, y: scene.size.height/2)
       }
       //gamescene formatting
       scene.backgroundColor = .white
@@ -165,14 +172,12 @@ class Game {
       scene.physicsWorld.gravity = .zero
       scene.physicsWorld.contactDelegate = gameScene
       
-      if let correctSound = Sensory.audioNodes["correct"], let incorrectSound = Sensory.audioNodes["incorrect"], let streakSound = Sensory.audioNodes["streak"] {
-        correctSound.autoplayLooped = false
-        incorrectSound.autoplayLooped = false
-        streakSound.autoplayLooped = false
-        scene.addChild(correctSound)
-        scene.addChild(incorrectSound)
-        scene.addChild(streakSound)
+      for (name, audioNode) in Sensory.audioNodes {
+        audioNode.autoplayLooped = false
+        if name == "blip" {audioNode.run(SKAction.changeVolume(by: -0.9, duration: 0))}
+        scene.addChild(audioNode)
       }
+      
       self.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
 
       //stimuli
@@ -197,11 +202,11 @@ class Game {
       Ball.pendingPause = true
       return
     }
-    if let gameWorld = self.world, let timer = self.timer {
-      gameWorld.isPaused = true
+    if let timer = self.timer {
       self.isPaused = true
       Ball.freezeMovement()
       Ball.maskTargets()
+      Ball.resetFoundTargets()
       currentGame.foundTargets = 0
       currentGame.failedAttempt = false
       //irrelevant for now
@@ -212,31 +217,36 @@ class Game {
     }
   }
   
-  
   func unpauseGame(){
-    if let world = self.world {
-      world.isPaused = false
-      self.isPaused = false
-      Ball.unfreezeMovement()
-      Ball.unmaskTargets()
-      Ball.hideBorders()
-      Ball.resetTextures()
-    }
+    self.isPaused = false
+    Ball.removeEmitters()
+    Ball.unfreezeMovement()
+    Ball.unmaskTargets()
+    Ball.hideBorders()
+    Ball.resetTextures()
   }
   
   func resetStatusBalls(){
-    self.statusBalls.forEach({ ball in ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-black")))})
+    self.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
   }
   
-  
+  func incrementStatusBalls(emitter:Bool = false) {
+    for ball in self.statusBalls {
+      if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
+        ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
+        if emitter { Sensory.addParticles(sprite: ball, emitterFile: "ball_fire")}
+        return
+      }
+    }
+  }
   
   private
   
   func addMemberstoScene(collections: [[SKNode]]){
-    if let world = self.world {
+    if let spriteWorld = self.spriteWorld {
       for collection in collections {
-        for node in collection{
-          world.addChild(node)
+        for sprite in collection{
+          spriteWorld.addChild(sprite)
         }
       }
     }

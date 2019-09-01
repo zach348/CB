@@ -73,19 +73,18 @@ class Ball: SKSpriteNode {
       self.pendingShift = true
       print("pending shift")
       return
-    }else if let gameWorld = currentGame.world, let timer = currentGame.timer {
-      gameWorld.removeAction(forKey: "targetTimer")
-      timer.members = timer.members.filter({ $0 != "targetTimer"})
+    }else if let worldTimer = currentGame.worldTimer, let timer = currentGame.timer {
+      timer.stopTimer(timerID: "targetTimer")
       Ball.clearTargets()
       Ball.assignRandomTargets().forEach { ball in
         ball.removeAction(forKey: "blinkBall")
-        ball.blinkBall()
+        Sensory.blinkBall(ball: ball)
         //testing
       }
       let targetTimer = SKAction.run {
         timer.targetTimer()
       }
-      gameWorld.run(targetTimer)
+      worldTimer.run(targetTimer)
     }
   }
   
@@ -107,7 +106,7 @@ class Ball: SKSpriteNode {
   class func addTarget(){
     if let newTarget = Ball.getDistractors().randomElement(){
       newTarget.isTarget = true
-      newTarget.blinkBall()
+      Sensory.blinkBall(ball: newTarget)
     }
   }
   
@@ -159,6 +158,12 @@ class Ball: SKSpriteNode {
     })
   }
   
+  class func removeEmitters(){
+    for ball in self.members {
+      ball.removeParticles()
+    }
+  }
+  
   class func hideBorders(){
     self.members.forEach({ $0.hideBorder()})
   }
@@ -172,6 +177,12 @@ class Ball: SKSpriteNode {
       ball.texture = ball.isTarget ? Game.currentTrackSettings.targetTexture : Game.currentTrackSettings.distractorTexture
       ball.alpha = Game.currentTrackSettings.alpha
     })
+  }
+  
+  class func resetFoundTargets(){
+    for ball in self.members {
+      ball.foundTarget = false
+    }
   }
   
   class func enableInteraction() {
@@ -195,6 +206,7 @@ class Ball: SKSpriteNode {
   var positionHistory:[CGPoint]
   var vectorHistory:[String:CGFloat]
   var border:SKShapeNode?
+  var foundTarget = false
   
   let game:Game
   init() {
@@ -210,7 +222,7 @@ class Ball: SKSpriteNode {
     if let border = self.border {
       border.fillColor = .clear
       border.strokeColor = Game.currentTrackSettings.borderColor
-      border.lineWidth = 10
+      border.lineWidth = 6
     }
     
     //alpha
@@ -222,9 +234,10 @@ class Ball: SKSpriteNode {
     //physics setup
     self.physicsBody = SKPhysicsBody(circleOfRadius: self.size.width/2 * 0.95)
     self.physicsBody?.isDynamic = true
-    self.physicsBody?.allowsRotation = false
+    self.physicsBody?.allowsRotation = true
     self.physicsBody?.friction = 0
     self.physicsBody?.linearDamping = 0
+    self.physicsBody?.angularDamping = 0
     self.physicsBody?.restitution = 1
     self.physicsBody?.categoryBitMask = PhysicsCategory.ball
     self.physicsBody?.contactTestBitMask = PhysicsCategory.ball
@@ -275,43 +288,6 @@ class Ball: SKSpriteNode {
     self.physicsBody?.velocity.dy *= factor
   }
   
-  func blinkBall(){
-    Ball.blinkFlags.append(true)
-    if let currentTexture = self.texture{
-      let setFlashTexture = SKAction.setTexture(Game.currentTrackSettings.flashTexture)
-      let resetTexture = SKAction.setTexture(currentTexture)
-      let resetAlpha = SKAction.run {
-        self.alpha = Game.currentTrackSettings.alpha
-      }
-      let resetSprite = SKAction.group([resetTexture, resetAlpha])
-      let fadeOut = SKAction.fadeOut(withDuration: 0.15)
-      let fadeIn = SKAction.fadeIn(withDuration: 0.15)
-      let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
-      let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetSprite])
-      let resetFlag = SKAction.run { Ball.blinkFlags.removeLast() }
-      let wait = SKAction.wait(forDuration: Double.random(min: 0.5, max: 1))
-      let resetSequence = SKAction.sequence([wait, resetFlag])
-      let flagSequence = SKAction.sequence([blinkAction, resetSequence])
-      self.run(flagSequence, withKey: "blinkBall")
-    }
-  }
-    
-  func flickerOutTarget(duration:TimeInterval = 0.75){
-    let off = SKAction.setTexture(Game.currentTrackSettings.distractorTexture)
-    let on = SKAction.setTexture(Game.currentTrackSettings.targetTexture)
-    let waitAction = SKAction.wait(forDuration: duration)
-    if duration < 0.01 {
-      self.run(off)
-    }else{
-      let newDuration = duration * Double.random(min: 0.85, max: 0.85)
-      let recursiveCall = SKAction.run {
-        self.flickerOutTarget(duration:newDuration)
-      }
-      self.run(SKAction.sequence([off,waitAction,on,waitAction]), completion: { self.run(recursiveCall)})
-    }
-  }
-  
-  
   func showBorder(){
     if let border = self.border { self.addChild(border) }
   }
@@ -320,38 +296,33 @@ class Ball: SKSpriteNode {
     if let border = self.border { border.removeFromParent() }
   }
   
+  func removeParticles(){
+    for node in self.children {
+      if node is SKEmitterNode { node.removeFromParent() }
+    }
+  }
+  
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
-    let touch:UITouch = touches.first! as UITouch
-    let positionInScene = touch.location(in: self)
-    let touchedNode = self.atPoint(positionInScene)
-    if let name = touchedNode.name, let gameScene = currentGame.gameScene {
-      if !currentGame.failedAttempt {
-        if Ball.getTargets().map({$0.name}).contains(name) {
-          let foundTarget = Ball.getBall(name: name)
-          foundTarget.showBorder()
-          foundTarget.run(SKAction.setTexture(Game.currentTrackSettings.targetTexture))
-          currentGame.foundTargets += 1
-          gameScene.run(SKAction.run({
-            Sensory.audioNodes["correct"]?.run(SKAction.play())
-          }))
-        }else{
-          currentGame.failedAttempt = true
-          currentGame.successHistory.append(false)
-          currentGame.resetStatusBalls()
-          gameScene.run(SKAction.run({
-            Sensory.audioNodes["incorrect"]!.run(SKAction.play())
-          }))
-          //irrelevant for now
-          currentGame.missesRemaining -= 1
-          print("miss!")
-        }
+    if self.foundTarget { return }
+    if !currentGame.failedAttempt {
+      if Ball.getTargets().contains(self) {
+        currentGame.foundTargets += 1
+        self.foundTarget = true
+        Sensory.foundTargetsFeedback(foundTarget: self)
       }else{
-        gameScene.run(SKAction.run({
-          Sensory.audioNodes["incorrect"]?.run(SKAction.play())
-        }))
-        print("failed attempt")
+        currentGame.failedAttempt = true
+        currentGame.successHistory.append(false)
+        currentGame.resetStatusBalls()
+        Sensory.missedTargetFeedback()
+        //irrelevant for now
+        currentGame.missesRemaining -= 1
+        print("miss!")
       }
+    }else{
+      Sensory.missedTargetFeedback()
+      print("failed attempt")
     }
   }
 }
+
 
