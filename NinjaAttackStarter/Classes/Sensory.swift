@@ -101,7 +101,7 @@ struct Sensory {
     }
   }
   
-  static func blinkBall(ball:Ball){
+  static func blinkBall(ball:Ball, count:Int = 2){
     Ball.blinkFlags.append(true)
     if let currentTexture = ball.texture{
       let setFlashTexture = SKAction.setTexture(Game.currentTrackSettings.flashTexture)
@@ -119,7 +119,7 @@ struct Sensory {
           break
         }
       })])
-      let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: 3)
+      let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: count)
       let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetSprite])
       let resetFlag = SKAction.run { Ball.blinkFlags.removeLast() }
       let wait = SKAction.wait(forDuration: Double.random(min: 0.5, max: 1))
