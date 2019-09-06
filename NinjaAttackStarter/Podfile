@@ -7,4 +7,7 @@ target 'NinjaAttack' do
 
   # Pods for NinjaAttack
   pod 'Firebase/Database'
+  pod 'Firebase/Core'
+  pod 'Firebase/Firestore'
+  pod 'Firebase/Auth'
 end
