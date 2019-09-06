@@ -10,6 +10,8 @@
 		5C2901831F8F6DE700803663 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C2901821F8F6DE700803663 /* LaunchScreen.storyboard */; };
 		8408B9B822D3FFF2001ACC95 /* RespSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8408B9B722D3FFF1001ACC95 /* RespSettings.swift */; };
 		84124FB8229C659B008A1510 /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84124FB7229C659B008A1510 /* Ball.swift */; };
+		842E25532321F93300151D44 /* Classes in Resources */ = {isa = PBXBuildFile; fileRef = 842E25522321F93300151D44 /* Classes */; };
+		842E25552321F96500151D44 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 842E25542321F96500151D44 /* GoogleService-Info.plist */; };
 		8436334422BF1D1800F4BC97 /* Sensory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8436334322BF1D1800F4BC97 /* Sensory.swift */; };
 		846E09A622CBAF49005A1C27 /* tone185hz.wav in Resources */ = {isa = PBXBuildFile; fileRef = 846E09A422CBAF49005A1C27 /* tone185hz.wav */; };
 		846E09A722CBAF49005A1C27 /* tone200hz.wav in Resources */ = {isa = PBXBuildFile; fileRef = 846E09A522CBAF49005A1C27 /* tone200hz.wav */; };
@@ -50,6 +52,8 @@
 		5C2901821F8F6DE700803663 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NinjaAttack/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8408B9B722D3FFF1001ACC95 /* RespSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespSettings.swift; sourceTree = "<group>"; };
 		84124FB7229C659B008A1510 /* Ball.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
+		842E25522321F93300151D44 /* Classes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Classes; sourceTree = "<group>"; };
+		842E25542321F96500151D44 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8436334322BF1D1800F4BC97 /* Sensory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensory.swift; sourceTree = "<group>"; };
 		846E09A422CBAF49005A1C27 /* tone185hz.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tone185hz.wav; sourceTree = "<group>"; };
 		846E09A522CBAF49005A1C27 /* tone200hz.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tone200hz.wav; sourceTree = "<group>"; };
@@ -103,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				84124FB7229C659B008A1510 /* Ball.swift */,
+				842E25522321F93300151D44 /* Classes */,
 				84BD930623134D4F0068E47D /* Assets.xcassets */,
 				84DF3B1322ABFE5C00AAAA8A /* Settings.swift */,
 				84DF3B1122ABF97200AAAA8A /* Extensions.swift */,
@@ -181,6 +186,7 @@
 				D2A5F20A1F4A9144005CD714 /* Assets.xcassets */,
 				5C2901821F8F6DE700803663 /* LaunchScreen.storyboard */,
 				D2A5F20F1F4A9144005CD714 /* Info.plist */,
+				842E25542321F96500151D44 /* GoogleService-Info.plist */,
 				84124FB4229C6322008A1510 /* Classes */,
 				AFD63F882036497100E08C66 /* GameScene.swift */,
 				AFD63F862036493600E08C66 /* GameViewController.swift */,
@@ -250,6 +256,7 @@
 			files = (
 				AFD63F8F203649F800E08C66 /* background-music-aac.caf in Resources */,
 				D2A5F20B1F4A9144005CD714 /* Assets.xcassets in Resources */,
+				842E25552321F96500151D44 /* GoogleService-Info.plist in Resources */,
 				84BD930823134D4F0068E47D /* Assets.xcassets in Resources */,
 				846E09A722CBAF49005A1C27 /* tone200hz.wav in Resources */,
 				84BD93042313243A0068E47D /* Assets.xcassets in Resources */,
@@ -269,6 +276,7 @@
 				846E09A622CBAF49005A1C27 /* tone185hz.wav in Resources */,
 				84C15396230610E800C60973 /* wrong_sound.wav in Resources */,
 				84BD930A231372650068E47D /* radar_blip.wav in Resources */,
+				842E25532321F93300151D44 /* Classes in Resources */,
 				D2A5F2091F4A9144005CD714 /* Main.storyboard in Resources */,
 				84BD93032313243A0068E47D /* red_spark.sks in Resources */,
 			);
@@ -434,7 +442,7 @@
 				DEVELOPMENT_TEAM = 4FG9HV6926;
 				INFOPLIST_FILE = "$(SRCROOT)/NinjaAttack/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.razeware.NinjaAttack;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.calibrate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -453,7 +461,7 @@
 				DEVELOPMENT_TEAM = 4FG9HV6926;
 				INFOPLIST_FILE = "$(SRCROOT)/NinjaAttack/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.razeware.NinjaAttack;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.calibrate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
