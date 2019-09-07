@@ -155,9 +155,14 @@ class Timer {
     if let worldTimer = currentGame.worldTimer {
       self.stopTimer(timerID: "targetTimer")
       let error = Game.currentTrackSettings.shiftError
-      let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentTrackSettings.shiftDelay - error, max: Game.currentTrackSettings.shiftDelay + error)))
+      let duration = (Double.random(min: Game.currentTrackSettings.shiftDelay - error, max: Game.currentTrackSettings.shiftDelay + error))
+      let wait = SKAction.wait(forDuration: duration )
       let shift = SKAction.run {
         Ball.shiftTargets()
+        DataStore.eventMarkers["didShift"] = [
+          "status": true,
+          "delay": duration
+        ]
       }
       self.members.append("targetTimer")
       worldTimer.run(SKAction.sequence([wait, shift]), withKey: "targetTimer")
