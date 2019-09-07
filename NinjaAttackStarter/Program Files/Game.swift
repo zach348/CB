@@ -53,6 +53,7 @@ class Game {
   class func transitionTrackPhase(timer:Timer){
     currentGame.streakAchieved = false
     currentGame.successHistory = [Bool]()
+    currentGame.streakLength = 0
     currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
     for (_, node) in Sensory.audioNodes {
       node.run(SKAction.changeVolume(by: Float(-0.3), duration: 0))
@@ -70,6 +71,7 @@ class Game {
     
     
     //testing
+    DataStore.saveGame()
   }
   
   class func transitionRespPhase(timer:Timer, worldTimer:SKNode){
@@ -140,6 +142,8 @@ class Game {
       if self.failedAttempt { self.successHistory.append(false)}
     }
   }
+  
+  var streakLength = 0
   var isPaused:Bool {
     didSet {
       if let worldTimer = currentGame.worldTimer {
@@ -240,6 +244,7 @@ class Game {
   }
   
   func incrementStatusBalls(emitter:Bool = false) {
+    self.streakLength += 1
     for ball in self.statusBalls {
       if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
         ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))

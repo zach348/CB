@@ -6,7 +6,10 @@ import Firebase
 
 struct DataStore {
   static var records = [[String:Any]]()
-  static var eventMarkers = [String:Any]()
+  static var eventMarkers:[String:Any] = [
+    "didShift": ["flag": false, "delay": -1],
+    "didAttempt": ["flag": false, "success": -1, "streakLength": -1]
+  ]
   
   static func addRecord(){
     if let timer = currentGame.timer, let scene = currentGame.gameScene {
@@ -33,12 +36,14 @@ struct DataStore {
         "targetTexture": Game.currentTrackSettings.targetTexture.description,
         "distractorTexture": Game.currentTrackSettings.distractorTexture.description,
         "eventMarkers": [
-          "didShift": self.eventMarkers["didShift"]
+          "didShift": self.eventMarkers["didShift"],
+          "didSAttempt": self.eventMarkers["didAttempt"]
         ]
       ]
       self.records.append(record)
       self.eventMarkers = [
-        "didShift": ["status": false, "delay": -1]
+        "didShift": ["flag": false, "delay": -1],
+        "didAttempt": ["flag": false, "success": -1, "streakLength": -1]
       ]
       
       let dataTimer = SKAction.run {
@@ -51,7 +56,6 @@ struct DataStore {
   static func saveTimePoint(tpRecord:[String:Any],tpCount:Int){
     let db = Firestore.firestore()
     let metaGamesRef = db.document("meta/games")
-
     metaGamesRef.getDocument { (document, error) in
       if let document = document {
         if let gamesCount:Any = document.get("count") {
@@ -60,7 +64,7 @@ struct DataStore {
             if let error = error {
               print("error: \(error.localizedDescription)")
             } else {
-              print("Data has been saved")
+              print("Timepoint data has been saved")
             }
           }
         }

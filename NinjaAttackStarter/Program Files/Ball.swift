@@ -309,11 +309,12 @@ class Ball: SKSpriteNode {
         currentGame.foundTargets += 1
         self.foundTarget = true
         Sensory.foundTargetsFeedback(foundTarget: self)
+        DataStore.eventMarkers["didAttempt"] = ["flag": true, "success": true, "streakLength": currentGame.streakLength]
       }else{
         currentGame.failedAttempt = true
-        currentGame.successHistory.append(false)
         currentGame.resetStatusBalls()
         Sensory.missedTargetFeedback()
+        DataStore.eventMarkers["didAttempt"] = ["flag": true, "success": false, "streakLength": currentGame.streakLength]
         //irrelevant for now
         currentGame.missesRemaining -= 1
         print("miss!")
