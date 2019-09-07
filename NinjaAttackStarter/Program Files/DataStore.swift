@@ -5,13 +5,12 @@ import SpriteKit
 import Firebase
 
 struct DataStore {
-  static var records = [String: Any]()
+  static var records = [[String:Any]]()
   static var eventMarkers = [String:Any]()
   
   static func addRecord(){
     if let timer = currentGame.timer, let scene = currentGame.gameScene {
       timer.stopTimer(timerID: "dataTimer")
-      let count = self.records.count
       let record:[String:Any] = [
         "elapsedTime": currentGame.timer!.elapsedTime,
         "isResponding": currentGame.isPaused,
@@ -37,7 +36,7 @@ struct DataStore {
           "didShift": self.eventMarkers["didShift"]
         ]
       ]
-      self.records["\(count+1)"] = record
+      self.records.append(record)
       self.eventMarkers = [
         "didShift": ["status": false, "delay": -1]
       ]
@@ -49,21 +48,52 @@ struct DataStore {
     }
   }
   
-  static func saveGame(){
-    let docRef = Firestore.firestore().document("sample_games/test_data")
-    let dataToSave:[String:Any] = self.records
-    
-    docRef.setData(dataToSave) { (error) in
-      if let error = error {
-        print("error: \(error.localizedDescription)")
-      } else {
-        print("Data has been saved")
+  static func saveTimePoint(tpRecord:[String:Any],tpCount:Int){
+    let db = Firestore.firestore()
+    let metaGamesRef = db.document("meta/games")
+
+    metaGamesRef.getDocument { (document, error) in
+      if let document = document {
+        if let gamesCount:Any = document.get("count") {
+          let tpSavePath:String = "\(gamesCount)/\(tpCount)"
+          db.document(tpSavePath).setData(tpRecord) { (error) in
+            if let error = error {
+              print("error: \(error.localizedDescription)")
+            } else {
+              print("Data has been saved")
+            }
+          }
+        }
+      }else{
+        print("Games metadoc not found")
       }
     }
   }
   
-  static func printData(){
-    let docRef = Firestore.firestore().document("sample_games/test_data")
+  static func saveGame(){
+    let db = Firestore.firestore()
+    let metaGamesRef = db.document("meta/games")
+    var counter:Int = 1
+    for tpRecord in self.records {
+      self.saveTimePoint(tpRecord: tpRecord, tpCount: counter)
+      counter += 1
+    }
+    metaGamesRef.updateData(["count": FieldValue.increment(Int64(1))])
+  }
+  
+  static func deleteDocument(path:String){
+    let docRef = Firestore.firestore().document(path)
+    docRef.delete { (error) in
+      if let error = error {
+        print("error: \(error.localizedDescription)")
+      }else{
+        print("deleted")
+      }
+    }
+  }
+  
+  static func printDocument(path:String){
+    let docRef = Firestore.firestore().document(path)
     docRef.getDocument { (document,error) in
       if let document = document, document.exists {
         let data = document.data().map(String.init(describing:)) ?? "nil"

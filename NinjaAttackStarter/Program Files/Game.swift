@@ -70,7 +70,6 @@ class Game {
     
     
     //testing
-    DataStore.saveGame()
   }
   
   class func transitionRespPhase(timer:Timer, worldTimer:SKNode){
@@ -201,8 +200,9 @@ class Game {
       Ball.startMovement()
       self.timer?.startTimerActions()
       Sensory.applyFrequency()
+
+
       //testing
-      DataStore.printData()
     }
   }
   
