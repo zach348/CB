@@ -71,7 +71,6 @@ class Game {
     
     
     //testing
-    DataStore.saveGame()
   }
   
   class func transitionRespPhase(timer:Timer, worldTimer:SKNode){
@@ -211,6 +210,9 @@ class Game {
   }
   
   func pauseGame(){
+ 
+    
+    //implementation
     if !Ball.blinkFlags.isEmpty {
       Ball.pendingPause = true
       return
@@ -227,6 +229,7 @@ class Game {
       //
       timer.pauseCountdown()
       //testing
+      DataStore.saveGame()
     }
   }
   

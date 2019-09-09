@@ -69,7 +69,7 @@ struct DataStore {
     var tpCounter:Int = 1
     
     metaGamesRef.updateData(["count": FieldValue.increment(Int64(1))])
-    metaGamesRef.getDocument{ (document,error) in
+    metaGamesRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
       if let document = document {
         guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
         print("gameCount:", gameCount)
@@ -80,7 +80,7 @@ struct DataStore {
       }else{
         print("Games metadoc not found")
       }
-    }
+    })
   }
   
   static func deleteDocument(path:String){
