@@ -19,7 +19,6 @@ class GameScene: SKScene {
   }
   
   override func update(_ currentTime: TimeInterval) {
-
   }
 }
 
