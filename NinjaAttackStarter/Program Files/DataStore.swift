@@ -5,12 +5,21 @@ import SpriteKit
 import Firebase
 
 struct DataStore {
-  static var records = [String: Any]()
+  static var initialRequest:Bool = true
+  static var db:Firestore = Firestore.firestore()
+  static var metaRef:DocumentReference = db.document("meta/games")
+  
+  static var records = [[String:Any]]()
+  static var eventMarkers:[String:Any] = [
+    "didShift": ["flag": false, "delay": -1],
+    "didAttempt": ["flag": false, "success": -1, "streakLength": -1]
+  ]
+  static var ballInfo:[String:Any] = ["speed": -1, "id": -1, "isTarget": -1, "positionHistory": -1]
   
   static func addRecord(){
     if let timer = currentGame.timer, let scene = currentGame.gameScene {
       timer.stopTimer(timerID: "dataTimer")
-      let count = self.records.count
+      self.updateBallStats()
       let record:[String:Any] = [
         "elapsedTime": currentGame.timer!.elapsedTime,
         "isResponding": currentGame.isPaused,
@@ -19,6 +28,7 @@ struct DataStore {
         "speedSD": Ball.standardDev(),
         "phase": Game.currentTrackSettings.phase,
         "requiredStreak": Game.currentTrackSettings.requiredStreak,
+        "streakLength": currentGame.streakLength,
         "pauseDelay": Game.currentTrackSettings.pauseDelay,
         "pauseError": Game.currentTrackSettings.pauseError,
         "pauseDuration": Game.currentTrackSettings.pauseDuration,
@@ -31,9 +41,18 @@ struct DataStore {
         "numTargets": Game.currentTrackSettings.numTargets,
         "ballCount": Ball.members.count,
         "targetTexture": Game.currentTrackSettings.targetTexture.description,
-        "distractorTexture": Game.currentTrackSettings.distractorTexture.description
-        ]
-      self.records["timepoint\(count+1)"] = record
+        "distractorTexture": Game.currentTrackSettings.distractorTexture.description,
+        "eventMarkers": [
+          "didShift": self.eventMarkers["didShift"],
+          "didSAttempt": self.eventMarkers["didAttempt"]
+        ],
+        "ballInfo": self.ballInfo
+      ]
+      self.records.append(record)
+      self.eventMarkers = [
+        "didShift": ["flag": false, "delay": -1],
+        "didAttempt": ["flag": false, "success": -1]
+      ]
       
       let dataTimer = SKAction.run {
         timer.dataTimer()
@@ -42,16 +61,69 @@ struct DataStore {
     }
   }
   
+  static func saveTimePoint(tpRecord:[String:Any],tpCount:Int, gameCount:Any){
+    let db = Firestore.firestore()
+    let timePointCollection = db.collection("games/\(gameCount)/timepoints")
+    timePointCollection.document("\(tpCount)").setData(tpRecord)
+  }
+  
+  
+  static func dummyRequest(){
+    if !self.initialRequest { return } else { self.initialRequest = false }
+    self.metaRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
+      guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
+      guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
+      
+      print("gameCount, dummy request:", gameCount)
+
+    })
+  }
+  
   static func saveGame(){
-    let docRef = Firestore.firestore().document("sample_games/test_data")
-    let dataToSave:[String:Any] = self.records
-    
-    docRef.setData(dataToSave) { (error) in
+    var tpCounter:Int = 1
+    self.metaRef.updateData(["count": FieldValue.increment(Int64(1))])
+    self.metaRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
+      guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
+      guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
+
+      print("records count: \(self.records.count)")
+      print("gameCount:", gameCount)
+      for tpRecord in self.records {
+        self.saveTimePoint(tpRecord: tpRecord, tpCount: tpCounter, gameCount: gameCount)
+        tpCounter += 1
+      }
+    })
+  }
+  
+  static func deleteDocument(path:String){
+    let docRef = self.db.document(path)
+    docRef.delete { (error) in
       if let error = error {
         print("error: \(error.localizedDescription)")
-      } else {
-        print("Data has been saved")
+      }else{
+        print("deleted")
       }
+    }
+  }
+  
+  static func printDocument(path:String){
+    let docRef = self.db.document(path)
+    docRef.getDocument { (document,error) in
+      if let document = document, document.exists {
+        let data = document.data().map(String.init(describing:)) ?? "nil"
+        print("Doc Data: \(data)")
+      }else{
+        print("Doc does not exist")
+      }
+    }
+  }
+  
+  private
+  
+  static func updateBallStats(){
+    for ball in Ball.members{
+      guard let name = ball.name else { break }
+      self.ballInfo = ["speed": ball.currentSpeed(), "id": name, "isTarget": ball.isTarget, "positionHistory": ball.positionHistory.map { ["x": $0.x, "y": $0.y] }]
     }
   }
 }
