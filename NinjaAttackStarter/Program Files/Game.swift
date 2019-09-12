@@ -230,7 +230,6 @@ class Game {
       //
       timer.pauseCountdown()
       //testing
-      DataStore.saveGame()
     }
   }
   

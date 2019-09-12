@@ -86,7 +86,7 @@ struct DataStore {
       guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
       guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
 
-      
+      print("records count: \(self.records.count)")
       print("gameCount:", gameCount)
       for tpRecord in self.records {
         self.saveTimePoint(tpRecord: tpRecord, tpCount: tpCounter, gameCount: gameCount)
