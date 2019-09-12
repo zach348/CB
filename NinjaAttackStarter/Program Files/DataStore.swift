@@ -5,6 +5,10 @@ import SpriteKit
 import Firebase
 
 struct DataStore {
+  static var initialRequest:Bool = true
+  static var db:Firestore = Firestore.firestore()
+  static var metaRef:DocumentReference = db.document("meta/games")
+  
   static var records = [[String:Any]]()
   static var eventMarkers:[String:Any] = [
     "didShift": ["flag": false, "delay": -1],
@@ -63,28 +67,36 @@ struct DataStore {
     timePointCollection.document("\(tpCount)").setData(tpRecord)
   }
   
+  
+  static func dummyRequest(){
+    if !self.initialRequest { return } else { self.initialRequest = false }
+    self.metaRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
+      guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
+      guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
+      
+      print("gameCount, dummy request:", gameCount)
+
+    })
+  }
+  
   static func saveGame(){
-    let db = Firestore.firestore()
-    let metaGamesRef = db.document("meta/games")
     var tpCounter:Int = 1
-    
-    metaGamesRef.updateData(["count": FieldValue.increment(Int64(1))])
-    metaGamesRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
-      if let document = document {
-        guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
-        print("gameCount:", gameCount)
-        for tpRecord in self.records {
-//          self.saveTimePoint(tpRecord: tpRecord, tpCount: tpCounter, gameCount: gameCount)
-//          tpCounter += 1
-        }
-      }else{
-        print("Games metadoc not found")
+    self.metaRef.updateData(["count": FieldValue.increment(Int64(1))])
+    self.metaRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
+      guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
+      guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
+
+      
+      print("gameCount:", gameCount)
+      for tpRecord in self.records {
+        self.saveTimePoint(tpRecord: tpRecord, tpCount: tpCounter, gameCount: gameCount)
+        tpCounter += 1
       }
     })
   }
   
   static func deleteDocument(path:String){
-    let docRef = Firestore.firestore().document(path)
+    let docRef = self.db.document(path)
     docRef.delete { (error) in
       if let error = error {
         print("error: \(error.localizedDescription)")
@@ -95,7 +107,7 @@ struct DataStore {
   }
   
   static func printDocument(path:String){
-    let docRef = Firestore.firestore().document(path)
+    let docRef = self.db.document(path)
     docRef.getDocument { (document,error) in
       if let document = document, document.exists {
         let data = document.data().map(String.init(describing:)) ?? "nil"

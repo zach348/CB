@@ -168,6 +168,7 @@ class Game {
     self.worldTimer = SKNode()
     self.spriteWorld = SKNode()
     self.hrController = HRMViewController()
+    DataStore.dummyRequest()
     
     if let scene = self.gameScene {
       if let worldTimer = self.worldTimer, let spriteWorld = currentGame.spriteWorld {
