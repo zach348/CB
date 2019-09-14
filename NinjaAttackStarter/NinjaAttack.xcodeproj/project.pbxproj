@@ -15,6 +15,7 @@
 		8436334422BF1D1800F4BC97 /* Sensory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8436334322BF1D1800F4BC97 /* Sensory.swift */; };
 		846E09A622CBAF49005A1C27 /* tone185hz.wav in Resources */ = {isa = PBXBuildFile; fileRef = 846E09A422CBAF49005A1C27 /* tone185hz.wav */; };
 		846E09A722CBAF49005A1C27 /* tone200hz.wav in Resources */ = {isa = PBXBuildFile; fileRef = 846E09A522CBAF49005A1C27 /* tone200hz.wav */; };
+		84908E03232D54C100DD687F /* StartGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84908E02232D54C100DD687F /* StartGameScene.swift */; };
 		849432AC22A0A57800CCD6CD /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AB22A0A57800CCD6CD /* Game.swift */; };
 		849432AE22A1CB9100CCD6CD /* MotionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AD22A1CB9100CCD6CD /* MotionControl.swift */; };
 		84BD93032313243A0068E47D /* red_spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = 84BD93012313243A0068E47D /* red_spark.sks */; };
@@ -58,6 +59,7 @@
 		8436334322BF1D1800F4BC97 /* Sensory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensory.swift; sourceTree = "<group>"; };
 		846E09A422CBAF49005A1C27 /* tone185hz.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tone185hz.wav; sourceTree = "<group>"; };
 		846E09A522CBAF49005A1C27 /* tone200hz.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tone200hz.wav; sourceTree = "<group>"; };
+		84908E02232D54C100DD687F /* StartGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameScene.swift; sourceTree = "<group>"; };
 		849432AB22A0A57800CCD6CD /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		849432AD22A1CB9100CCD6CD /* MotionControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionControl.swift; sourceTree = "<group>"; };
 		84BD93012313243A0068E47D /* red_spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = red_spark.sks; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				84DF3B1122ABF97200AAAA8A /* Extensions.swift */,
 				849432AD22A1CB9100CCD6CD /* MotionControl.swift */,
 				8436334322BF1D1800F4BC97 /* Sensory.swift */,
+				84908E02232D54C100DD687F /* StartGameScene.swift */,
 				849432AB22A0A57800CCD6CD /* Game.swift */,
 				84BD930B231C2EC70068E47D /* HeartRateController.swift */,
 				84C153912300636700C60973 /* TIle.swift */,
@@ -375,6 +378,7 @@
 				84DF3B1422ABFE5C00AAAA8A /* Settings.swift in Sources */,
 				849432AC22A0A57800CCD6CD /* Game.swift in Sources */,
 				849432AE22A1CB9100CCD6CD /* MotionControl.swift in Sources */,
+				84908E03232D54C100DD687F /* StartGameScene.swift in Sources */,
 				84BD930E231C4E450068E47D /* DataStore.swift in Sources */,
 				84BD930C231C2EC70068E47D /* HeartRateController.swift in Sources */,
 				84C153922300636700C60973 /* TIle.swift in Sources */,
