@@ -15,11 +15,15 @@ struct Sensory {
   ]
   
   static func foundTargetsFeedback(foundTarget:Ball){
+    let weakPop = SystemSoundID(1519)
+    let strongPop = SystemSoundID(1520)
+
     switch Game.currentTrackSettings.phase {
     case 1,2:
       self.addParticles(sprite: foundTarget, emitterFile: "red_spark.sks")
       foundTarget.showBorder()
       foundTarget.texture = Game.currentTrackSettings.targetTexture
+      AudioServicesPlaySystemSound(strongPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
         foundTarget.run(SKAction.run({
           self.audioNodes["correct"]?.run(SKAction.play())
@@ -29,6 +33,7 @@ struct Sensory {
     case 3:
       foundTarget.showBorder()
       foundTarget.texture = Game.currentTrackSettings.targetTexture
+      AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
         foundTarget.run(SKAction.run({
           Sensory.audioNodes["correct"]?.run(SKAction.play())
@@ -37,6 +42,7 @@ struct Sensory {
       }
     case 4:
       foundTarget.texture = Game.currentTrackSettings.targetTexture
+      AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
         foundTarget.run(SKAction.run({
           Sensory.audioNodes["correct"]?.run(SKAction.play())
@@ -45,6 +51,7 @@ struct Sensory {
       }
     case 5:
       foundTarget.texture = Game.currentTrackSettings.targetTexture
+      AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
         currentGame.incrementStatusBalls()
       }
@@ -54,17 +61,21 @@ struct Sensory {
   }
   
   static func missedTargetFeedback(){
+    let cancelled = SystemSoundID(1521)
+    let vibration = SystemSoundID(kSystemSoundID_Vibrate)
+
     if let gameScene = currentGame.gameScene {
       switch Game.currentTrackSettings.phase {
       case 1,2:
         gameScene.run(SKAction.run({
           Sensory.audioNodes["incorrect"]!.run(SKAction.play())
         }))
-        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-      case 3,4:
+        AudioServicesPlaySystemSound(vibration)
+      case 3,4,5:
         gameScene.run(SKAction.run({
           Sensory.audioNodes["incorrect"]!.run(SKAction.play())
         }))
+        AudioServicesPlaySystemSound(cancelled)
       default:
         break
       }
@@ -169,6 +180,7 @@ struct Sensory {
   }
   
   static func applyFrequency() {
+    let peekVibration = SystemSoundID(1519)
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
     let tone = Game.currentTrackSettings.toneFile
