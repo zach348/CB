@@ -180,7 +180,6 @@ struct Sensory {
   }
   
   static func applyFrequency() {
-    let peekVibration = SystemSoundID(1519)
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
     let tone = Game.currentTrackSettings.toneFile
@@ -188,7 +187,7 @@ struct Sensory {
       let tone = SKAction.playSoundFileNamed(tone, waitForCompletion: true)
       let wait = SKAction.wait(forDuration: 1/hz/2)
       let systemVal = UIScreen.main.brightness
-      let decrease = SKAction.run({ UIScreen.main.brightness = systemVal * 0.975 })
+      let decrease = SKAction.run({ UIScreen.main.brightness = systemVal * 0.95 })
       let increase = SKAction.run({ UIScreen.main.brightness = systemVal })
       let freqGroup = SKAction.group([increase, tone])
       let sequence = SKAction.sequence([wait, decrease, wait, freqGroup])

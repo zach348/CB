@@ -4,22 +4,33 @@ import Foundation
 import SpriteKit
 
 class StartGameScene: SKScene {
-  var button: SKNode! = nil
+  var startButton: FTButtonNode! = nil
   
   override func didMove(to view: SKView) {
-    // Create a simple red rectangle that's 100x44
-    button = SKSpriteNode(color: SKColor.red, size: CGSize(width: 100, height: 44))
-    // Put it in the center of the scene
-    button.position = CGPoint(x:self.frame.width/2, y:self.frame.height/2);
-    
-    self.addChild(button)
+    backgroundColor = SKColor.white
+    let buttonTexture:SKTexture! = SKTexture(imageNamed: "buttonUnselected.png")
+    let buttonTextureSelected:SKTexture! = SKTexture(imageNamed: "buttonSelected.png")
+    self.startButton = FTButtonNode(normalTexture: buttonTexture, selectedTexture: buttonTextureSelected, disabledTexture: buttonTexture)
+    self.startButton.setButtonAction(target: self, triggerEvent: .TouchUpInside, action: #selector(StartGameScene.startGame))
+    self.startButton.setButtonLabel(title: "Start Game", font: "Arial", fontSize: 20)
+    self.startButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+    self.startButton.zPosition = 1
+    self.startButton.name = "button"
+    self.addChild(self.startButton)
   }
   
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 
-        print("tapped!")
-      
-    
+  @objc func startGame(){
+    run(SKAction.sequence([
+      SKAction.wait(forDuration: 3.0),
+      SKAction.run() { [weak self] in
+        // 5
+        guard let `self` = self else { return }
+        let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+        let scene = GameScene(size: self.size)
+        self.view?.presentScene(scene, transition:reveal)
+      }
+      ]))
   }
   
 }
