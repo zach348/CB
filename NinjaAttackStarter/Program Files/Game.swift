@@ -18,6 +18,7 @@ class Game {
   static var respSettingsArr:[RespSettings] = [
     RespSettings(phase: 7, frequency: 2.5, inDuration: 3.5, inWait: 1.5, outDuration: 5, outWait: 2.5, moveToCenterDuration: 8.5, moveCenterWait: 2)
   ]
+  static var willSaveGame:Bool = false
   static var respActive:Bool = false
   static var initialRespTransition = true
   ///STARTING POINTS

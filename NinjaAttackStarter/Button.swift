@@ -22,7 +22,19 @@ class FTButtonNode: SKSpriteNode {
     }
   }
   
+  var toggleButton:Bool = false
+  var toggleOn:Bool = false {
+    didSet {
+      if(toggleOn){
+        self.defaultTexture = self.selectedTexture
+      }else{
+        self.defaultTexture = self.hardDefaultTexture
+      }
+    }
+  }
+  
   var defaultTexture: SKTexture
+  var hardDefaultTexture: SKTexture
   var selectedTexture: SKTexture
   var label: SKLabelNode
   
@@ -30,9 +42,11 @@ class FTButtonNode: SKSpriteNode {
     fatalError("NSCoding not supported")
   }
   
-  init(normalTexture defaultTexture: SKTexture!, selectedTexture:SKTexture!, disabledTexture: SKTexture?) {
+  init(normalTexture defaultTexture: SKTexture!, selectedTexture:SKTexture!, disabledTexture: SKTexture?, toggleButton:Bool = false) {
     
+    if(toggleButton){self.toggleButton = true}
     self.defaultTexture = defaultTexture
+    self.hardDefaultTexture = defaultTexture
     self.selectedTexture = selectedTexture
     self.disabledTexture = disabledTexture
     self.label = SKLabelNode(fontNamed: "Helvetica");
@@ -126,7 +140,7 @@ class FTButtonNode: SKSpriteNode {
     
     isSelected = false
     
-    if (targetTouchUpInside != nil && targetTouchUpInside!.responds(to: actionTouchUpInside!)) {
+ if (targetTouchUpInside != nil && targetTouchUpInside!.responds(to: actionTouchUpInside!)) {
       let touch: AnyObject! = touches.first
       let touchLocation = touch.location(in: parent!)
       
