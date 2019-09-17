@@ -14,14 +14,6 @@ let currentGame:Game = Game()
 class GameScene: SKScene {
  
   override func didMove(to view: SKView) {
-//    guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
-//
-//    do {
-//      engine = try CHHapticEngine()
-//      try engine?.start()
-//    } catch {
-//      print("There was an error creating the engine: \(error.localizedDescription)")
-//    }
     
     currentGame.gameScene = self
     currentGame.setupGame()
@@ -29,6 +21,13 @@ class GameScene: SKScene {
   }
   
   override func update(_ currentTime: TimeInterval) {
+    if (Game.willSaveGame && !Game.didSaveGame && Game.respActive){
+      guard let timer = currentGame.timer else {return}
+      if timer.elapsedTime - timer.lastPhaseShiftTime > 60 {
+        DataStore.saveGame()
+        Game.didSaveGame = true
+      }
+    }
   }
 }
 

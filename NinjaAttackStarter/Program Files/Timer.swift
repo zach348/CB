@@ -169,7 +169,7 @@ class Timer {
     }
   }
   
-  func dataTimer(){
+  func dataTimer(saveGame:Bool = false){
     if let scene = currentGame.gameScene {
       self.stopTimer(timerID: "dataTimer")
       let wait = SKAction.wait(forDuration: 0.5)

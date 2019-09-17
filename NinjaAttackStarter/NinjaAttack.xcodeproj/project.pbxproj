@@ -121,8 +121,8 @@
 		84124FB4229C6322008A1510 /* Program Files */ = {
 			isa = PBXGroup;
 			children = (
-				84124FB7229C659B008A1510 /* Ball.swift */,
 				84BD930623134D4F0068E47D /* Assets.xcassets */,
+				84124FB7229C659B008A1510 /* Ball.swift */,
 				84DF3B1322ABFE5C00AAAA8A /* Settings.swift */,
 				84DF3B1122ABF97200AAAA8A /* Extensions.swift */,
 				849432AD22A1CB9100CCD6CD /* MotionControl.swift */,

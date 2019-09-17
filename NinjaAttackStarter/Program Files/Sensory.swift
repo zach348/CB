@@ -124,7 +124,8 @@ struct Sensory {
       let fadeOut = SKAction.fadeOut(withDuration: 0.15)
       let fadeIn = SKAction.group([SKAction.fadeIn(withDuration: 0.15), SKAction.run({
         switch Game.currentTrackSettings.phase {
-        case 1,2:
+        case 1:
+          print("radar blip")
           Sensory.playRadarBlip(count: 1)
         default:
           break

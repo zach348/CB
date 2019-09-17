@@ -2,7 +2,7 @@
 import Foundation
 import SpriteKit
 
-class FTButtonNode: SKSpriteNode {
+class Button: SKSpriteNode {
   
   enum FTButtonActionType: Int {
     case TouchUpInside = 1,

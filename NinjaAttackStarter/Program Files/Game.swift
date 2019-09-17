@@ -19,6 +19,7 @@ class Game {
     RespSettings(phase: 7, frequency: 2.5, inDuration: 3.5, inWait: 1.5, outDuration: 5, outWait: 2.5, moveToCenterDuration: 8.5, moveCenterWait: 2)
   ]
   static var willSaveGame:Bool = false
+  static var didSaveGame:Bool = false
   static var respActive:Bool = false
   static var initialRespTransition = true
   ///STARTING POINTS
@@ -56,11 +57,16 @@ class Game {
     currentGame.successHistory = [Bool]()
     currentGame.streakLength = 0
     currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
+
     for (_, node) in Sensory.audioNodes {
       node.run(SKAction.changeVolume(by: Float(-0.3), duration: 0))
     }
     Sensory.applyFrequency()
-    timer.targetTimer()
+    if(Game.currentTrackSettings.phase < 5){
+      timer.targetTimer()
+    }else{
+      timer.stopTimer(timerID: "targetTimer")
+    }
     if Ball.getTargets().count < Game.currentTrackSettings.numTargets && self.currentTrackSettings.phase < 6 {
       let numTargets = Game.currentTrackSettings.numTargets - Ball.getTargets().count
       for _ in 1...numTargets { Ball.addTarget()}
@@ -72,6 +78,9 @@ class Game {
     
     
     //testing
+    
+    //saving
+
   }
   
   class func transitionRespPhase(timer:Timer, worldTimer:SKNode){
