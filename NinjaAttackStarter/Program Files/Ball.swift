@@ -83,7 +83,7 @@ class Ball: SKSpriteNode {
         if Ball.assignedBlinkAudio {
           Sensory.blinkBall(ball: ball)
         }else{
-          Sensory.blinkBall(ball: ball, fadeInBlock: SKAction.run {
+          Sensory.blinkBall(ball: ball, fadeOutBlock: SKAction.run {
             switch Game.currentTrackSettings.phase {
             case 1,2:
               Sensory.playRadarBlip(count: 1)
