@@ -185,7 +185,7 @@ class Game {
       
       for (name, audioNode) in Sensory.audioNodes {
         audioNode.autoplayLooped = false
-        if name == "blip" {audioNode.run(SKAction.changeVolume(by: -0.9, duration: 0))}
+        if name == "blip" {audioNode.run(SKAction.changeVolume(by: -0.6, duration: 0))}
         scene.addChild(audioNode)
       }
       
