@@ -19,6 +19,8 @@ class Ball: SKSpriteNode {
   static var pendingPause:Bool = false
   static var pendingShift = false
   
+  static var assignedBlinkAudio:Bool = false
+  
   class func ballStats(){
     print("Mean Speed:", self.mean(), "SD:", self.standardDev())
   }
@@ -78,9 +80,23 @@ class Ball: SKSpriteNode {
       Ball.clearTargets()
       Ball.assignRandomTargets().forEach { ball in
         ball.removeAction(forKey: "blinkBall")
-        Sensory.blinkBall(ball: ball)
+        if Ball.assignedBlinkAudio {
+          Sensory.blinkBall(ball: ball)
+        }else{
+          Sensory.blinkBall(ball: ball, fadeInBlock: SKAction.run {
+            switch Game.currentTrackSettings.phase {
+            case 1,2:
+              Sensory.playRadarBlip(count: 1)
+              print("radar blip")
+            default:
+              break
+            }
+          })
+          Ball.assignedBlinkAudio = true
+        }
         //testing
       }
+      Ball.assignedBlinkAudio = false
       let targetTimer = SKAction.run {
         timer.targetTimer()
       }

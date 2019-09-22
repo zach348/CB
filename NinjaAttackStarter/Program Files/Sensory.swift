@@ -112,7 +112,7 @@ struct Sensory {
     }
   }
   
-  static func blinkBall(ball:Ball, count:Int = 3){
+  static func blinkBall(ball:Ball, fadeInBlock:SKAction = SKAction.run {}, count:Int = 3){
     Ball.blinkFlags.append(true)
     if let currentTexture = ball.texture{
       let setFlashTexture = SKAction.setTexture(Game.currentTrackSettings.flashTexture)
@@ -122,14 +122,7 @@ struct Sensory {
       }
       let resetSprite = SKAction.group([resetTexture, resetAlpha])
       let fadeOut = SKAction.fadeOut(withDuration: 0.15)
-      let fadeIn = SKAction.group([SKAction.fadeIn(withDuration: 0.15), SKAction.run({
-        switch Game.currentTrackSettings.phase {
-        case 1,2:
-          Sensory.playRadarBlip(count: 1)
-        default:
-          break
-        }
-      })])
+      let fadeIn = SKAction.group([SKAction.fadeIn(withDuration: 0.15), fadeInBlock])
       let fadeSequence = SKAction.repeat(SKAction.sequence([fadeOut, fadeIn]), count: count)
       let blinkAction = SKAction.sequence([setFlashTexture, fadeSequence, resetSprite])
       let resetFlag = SKAction.run { Ball.blinkFlags.removeLast() }
@@ -180,7 +173,6 @@ struct Sensory {
   }
   
   static func applyFrequency() {
-    let peekVibration = SystemSoundID(1519)
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
     let tone = Game.currentTrackSettings.toneFile
