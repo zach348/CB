@@ -114,7 +114,7 @@ struct Sensory {
   
   static func blinkBall(ball:Ball, count:Int = 3){
     Ball.blinkFlags.append(true)
-    if let currentTexture = ball.texture{
+    if let currentTexture = ball.texture    {
       let setFlashTexture = SKAction.setTexture(Game.currentTrackSettings.flashTexture)
       let resetTexture = SKAction.setTexture(currentTexture)
       let resetAlpha = SKAction.run {
