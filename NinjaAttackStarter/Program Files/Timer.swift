@@ -8,11 +8,14 @@ class Timer {
     didSet {
       if Ball.blinkFlags.isEmpty {
         self.remainingInPhase = Game.currentTrackSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
-        if self.remainingInPhase <  0 && !currentGame.isPaused && currentGame.streakAchieved { Game.advancePhase() }
+        //play mode
+//        if (currentGame.isPaused && currentGame.streakAchieved) { Game.advancePhase() }
+        //demo mode
+        if (!currentGame.isPaused && self.elapsedTime - self.lastPhaseShiftTime > 20) { Game.advancePhase()}
       }
     }
   }
-  var lastPhaseShiftTime:Double
+  var lastPhaseShiftTime:Double = 0
   var remainingInPhase:Double
   init(){
     self.members = []
