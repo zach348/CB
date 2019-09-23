@@ -8,11 +8,14 @@ class Timer {
     didSet {
       if Ball.blinkFlags.isEmpty {
         self.remainingInPhase = Game.currentTrackSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
-        if self.remainingInPhase <  0 && !currentGame.isPaused && currentGame.streakAchieved { Game.advancePhase() }
+        //play mode
+        if (currentGame.isPaused && currentGame.streakAchieved) { Game.advancePhase() }
+        //demo mode
+//      if (!currentGame.isPaused && self.elapsedTime - self.lastPhaseShiftTime > 45) { Game.advancePhase()}
       }
     }
   }
-  var lastPhaseShiftTime:Double
+  var lastPhaseShiftTime:Double = 0
   var remainingInPhase:Double
   init(){
     self.members = []
@@ -26,13 +29,13 @@ class Timer {
     let count = SKAction.run {
       self.elapsedTime += 0.05
     }
-  //Master Game block kept at top level/ on gamescene instance
+    //Master Game block kept at top level/ on gamescene instance
     if let scene = currentGame.gameScene {
       self.members.append("gameTimer")
       scene.run(SKAction.repeatForever(SKAction.sequence([wait,count])), withKey: "gameTimer")
     }
   }
-
+  
   func movementTimer(){
     if let worldTimer = currentGame.worldTimer {
       let wait = SKAction.wait(forDuration: 0.025)
@@ -169,7 +172,7 @@ class Timer {
     }
   }
   
-  func dataTimer(){
+  func dataTimer(saveGame:Bool = false){
     if let scene = currentGame.gameScene {
       self.stopTimer(timerID: "dataTimer")
       let wait = SKAction.wait(forDuration: 0.5)
