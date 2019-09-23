@@ -1,1 +1,8 @@
+
 GoogleService-Info.plist
+
+##other
+*.xcuserstate
+*.xccheckout
+*/xcuserdata/
+*/Breakpoints_v2.xcbkptlist
