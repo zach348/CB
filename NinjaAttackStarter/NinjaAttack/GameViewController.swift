@@ -7,11 +7,11 @@ class GameViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-   
     
     
     
     
+    let startScene = StartGameScene(size: view.bounds.size)
     let scene = GameScene(size: view.bounds.size)
     let skView = view as! SKView
     skView.showsFPS = true
@@ -19,7 +19,7 @@ class GameViewController: UIViewController {
     skView.showsNodeCount = true
     skView.ignoresSiblingOrder = true
     scene.scaleMode = .resizeFill
-    skView.presentScene(scene)
+    skView.presentScene(startScene)
   }
   
   override var prefersStatusBarHidden: Bool {

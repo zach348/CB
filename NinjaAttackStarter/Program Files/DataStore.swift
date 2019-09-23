@@ -61,10 +61,10 @@ struct DataStore {
     }
   }
   
-  static func saveTimePoint(tpRecord:[String:Any],tpCount:Int, gameCount:Any){
+  static func saveTimePoint(tpRecord:[String:Any], gameCount:Any){
     let db = Firestore.firestore()
     let timePointCollection = db.collection("games/\(gameCount)/timepoints")
-    timePointCollection.document("\(tpCount)").setData(tpRecord)
+    timePointCollection.addDocument(data: tpRecord)
   }
   
   
@@ -75,22 +75,20 @@ struct DataStore {
       guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
       
       print("gameCount, dummy request:", gameCount)
-
+      
     })
   }
   
   static func saveGame(){
-    var tpCounter:Int = 1
     self.metaRef.updateData(["count": FieldValue.increment(Int64(1))])
     self.metaRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
       guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
       guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
-
+      
       print("records count: \(self.records.count)")
       print("gameCount:", gameCount)
-      for tpRecord in self.records {
-        self.saveTimePoint(tpRecord: tpRecord, tpCount: tpCounter, gameCount: gameCount)
-        tpCounter += 1
+      for tpRecord in self.records.shuffled() {
+        self.saveTimePoint(tpRecord: tpRecord, gameCount: gameCount)
       }
     })
   }

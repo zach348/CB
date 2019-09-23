@@ -18,23 +18,25 @@ class Game {
   static var respSettingsArr:[RespSettings] = [
     RespSettings(phase: 7, frequency: 2.5, inDuration: 3.5, inWait: 1.5, outDuration: 5, outWait: 2.5, moveToCenterDuration: 8.5, moveCenterWait: 2)
   ]
+  static var willSaveGame:Bool = false
+  static var didSaveGame:Bool = false
   static var respActive:Bool = false
   static var initialRespTransition = true
   ///STARTING POINTS
   static var currentRespSettings:RespSettings = respSettingsArr[0]
   static var currentTrackSettings:Settings = settingsArr[0] {
-   didSet {
-    if self.currentTrackSettings.phase == 6 {
-      //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
-      self.respActive = true
-    }
-    if let timer = currentGame.timer, let worldTimer = currentGame.worldTimer {
-      if self.respActive {
-        self.transitionRespPhase(timer: timer, worldTimer: worldTimer)
-      }else{
-        self.transitionTrackPhase(timer:timer)
+    didSet {
+      if self.currentTrackSettings.phase == 6 {
+        //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
+        self.respActive = true
       }
-     }
+      if let timer = currentGame.timer, let worldTimer = currentGame.worldTimer {
+        if self.respActive {
+          self.transitionRespPhase(timer: timer, worldTimer: worldTimer)
+        }else{
+          self.transitionTrackPhase(timer:timer)
+        }
+      }
     }
   }
   
@@ -55,11 +57,16 @@ class Game {
     currentGame.successHistory = [Bool]()
     currentGame.streakLength = 0
     currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
+    
     for (_, node) in Sensory.audioNodes {
       node.run(SKAction.changeVolume(by: Float(-0.3), duration: 0))
     }
     Sensory.applyFrequency()
-    timer.targetTimer()
+    if(Game.currentTrackSettings.phase < 5){
+      timer.targetTimer()
+    }else{
+      timer.stopTimer(timerID: "targetTimer")
+    }
     if Ball.getTargets().count < Game.currentTrackSettings.numTargets && self.currentTrackSettings.phase < 6 {
       let numTargets = Game.currentTrackSettings.numTargets - Ball.getTargets().count
       for _ in 1...numTargets { Ball.addTarget()}
@@ -71,10 +78,13 @@ class Game {
     
     
     //testing
+    
+    //saving
+    
   }
   
   class func transitionRespPhase(timer:Timer, worldTimer:SKNode){
-
+    
     Sensory.applyFrequency()
     let circleAction = SKAction.run({ timer.circleMovementTimer()})
     //for transition from trackphase only
@@ -96,7 +106,7 @@ class Game {
       }
       let wait = SKAction.wait(forDuration: 5)
       let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
-
+      
       worldTimer.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
     }else{
       worldTimer.run(SKAction.sequence([circleAction]))
@@ -104,7 +114,7 @@ class Game {
   }
   
   
-
+  
   var gameScene:GameScene?
   var timer:Timer?
   var worldTimer:SKNode?
@@ -162,7 +172,7 @@ class Game {
   init(){
     self.isPaused = false
   }
-
+  
   func setupGame(){
     self.timer = Timer()
     self.worldTimer = SKNode()
@@ -190,7 +200,7 @@ class Game {
       }
       
       self.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
-
+      
       //stimuli
       Ball.createBalls(num: 12, game: self)
       Tile.createTiles()
@@ -204,14 +214,14 @@ class Game {
       Ball.startMovement()
       self.timer?.startTimerActions()
       Sensory.applyFrequency()
-
-
+      
+      
       //testing
     }
   }
   
   func pauseGame(){
- 
+    
     
     //implementation
     if !Ball.blinkFlags.isEmpty {
