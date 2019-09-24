@@ -96,6 +96,7 @@ class Button: SKSpriteNode {
     self.label.text = title as String
     self.label.fontSize = fontSize
     self.label.fontName = font
+    self.label.zPosition = 3
   }
   
   var disabledTexture: SKTexture?
