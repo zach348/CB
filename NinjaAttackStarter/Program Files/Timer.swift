@@ -1,17 +1,28 @@
 
 import Foundation
 import SpriteKit
+import CoreHaptics
 
 class Timer {
   var members:[String]
   var elapsedTime:Double = 0 {
     didSet {
       if Ball.blinkFlags.isEmpty {
-        self.remainingInPhase = Game.currentTrackSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
         //play mode
-        if (currentGame.isPaused && currentGame.streakAchieved) { Game.advancePhase() }
+        if !Game.respActive && !currentGame.isPaused && currentGame.streakAchieved {
+          self.remainingInPhase = Game.currentTrackSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
+          Game.advancePhase()
+        } else if Game.respActive {
+          self.remainingInPhase = Game.currentRespSettings.phaseDuration - (self.elapsedTime - self.lastPhaseShiftTime)
+          if self.remainingInPhase < 0 {
+            Game.advancePhase()
+          }
+          print(self.remainingInPhase)
+        }
         //demo mode
 //      if (!currentGame.isPaused && self.elapsedTime - self.lastPhaseShiftTime > 45) { Game.advancePhase()}
+   
+
       }
     }
   }
@@ -61,11 +72,12 @@ class Timer {
     }
   }
   
-  func circleMovementTimer(){
+  func circleMovementTimer(initial:Bool = false){
+    guard let timer = currentGame.timer, let worldTimer = currentGame.worldTimer else { return }
     let concentrics = MotionControl.generateConcentrics()
     for index in 0..<Ball.members.count {
       let ball = Ball.members[index], incrementalOutDuration = Game.currentRespSettings.outDuration/4, incrementalInDuration = Game.currentRespSettings.inDuration/4
-      var inActions = [SKAction](), outActions = [SKAction](), trajectory = [CGPoint](), legIndices = [Int]()
+      var breathInActions = [SKAction](), breathOutActions = [SKAction](), trajectory = [CGPoint](), legIndices = [Int]()
       for pointsIndex in stride(from: 0, through: concentrics.count - 1, by: 2){
         let point = concentrics[pointsIndex][index]
         trajectory.append(point)
@@ -76,19 +88,88 @@ class Timer {
       legIndices.append(trajectory.count - 1)
       
       for legIndex in legIndices {
-        inActions.append(SKAction.move(to: trajectory[legIndex], duration: incrementalInDuration))
-        outActions.append(SKAction.move(to: trajectory.reversed()[legIndex], duration: incrementalOutDuration))
+        let breathInMoveAction = SKAction.move(to: trajectory[legIndex], duration: incrementalInDuration)
+        let breathOutMMoveAction = SKAction.move(to: trajectory.reversed()[legIndex], duration: incrementalOutDuration)
+        
+        breathInActions.append(SKAction.group([breathInMoveAction]))
+        breathOutActions.append(SKAction.group([breathOutMMoveAction]))
       }
-      let moveOutSequence = SKAction.sequence(outActions)
-      let moveInSequence = SKAction.sequence(inActions)
-      let moveInWait = SKAction.wait(forDuration: Game.currentRespSettings.inWait)
-      let moveOutWait = SKAction.wait(forDuration: Game.currentRespSettings.outWait)
+      
+      //Haptics
+      var hapticInEvents = [CHHapticEvent]()
+      var hapticOutEvents = [CHHapticEvent]()
+      var startTime:Double = 0
+      var revStartTime:Double = Game.currentRespSettings.outDuration - incrementalOutDuration
+      for i in stride(from: 0.08, to: 0.16, by: 0.02) {
+        let inEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 0.4, relativeTime: startTime, duration: incrementalInDuration)
+        let outEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 0.4, relativeTime: revStartTime, duration: incrementalOutDuration)
+        startTime = startTime + incrementalInDuration
+        revStartTime = revStartTime - incrementalOutDuration
+        hapticInEvents.append(inEvent)
+        hapticOutEvents.append(outEvent)
+      }
+
+      let breathInHoldHaptics = SKAction.run {
+        let event = Sensory.createHapticEvent(isContinuous: true, intensity: 0.16, sharpness: 0.4, relativeTime: 0, duration: Game.currentRespSettings.inWait)
+        do {
+          let pattern = try CHHapticPattern(events: [event], parameters: [])
+          Sensory.hapticPlayers["inHold"] = try Sensory.hapticEngine?.makePlayer(with: pattern)
+          try Sensory.hapticPlayers["inHold"]?.start(atTime: 0)
+        }catch{
+          print("failed to play pattern: \(error.localizedDescription)")
+        }
+      }
+
+      let breathInHaptics = SKAction.run {
+        do {
+          let pattern = try CHHapticPattern(events: hapticInEvents, parameters: [])
+          Sensory.hapticPlayers["breathIn"] = try Sensory.hapticEngine?.makePlayer(with: pattern)
+          try Sensory.hapticPlayers["breathIn"]?.start(atTime: 0)
+        }catch{
+          print("failed to play pattern: \(error.localizedDescription)")
+        }
+      }
+      let breathOutHaptics = SKAction.run {
+        do {
+          let pattern = try CHHapticPattern(events: hapticOutEvents, parameters: [])
+          Sensory.hapticPlayers["breathOut"] = try Sensory.hapticEngine?.makePlayer(with: pattern)
+          try Sensory.hapticPlayers["breathOut"]?.start(atTime: 0)
+        }catch{
+          print("failed to play pattern: \(error.localizedDescription)")
+        }
+      }
+      
+      let breathOutSequence = SKAction.sequence(breathOutActions)
+      let breathOutGroup = SKAction.group([breathOutSequence,breathOutHaptics])
+      let breathInSequence = SKAction.sequence(breathInActions)
+      let breathInGroup = SKAction.group([breathInSequence,breathInHaptics])
+      let breathInWait = SKAction.wait(forDuration: Game.currentRespSettings.inWait)
+      let breathInWaitGroup = SKAction.group([breathInWait,breathInHoldHaptics])
+      let breathOutWait = SKAction.wait(forDuration: Game.currentRespSettings.outWait)
+      let checkForPhaseAdv = SKAction.run {
+        if currentGame.advanceRespFlag {
+          self.stopTimer(timerID: "breathLoop")
+          for (key, player) in Sensory.hapticPlayers {
+            do {
+              try player.stop(atTime: 0)
+            }catch{
+              print("\(key) player failed to stop: \(error.localizedDescription)")
+            }
+          }
+          Game.transitionRespPhase(timer: timer, worldTimer: worldTimer)
+        }
+      }
       let moveToCenter = SKAction.move(to: trajectory.first!, duration: Game.currentRespSettings.moveToCenterDuration)
       let moveToCenterWait = SKAction.wait(forDuration: Game.currentRespSettings.moveCenterWait)
       let centerSequence = SKAction.sequence([moveToCenter,moveToCenterWait])
-      let finalSequence = SKAction.repeatForever(SKAction.sequence([moveInSequence,moveInWait,moveOutSequence,moveOutWait]))
+      let finalSequence = SKAction.repeatForever(SKAction.sequence([breathInGroup,breathInWaitGroup,breathOutGroup,breathOutWait,checkForPhaseAdv]))
       self.members.append("breathLoop")
-      ball.run(SKAction.sequence([centerSequence,finalSequence]), withKey: "breathLoop")
+      
+      if initial {
+        ball.run(SKAction.sequence([centerSequence,finalSequence]), withKey: "breathLoop")
+      }else{
+        ball.run(finalSequence, withKey: "breathLoop")
+      }
       //create a speed bleed/transition function
       ball.physicsBody?.velocity.dx = 0
       ball.physicsBody?.velocity.dy = 0
@@ -189,6 +270,10 @@ class Timer {
       if timerID == "gameTimer" || timerID == "frequencyLoopTimer" || timerID == "pauseTimer" || timerID == "dataTimer" {
         self.members = self.members.filter { $0 != timerID }
         scene.removeAction(forKey: timerID)
+      }else if timerID == "breathLoop" {
+        Ball.members.forEach { ball in
+          ball.removeAction(forKey: "breathLoop")
+        }
       }else{
         worldTimer.removeAction(forKey: timerID)
         self.members = self.members.filter { $0 != timerID }
