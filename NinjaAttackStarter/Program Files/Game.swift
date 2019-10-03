@@ -31,7 +31,7 @@ class Game {
       currentGame.advanceRespFlag = true
     }
   }
-  static var currentTrackSettings:Settings = settingsArr[0] {
+  static var currentTrackSettings:Settings = settingsArr[4] {
     didSet {
       //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
       if self.currentTrackSettings.phase == 6 {

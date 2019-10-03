@@ -22,6 +22,7 @@ struct Sensory {
     guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { print("no haptic support"); return }
     do {
       self.hapticEngine = try CHHapticEngine()
+      self.hapticEngine?.playsHapticsOnly = true
       try self.hapticEngine?.start()
     } catch {
       print("Error with creating haptic engine: \(error.localizedDescription)")

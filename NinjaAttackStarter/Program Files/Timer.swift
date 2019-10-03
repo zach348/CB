@@ -100,7 +100,7 @@ class Timer {
       var hapticOutEvents = [CHHapticEvent]()
       var startTime:Double = 0
       var revStartTime:Double = Game.currentRespSettings.outDuration - incrementalOutDuration
-      for i in stride(from: 0.08, to: 0.16, by: 0.02) {
+      for i in stride(from: 0.2, to: 0.4, by: 0.05) {
         let inEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 0.4, relativeTime: startTime, duration: incrementalInDuration)
         let outEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 0.4, relativeTime: revStartTime, duration: incrementalOutDuration)
         startTime = startTime + incrementalInDuration
@@ -108,34 +108,40 @@ class Timer {
         hapticInEvents.append(inEvent)
         hapticOutEvents.append(outEvent)
       }
+      let holdEvent = Sensory.createHapticEvent(isContinuous: true, intensity: 0.4, sharpness: 0.4, relativeTime: 0, duration: Game.currentRespSettings.inWait)
+      
+      do{
+        let holdPattern = try CHHapticPattern(events: [holdEvent], parameters: [])
+        Sensory.hapticPlayers["inHold"] = try Sensory.hapticEngine?.makePlayer(with: holdPattern)
+        let inPattern = try CHHapticPattern(events: hapticInEvents, parameters: [])
+        Sensory.hapticPlayers["breathIn"] = try Sensory.hapticEngine?.makePlayer(with: inPattern)
+        let outPattern = try CHHapticPattern(events: hapticOutEvents, parameters: [])
+        Sensory.hapticPlayers["breathOut"] = try Sensory.hapticEngine?.makePlayer(with: outPattern)
+      }catch{
+        print("error creating haptic pattern or player: \(error.localizedDescription)")
+      }
+    
 
       let breathInHoldHaptics = SKAction.run {
-        let event = Sensory.createHapticEvent(isContinuous: true, intensity: 0.16, sharpness: 0.4, relativeTime: 0, duration: Game.currentRespSettings.inWait)
         do {
-          let pattern = try CHHapticPattern(events: [event], parameters: [])
-          Sensory.hapticPlayers["inHold"] = try Sensory.hapticEngine?.makePlayer(with: pattern)
           try Sensory.hapticPlayers["inHold"]?.start(atTime: 0)
         }catch{
-          print("failed to play pattern: \(error.localizedDescription)")
+          print("failed to play haptic pattern: \(error.localizedDescription)")
         }
       }
 
       let breathInHaptics = SKAction.run {
         do {
-          let pattern = try CHHapticPattern(events: hapticInEvents, parameters: [])
-          Sensory.hapticPlayers["breathIn"] = try Sensory.hapticEngine?.makePlayer(with: pattern)
           try Sensory.hapticPlayers["breathIn"]?.start(atTime: 0)
         }catch{
-          print("failed to play pattern: \(error.localizedDescription)")
+          print("failed to play haptic pattern: \(error.localizedDescription)")
         }
       }
       let breathOutHaptics = SKAction.run {
         do {
-          let pattern = try CHHapticPattern(events: hapticOutEvents, parameters: [])
-          Sensory.hapticPlayers["breathOut"] = try Sensory.hapticEngine?.makePlayer(with: pattern)
           try Sensory.hapticPlayers["breathOut"]?.start(atTime: 0)
         }catch{
-          print("failed to play pattern: \(error.localizedDescription)")
+          print("failed to play haptic pattern: \(error.localizedDescription)")
         }
       }
       

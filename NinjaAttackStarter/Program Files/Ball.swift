@@ -87,7 +87,6 @@ class Ball: SKSpriteNode {
             switch Game.currentTrackSettings.phase {
             case 1,2:
               Sensory.playRadarBlip(count: 1)
-              print("radar blip")
             default:
               break
             }
