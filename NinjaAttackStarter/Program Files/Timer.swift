@@ -100,15 +100,15 @@ class Timer {
       var hapticOutEvents = [CHHapticEvent]()
       var startTime:Double = 0
       var revStartTime:Double = Game.currentRespSettings.outDuration - incrementalOutDuration
-      for i in stride(from: 0.2, to: 0.4, by: 0.05) {
-        let inEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 0.4, relativeTime: startTime, duration: incrementalInDuration)
-        let outEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 0.4, relativeTime: revStartTime, duration: incrementalOutDuration)
+      for i in stride(from: 0.3, to: 0.6, by: (0.6-0.3)/4) {
+        let inEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 1.5 * i, relativeTime: startTime, duration: incrementalInDuration)
+        let outEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 1.5 * i, relativeTime: revStartTime, duration: incrementalOutDuration)
         startTime = startTime + incrementalInDuration
         revStartTime = revStartTime - incrementalOutDuration
         hapticInEvents.append(inEvent)
         hapticOutEvents.append(outEvent)
       }
-      let holdEvent = Sensory.createHapticEvent(isContinuous: true, intensity: 0.4, sharpness: 0.4, relativeTime: 0, duration: Game.currentRespSettings.inWait)
+      let holdEvent = Sensory.createHapticEvent(isContinuous: true, intensity: 0.6, sharpness: 1.5*0.6, relativeTime: 0, duration: Game.currentRespSettings.inWait)
       
       do{
         let holdPattern = try CHHapticPattern(events: [holdEvent], parameters: [])
@@ -121,7 +121,6 @@ class Timer {
         print("error creating haptic pattern or player: \(error.localizedDescription)")
       }
     
-
       let breathInHoldHaptics = SKAction.run {
         do {
           try Sensory.hapticPlayers["inHold"]?.start(atTime: 0)
