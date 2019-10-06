@@ -16,9 +16,9 @@ class Game {
     Settings(phase: 7, missesAllowed: 0, requiredStreak: 2, phaseDuration: 900, pauseDelay: 40, pauseError: 10, pauseDuration: 8, frequency: 2.5, toneFile: "tone140hz.wav", targetMeanSpeed: 0, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange-1", distractorTexture: "sphere-black", borderColor: UIColor.cyan, flashTexture: "sphere-orange", alpha: 1)
   ]
   static var respSettingsArr:[RespSettings] = [
-    RespSettings(phase: 7, phaseDuration: 30, frequency: 2.5, inDuration: 3.5, inWait: 1.5, outDuration: 5, outWait: 2.5, moveToCenterDuration: 8.5, moveCenterWait: 2),
-    RespSettings(phase: 8, phaseDuration: 30, frequency: 1.5, inDuration: 4.5, inWait: 2, outDuration: 7, outWait: 4, moveToCenterDuration: 8.5, moveCenterWait: 2),
-    RespSettings(phase: 9, phaseDuration: 30, frequency: 1.5, inDuration: 4.5, inWait: 2, outDuration: 7, outWait: 4, moveToCenterDuration: 8.5, moveCenterWait: 2)
+    RespSettings(phase: 7, phaseDuration: 30, frequency: 2.5, inDuration: 4, inWait: 1.5, outDuration: 6, outWait: 2.5, moveToCenterDuration: 8.5, moveCenterWait: 2),
+    RespSettings(phase: 8, phaseDuration: 30, frequency: 1.5, inDuration: 5, inWait: 2, outDuration: 8, outWait: 4, moveToCenterDuration: 8.5, moveCenterWait: 2),
+    RespSettings(phase: 9, phaseDuration: 999, frequency: 1.5, inDuration: 6, inWait: 2.5, outDuration: 10, outWait: 5.5, moveToCenterDuration: 10, moveCenterWait: 2)
   ]
   static var willSaveGame:Bool = false
   static var didSaveGame:Bool = false
