@@ -5,16 +5,16 @@ import SpriteKit
 
 struct MotionControl {
   
-  public static func correctMovement(){
+  static func correctMovement(){
     self.correctSpeedSD()
     self.correctMeanSpeed()
     self.correctSpeedRange()
     self.wallPush()
   }
   
-  ///////////RESP//////////////////////////////////
+  ///////////Resp Functions
   
-  public static func generateConcentrics() -> [[CGPoint]] {
+  static func generateConcentrics() -> [[CGPoint]] {
     var concentricCircles = [[CGPoint]]()
     if let gameScene = currentGame.gameScene {
       for radius in 70...Int(gameScene.size.height/2) {
@@ -25,7 +25,7 @@ struct MotionControl {
   }
   
   //gist
-  public static func circlePoints(numPoints:Int, anchorX: CGFloat, anchorY: CGFloat, radius: CGFloat, precision:Int = 3) -> [CGPoint] {
+  static func circlePoints(numPoints:Int, anchorX: CGFloat, anchorY: CGFloat, radius: CGFloat, precision:Int = 3) -> [CGPoint] {
     var points = [CGPoint]()
     let angle = CGFloat(Double.pi) / CGFloat(numPoints) * 2.0
     let p = CGFloat(pow(10.0, Double(precision)))
@@ -41,7 +41,6 @@ struct MotionControl {
   }
   
   ///TRACK FUNCTIONS
-  
   
   private static func correctMeanSpeed(){
     let currentMeanSpeed = Ball.mean()

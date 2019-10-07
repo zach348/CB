@@ -6,8 +6,13 @@ import SpriteKit
 class StartGameScene: SKScene {
   var startButton: Button! = nil
   var saveGameButton: Button! = nil
+  var background = SKSpriteNode(imageNamed: "sphere-gray")
   
   override func didMove(to view: SKView) {
+    background.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
+    background.size = self.frame.size
+    addChild(background)
+    
     backgroundColor = SKColor.white
     let buttonTexture:SKTexture! = SKTexture(imageNamed: "buttonUnselected.png")
     let buttonTextureSelected:SKTexture! = SKTexture(imageNamed: "buttonSelected.png")
@@ -27,7 +32,8 @@ class StartGameScene: SKScene {
     self.saveGameButton.name = "saveButton"
     self.addChild(self.saveGameButton)
     
-    
+    //Haptic testing
+    Sensory.createHapticEngine()
   }
   
 

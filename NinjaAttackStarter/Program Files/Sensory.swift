@@ -3,7 +3,7 @@ import Foundation
 import SpriteKit
 import AudioToolbox
 import UIKit
-
+import CoreHaptics
 
 struct Sensory {
   
@@ -13,6 +13,35 @@ struct Sensory {
     "streak": SKAudioNode(fileNamed: "streak_sound"),
     "blip": SKAudioNode(fileNamed: "radar_blip")
   ]
+  
+  static var hapticEngine: CHHapticEngine?
+  
+  static var hapticPlayers: [String: CHHapticPatternPlayer] = [String: CHHapticPatternPlayer]()
+  
+  static func createHapticEngine(){
+    guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { print("no haptic support"); return }
+    do {
+      self.hapticEngine = try CHHapticEngine()
+      self.hapticEngine?.playsHapticsOnly = true
+      try self.hapticEngine?.start()
+    } catch {
+      print("Error with creating haptic engine: \(error.localizedDescription)")
+    }
+    
+    self.hapticEngine?.stoppedHandler = { reason in
+      print("The engine stopped: \(reason)")
+    }
+    
+    self.hapticEngine?.resetHandler = { [self] in
+      print("The engine reset")
+      do {
+        try self.hapticEngine?.start()
+      } catch {
+        print("failed to restart the engine: \(error.localizedDescription)")
+      }
+    }
+  }
+    
   
   static func foundTargetsFeedback(foundTarget:Ball){
     let weakPop = SystemSoundID(1519)
@@ -176,18 +205,89 @@ struct Sensory {
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
     let tone = Game.currentTrackSettings.toneFile
+    let event = self.createHapticEvent(intensity: 0.5, sharpness: 1, relativeTime: 0, duration: 0)
+
+     do{
+      let pattern = try CHHapticPattern(events: [event], parameters: [])
+      Sensory.hapticPlayers["frequency"] = try self.hapticEngine?.makePlayer(with: pattern)
+     }catch{
+      print("Problem creating haptic pattern or player: \(error.localizedDescription)")
+     }
     if let gameScene = currentGame.gameScene {
       let tone = SKAction.playSoundFileNamed(tone, waitForCompletion: true)
+      let haptic = SKAction.run {
+        do {
+          try Sensory.hapticPlayers["frequency"]?.start(atTime: 0)
+        }catch{
+          print("Failed to play pattern: \(error.localizedDescription)")
+        }
+      }
+      let toneGroup = SKAction.group([tone,haptic])
       let wait = SKAction.wait(forDuration: 1/hz/2)
       let systemVal = UIScreen.main.brightness
       let decrease = SKAction.run({ UIScreen.main.brightness = systemVal * 0.975 })
       let increase = SKAction.run({ UIScreen.main.brightness = systemVal })
-      let freqGroup = SKAction.group([increase, tone])
+      let freqGroup = SKAction.group([increase, toneGroup])
       let sequence = SKAction.sequence([wait, decrease, wait, freqGroup])
       
       gameScene.run(SKAction.repeatForever(sequence), withKey: "frequencyLoopTimer")
       currentGame.timer?.members.append("frequencyLoopTimer")
     }
+  }
+  
+  static func fadeScreen(){
+    guard let gameScene = currentGame.gameScene else { return }
+    for ball in Ball.members {
+      ball.physicsBody = nil
+    }
+    gameScene.run(SKAction.colorize(with: SKColor.black, colorBlendFactor: 1, duration: 10))
+    gameScene.run(SKAction.fadeOut(withDuration: 10))
+  }
+  
+  static func createHapticEvent(isContinuous:Bool = false, intensity:Double, sharpness:Double, relativeTime:Double, duration:Double) -> CHHapticEvent {
+    let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: Float(intensity))
+    let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: Float(sharpness))
+    let event:CHHapticEvent
+    if isContinuous {
+      event = CHHapticEvent(eventType: .hapticContinuous, parameters: [intensity,sharpness], relativeTime: relativeTime, duration: duration)
+    }else{
+      event = CHHapticEvent(eventType: .hapticTransient, parameters: [intensity,sharpness], relativeTime: relativeTime, duration: duration)
+    }
+    return event
+  }
+  
+  static func prepareHaptics(){
+  //Breathloop haptics
+    for respSettings in Game.respSettingsArr {
+      let incrementalOutDuration = respSettings.outDuration/4
+      let incrementalInDuration = respSettings.inDuration/4
+      var hapticInEvents = [CHHapticEvent]()
+      var hapticOutEvents = [CHHapticEvent]()
+      var startTime:Double = 0
+      var revStartTime:Double = respSettings.outDuration - incrementalOutDuration
+      for i in stride(from: 0.3, to: 0.6, by: (0.6-0.3)/4) {
+        let inEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 1.5 * i, relativeTime: startTime, duration: incrementalInDuration)
+        let outEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 1.5 * i, relativeTime: revStartTime, duration: incrementalOutDuration)
+        startTime = startTime + incrementalInDuration
+        revStartTime = revStartTime - incrementalOutDuration
+        hapticInEvents.append(inEvent)
+        hapticOutEvents.append(outEvent)
+      }
+      let holdEvent = Sensory.createHapticEvent(isContinuous: true, intensity: 0.6, sharpness: 1.5*0.6, relativeTime: 0, duration: respSettings.inWait)
+         
+      do{
+        let holdPattern = try CHHapticPattern(events: [holdEvent], parameters: [])
+        Sensory.hapticPlayers["breathHold\(respSettings.phase)"] = try Sensory.hapticEngine?.makePlayer(with: holdPattern)
+        let inPattern = try CHHapticPattern(events: hapticInEvents, parameters: [])
+        Sensory.hapticPlayers["breathIn\(respSettings.phase)"] = try Sensory.hapticEngine?.makePlayer(with: inPattern)
+        let outPattern = try CHHapticPattern(events: hapticOutEvents, parameters: [])
+        Sensory.hapticPlayers["breathOut\(respSettings.phase)"] = try Sensory.hapticEngine?.makePlayer(with: outPattern)
+        
+      }catch{
+        print("error creating haptic pattern or player: \(error.localizedDescription)")
+      }
+    }
+
   }
 }
 
