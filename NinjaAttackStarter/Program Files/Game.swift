@@ -122,7 +122,7 @@ class Game {
       let wait = SKAction.wait(forDuration: 5)
       let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
       self.initialRespTransition = false
-      
+      Sensory.prepareHaptics()
       worldTimer.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
     }else{
       print("running non initial circleaction")

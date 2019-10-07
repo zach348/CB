@@ -255,6 +255,40 @@ struct Sensory {
     }
     return event
   }
+  
+  static func prepareHaptics(){
+  //Breathloop haptics
+    for respSettings in Game.respSettingsArr {
+      let incrementalOutDuration = respSettings.outDuration/4
+      let incrementalInDuration = respSettings.inDuration/4
+      var hapticInEvents = [CHHapticEvent]()
+      var hapticOutEvents = [CHHapticEvent]()
+      var startTime:Double = 0
+      var revStartTime:Double = respSettings.outDuration - incrementalOutDuration
+      for i in stride(from: 0.3, to: 0.6, by: (0.6-0.3)/4) {
+        let inEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 1.5 * i, relativeTime: startTime, duration: incrementalInDuration)
+        let outEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 1.5 * i, relativeTime: revStartTime, duration: incrementalOutDuration)
+        startTime = startTime + incrementalInDuration
+        revStartTime = revStartTime - incrementalOutDuration
+        hapticInEvents.append(inEvent)
+        hapticOutEvents.append(outEvent)
+      }
+      let holdEvent = Sensory.createHapticEvent(isContinuous: true, intensity: 0.6, sharpness: 1.5*0.6, relativeTime: 0, duration: respSettings.inWait)
+         
+      do{
+        let holdPattern = try CHHapticPattern(events: [holdEvent], parameters: [])
+        Sensory.hapticPlayers["breathHold\(respSettings.phase)"] = try Sensory.hapticEngine?.makePlayer(with: holdPattern)
+        let inPattern = try CHHapticPattern(events: hapticInEvents, parameters: [])
+        Sensory.hapticPlayers["breathIn\(respSettings.phase)"] = try Sensory.hapticEngine?.makePlayer(with: inPattern)
+        let outPattern = try CHHapticPattern(events: hapticOutEvents, parameters: [])
+        Sensory.hapticPlayers["breathOut\(respSettings.phase)"] = try Sensory.hapticEngine?.makePlayer(with: outPattern)
+        
+      }catch{
+        print("error creating haptic pattern or player: \(error.localizedDescription)")
+      }
+    }
+
+  }
 }
 
 
