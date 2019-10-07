@@ -205,19 +205,24 @@ struct Sensory {
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
     let tone = Game.currentTrackSettings.toneFile
+    let event = self.createHapticEvent(intensity: 0.5, sharpness: 1, relativeTime: 0, duration: 0)
+
+     do{
+      let pattern = try CHHapticPattern(events: [event], parameters: [])
+      Sensory.hapticPlayers["frequency"] = try self.hapticEngine?.makePlayer(with: pattern)
+     }catch{
+      print("Problem creating haptic pattern or player: \(error.localizedDescription)")
+     }
     if let gameScene = currentGame.gameScene {
-      let event = self.createHapticEvent(intensity: 0.5, sharpness: 1, relativeTime: 0, duration: 0)
       let tone = SKAction.playSoundFileNamed(tone, waitForCompletion: true)
-      let thud = SKAction.run {
+      let haptic = SKAction.run {
         do {
-          let pattern = try CHHapticPattern(events: [event], parameters: [])
-          let hapticPlayer = try self.hapticEngine?.makePlayer(with: pattern)
-          try hapticPlayer?.start(atTime: 0)
+          try Sensory.hapticPlayers["frequency"]?.start(atTime: 0)
         }catch{
           print("Failed to play pattern: \(error.localizedDescription)")
         }
       }
-      let toneGroup = SKAction.group([tone,thud])
+      let toneGroup = SKAction.group([tone,haptic])
       let wait = SKAction.wait(forDuration: 1/hz/2)
       let systemVal = UIScreen.main.brightness
       let decrease = SKAction.run({ UIScreen.main.brightness = systemVal * 0.975 })
