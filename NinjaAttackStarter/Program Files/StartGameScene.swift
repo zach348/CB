@@ -31,9 +31,11 @@ class StartGameScene: SKScene {
     self.saveGameButton.zPosition = 1
     self.saveGameButton.name = "saveButton"
     self.addChild(self.saveGameButton)
-    
-    //Haptic testing
+
+    //Haptics
     Sensory.createHapticEngine()
+    
+    //Testing
   }
   
 

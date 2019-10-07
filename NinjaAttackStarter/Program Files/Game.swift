@@ -220,7 +220,7 @@ class Game {
       self.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
       
       //stimuli
-      Ball.createBalls(num: 12, game: self)
+      self.gameScene!.view!.frame.width < 670 ? Ball.createBalls(num: 10, game: self) : Ball.createBalls(num: 12, game: self)
       Tile.createTiles()
       self.addMemberstoScene(collections: [Ball.members, Tile.members])
     }
