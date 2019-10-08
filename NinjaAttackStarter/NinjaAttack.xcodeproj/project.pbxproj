@@ -91,7 +91,7 @@
 		AFD63F8D203649F800E08C66 /* background-music-aac.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "background-music-aac.caf"; sourceTree = "<group>"; };
 		AFD63F8E203649F800E08C66 /* pew-pew-lei.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pew-pew-lei.caf"; sourceTree = "<group>"; };
 		C29CAC0CE10DAADF0FE5C704 /* Pods_NinjaAttack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NinjaAttack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D2A5F2001F4A9144005CD714 /* Calibrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calibrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2A5F2001F4A9144005CD714 /* Kalibr8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kalibr8.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2A5F2081F4A9144005CD714 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D2A5F20A1F4A9144005CD714 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = NinjaAttack/Assets.xcassets; sourceTree = "<group>"; };
 		D2A5F20F1F4A9144005CD714 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = NinjaAttack/Info.plist; sourceTree = "<group>"; };
@@ -188,7 +188,7 @@
 		D2A5F2011F4A9144005CD714 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D2A5F2001F4A9144005CD714 /* Calibrate.app */,
+				D2A5F2001F4A9144005CD714 /* Kalibr8.app */,
 			);
 			name = Products;
 			path = NinjaAttack;
@@ -240,7 +240,7 @@
 			);
 			name = NinjaAttack;
 			productName = MyRWTutorial;
-			productReference = D2A5F2001F4A9144005CD714 /* Calibrate.app */;
+			productReference = D2A5F2001F4A9144005CD714 /* Kalibr8.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -534,8 +534,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.calibrate;
-				PRODUCT_NAME = Calibrate;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.kalibr8;
+				PRODUCT_NAME = Kalibr8;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -557,8 +557,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.calibrate;
-				PRODUCT_NAME = Calibrate;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.kalibr8;
+				PRODUCT_NAME = Kalibr8;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
