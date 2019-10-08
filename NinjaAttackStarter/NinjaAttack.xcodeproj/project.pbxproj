@@ -11,6 +11,18 @@
 		756E72A310BA5B1FE9BADD2F /* Pods_NinjaAttack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C29CAC0CE10DAADF0FE5C704 /* Pods_NinjaAttack.framework */; };
 		8408B9B822D3FFF2001ACC95 /* RespSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8408B9B722D3FFF1001ACC95 /* RespSettings.swift */; };
 		84124FB8229C659B008A1510 /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84124FB7229C659B008A1510 /* Ball.swift */; };
+		84176B94234D141A00E38F9C /* NinjaAttackStarter in Resources */ = {isa = PBXBuildFile; fileRef = 84176B93234D141A00E38F9C /* NinjaAttackStarter */; };
+		84176B98234D179000E38F9C /* 120.png in Resources */ = {isa = PBXBuildFile; fileRef = 84176B97234D179000E38F9C /* 120.png */; };
+		84176BA0234D1BD100E38F9C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84176B9F234D1BD100E38F9C /* AppDelegate.swift */; };
+		84176BA2234D1BD100E38F9C /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 84176BA1234D1BD100E38F9C /* GameScene.sks */; };
+		84176BA4234D1BD100E38F9C /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 84176BA3234D1BD100E38F9C /* Actions.sks */; };
+		84176BA6234D1BD100E38F9C /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84176BA5234D1BD100E38F9C /* GameScene.swift */; };
+		84176BA8234D1BD100E38F9C /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84176BA7234D1BD100E38F9C /* GameViewController.swift */; };
+		84176BAB234D1BD100E38F9C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84176BA9234D1BD100E38F9C /* Main.storyboard */; };
+		84176BAD234D1BD200E38F9C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84176BAC234D1BD200E38F9C /* Assets.xcassets */; };
+		84176BB0234D1BD200E38F9C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84176BAE234D1BD200E38F9C /* LaunchScreen.storyboard */; };
+		84176BBB234D1BD300E38F9C /* KalibrateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84176BBA234D1BD300E38F9C /* KalibrateTests.swift */; };
+		84176BC6234D1BD300E38F9C /* KalibrateUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84176BC5234D1BD300E38F9C /* KalibrateUITests.swift */; };
 		842E25552321F96500151D44 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 842E25542321F96500151D44 /* GoogleService-Info.plist */; };
 		8436334422BF1D1800F4BC97 /* Sensory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8436334322BF1D1800F4BC97 /* Sensory.swift */; };
 		846E09A622CBAF49005A1C27 /* tone185hz.wav in Resources */ = {isa = PBXBuildFile; fileRef = 846E09A422CBAF49005A1C27 /* tone185hz.wav */; };
@@ -50,12 +62,47 @@
 		D2A5F2211F4A96D0005CD714 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F2201F4A96D0005CD714 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		84176BB7234D1BD200E38F9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D2A5F1F81F4A9143005CD714 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 84176B9C234D1BD000E38F9C;
+			remoteInfo = Kalibrate;
+		};
+		84176BC2234D1BD300E38F9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D2A5F1F81F4A9143005CD714 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 84176B9C234D1BD000E38F9C;
+			remoteInfo = Kalibrate;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		1D048603356152AE9EDA84F2 /* Pods-NinjaAttack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NinjaAttack.debug.xcconfig"; path = "Target Support Files/Pods-NinjaAttack/Pods-NinjaAttack.debug.xcconfig"; sourceTree = "<group>"; };
 		5C2901821F8F6DE700803663 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NinjaAttack/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		64F76289F6019A839BBCCBD8 /* Pods-NinjaAttack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NinjaAttack.release.xcconfig"; path = "Target Support Files/Pods-NinjaAttack/Pods-NinjaAttack.release.xcconfig"; sourceTree = "<group>"; };
 		8408B9B722D3FFF1001ACC95 /* RespSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespSettings.swift; sourceTree = "<group>"; };
 		84124FB7229C659B008A1510 /* Ball.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
+		84176B93234D141A00E38F9C /* NinjaAttackStarter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = NinjaAttackStarter; sourceTree = "<group>"; };
+		84176B97234D179000E38F9C /* 120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 120.png; sourceTree = "<group>"; };
+		84176B9D234D1BD000E38F9C /* Kalibrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kalibrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		84176B9F234D1BD100E38F9C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		84176BA1234D1BD100E38F9C /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		84176BA3234D1BD100E38F9C /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
+		84176BA5234D1BD100E38F9C /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		84176BA7234D1BD100E38F9C /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		84176BAA234D1BD100E38F9C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		84176BAC234D1BD200E38F9C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		84176BAF234D1BD200E38F9C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		84176BB1234D1BD200E38F9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84176BB6234D1BD200E38F9C /* KalibrateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KalibrateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		84176BBA234D1BD300E38F9C /* KalibrateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KalibrateTests.swift; sourceTree = "<group>"; };
+		84176BBC234D1BD300E38F9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84176BC1234D1BD300E38F9C /* KalibrateUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KalibrateUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		84176BC5234D1BD300E38F9C /* KalibrateUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KalibrateUITests.swift; sourceTree = "<group>"; };
+		84176BC7234D1BD300E38F9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		842E25542321F96500151D44 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8436334322BF1D1800F4BC97 /* Sensory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensory.swift; sourceTree = "<group>"; };
 		846E09A422CBAF49005A1C27 /* tone185hz.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tone185hz.wav; sourceTree = "<group>"; };
@@ -99,6 +146,27 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		84176B9A234D1BD000E38F9C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84176BB3234D1BD200E38F9C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84176BBE234D1BD300E38F9C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2A5F1FD1F4A9144005CD714 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -139,6 +207,40 @@
 			path = "Program Files";
 			sourceTree = "<group>";
 		};
+		84176B9E234D1BD100E38F9C /* Kalibrate */ = {
+			isa = PBXGroup;
+			children = (
+				84176B9F234D1BD100E38F9C /* AppDelegate.swift */,
+				84176BA1234D1BD100E38F9C /* GameScene.sks */,
+				84176BA3234D1BD100E38F9C /* Actions.sks */,
+				84176BA5234D1BD100E38F9C /* GameScene.swift */,
+				84176BA7234D1BD100E38F9C /* GameViewController.swift */,
+				84176BA9234D1BD100E38F9C /* Main.storyboard */,
+				84176BAC234D1BD200E38F9C /* Assets.xcassets */,
+				84176BAE234D1BD200E38F9C /* LaunchScreen.storyboard */,
+				84176BB1234D1BD200E38F9C /* Info.plist */,
+			);
+			path = Kalibrate;
+			sourceTree = "<group>";
+		};
+		84176BB9234D1BD300E38F9C /* KalibrateTests */ = {
+			isa = PBXGroup;
+			children = (
+				84176BBA234D1BD300E38F9C /* KalibrateTests.swift */,
+				84176BBC234D1BD300E38F9C /* Info.plist */,
+			);
+			path = KalibrateTests;
+			sourceTree = "<group>";
+		};
+		84176BC4234D1BD300E38F9C /* KalibrateUITests */ = {
+			isa = PBXGroup;
+			children = (
+				84176BC5234D1BD300E38F9C /* KalibrateUITests.swift */,
+				84176BC7234D1BD300E38F9C /* Info.plist */,
+			);
+			path = KalibrateUITests;
+			sourceTree = "<group>";
+		};
 		84BD9300231323F20068E47D /* Emitters */ = {
 			isa = PBXGroup;
 			children = (
@@ -177,6 +279,9 @@
 			isa = PBXGroup;
 			children = (
 				D2A5F2021F4A9144005CD714 /* NinjaAttack */,
+				84176B9E234D1BD100E38F9C /* Kalibrate */,
+				84176BB9234D1BD300E38F9C /* KalibrateTests */,
+				84176BC4234D1BD300E38F9C /* KalibrateUITests */,
 				D2A5F2011F4A9144005CD714 /* Products */,
 				E3D0BEA2D2BB1BC6BBC2B0BF /* Pods */,
 				4A168296DBA6211982407530 /* Frameworks */,
@@ -189,6 +294,9 @@
 			isa = PBXGroup;
 			children = (
 				D2A5F2001F4A9144005CD714 /* Calibrate.app */,
+				84176B9D234D1BD000E38F9C /* Kalibrate.app */,
+				84176BB6234D1BD200E38F9C /* KalibrateTests.xctest */,
+				84176BC1234D1BD300E38F9C /* KalibrateUITests.xctest */,
 			);
 			name = Products;
 			path = NinjaAttack;
@@ -204,6 +312,8 @@
 				D2A5F20A1F4A9144005CD714 /* Assets.xcassets */,
 				5C2901821F8F6DE700803663 /* LaunchScreen.storyboard */,
 				D2A5F20F1F4A9144005CD714 /* Info.plist */,
+				84176B97234D179000E38F9C /* 120.png */,
+				84176B93234D141A00E38F9C /* NinjaAttackStarter */,
 				842E25542321F96500151D44 /* GoogleService-Info.plist */,
 				84124FB4229C6322008A1510 /* Program Files */,
 				AFD63F882036497100E08C66 /* GameScene.swift */,
@@ -224,6 +334,59 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		84176B9C234D1BD000E38F9C /* Kalibrate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84176BC8234D1BD300E38F9C /* Build configuration list for PBXNativeTarget "Kalibrate" */;
+			buildPhases = (
+				84176B99234D1BD000E38F9C /* Sources */,
+				84176B9A234D1BD000E38F9C /* Frameworks */,
+				84176B9B234D1BD000E38F9C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Kalibrate;
+			productName = Kalibrate;
+			productReference = 84176B9D234D1BD000E38F9C /* Kalibrate.app */;
+			productType = "com.apple.product-type.application";
+		};
+		84176BB5234D1BD200E38F9C /* KalibrateTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84176BCB234D1BD300E38F9C /* Build configuration list for PBXNativeTarget "KalibrateTests" */;
+			buildPhases = (
+				84176BB2234D1BD200E38F9C /* Sources */,
+				84176BB3234D1BD200E38F9C /* Frameworks */,
+				84176BB4234D1BD200E38F9C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				84176BB8234D1BD200E38F9C /* PBXTargetDependency */,
+			);
+			name = KalibrateTests;
+			productName = KalibrateTests;
+			productReference = 84176BB6234D1BD200E38F9C /* KalibrateTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		84176BC0234D1BD300E38F9C /* KalibrateUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84176BCE234D1BD300E38F9C /* Build configuration list for PBXNativeTarget "KalibrateUITests" */;
+			buildPhases = (
+				84176BBD234D1BD300E38F9C /* Sources */,
+				84176BBE234D1BD300E38F9C /* Frameworks */,
+				84176BBF234D1BD300E38F9C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				84176BC3234D1BD300E38F9C /* PBXTargetDependency */,
+			);
+			name = KalibrateUITests;
+			productName = KalibrateUITests;
+			productReference = 84176BC1234D1BD300E38F9C /* KalibrateUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		D2A5F1FF1F4A9144005CD714 /* NinjaAttack */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D2A5F2121F4A9144005CD714 /* Build configuration list for PBXNativeTarget "NinjaAttack" */;
@@ -249,10 +412,21 @@
 		D2A5F1F81F4A9143005CD714 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0900;
+				LastSwiftUpdateCheck = 1100;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Training State";
 				TargetAttributes = {
+					84176B9C234D1BD000E38F9C = {
+						CreatedOnToolsVersion = 11.0;
+					};
+					84176BB5234D1BD200E38F9C = {
+						CreatedOnToolsVersion = 11.0;
+						TestTargetID = 84176B9C234D1BD000E38F9C;
+					};
+					84176BC0234D1BD300E38F9C = {
+						CreatedOnToolsVersion = 11.0;
+						TestTargetID = 84176B9C234D1BD000E38F9C;
+					};
 					D2A5F1FF1F4A9144005CD714 = {
 						CreatedOnToolsVersion = 9.0;
 						LastSwiftMigration = 1020;
@@ -274,11 +448,40 @@
 			projectRoot = "";
 			targets = (
 				D2A5F1FF1F4A9144005CD714 /* NinjaAttack */,
+				84176B9C234D1BD000E38F9C /* Kalibrate */,
+				84176BB5234D1BD200E38F9C /* KalibrateTests */,
+				84176BC0234D1BD300E38F9C /* KalibrateUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		84176B9B234D1BD000E38F9C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84176BAB234D1BD100E38F9C /* Main.storyboard in Resources */,
+				84176BA2234D1BD100E38F9C /* GameScene.sks in Resources */,
+				84176BAD234D1BD200E38F9C /* Assets.xcassets in Resources */,
+				84176BB0234D1BD200E38F9C /* LaunchScreen.storyboard in Resources */,
+				84176BA4234D1BD100E38F9C /* Actions.sks in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84176BB4234D1BD200E38F9C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84176BBF234D1BD300E38F9C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2A5F1FE1F4A9144005CD714 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -286,6 +489,7 @@
 				AFD63F8F203649F800E08C66 /* background-music-aac.caf in Resources */,
 				D2A5F20B1F4A9144005CD714 /* Assets.xcassets in Resources */,
 				842E25552321F96500151D44 /* GoogleService-Info.plist in Resources */,
+				84176B94234D141A00E38F9C /* NinjaAttackStarter in Resources */,
 				84BD930823134D4F0068E47D /* Assets.xcassets in Resources */,
 				846E09A722CBAF49005A1C27 /* tone200hz.wav in Resources */,
 				84BD93042313243A0068E47D /* Assets.xcassets in Resources */,
@@ -295,6 +499,7 @@
 				84C1D2C122C82DFA008E5C7F /* tone140hz.wav in Resources */,
 				84C153982306116900C60973 /* input_error.wav in Resources */,
 				84C1539A2306141500C60973 /* correct_sound.wav in Resources */,
+				84176B98234D179000E38F9C /* 120.png in Resources */,
 				84C1D2BF22C82DFA008E5C7F /* tone115hz.wav in Resources */,
 				84C1D2BE22C82DFA008E5C7F /* tone90hz.wav in Resources */,
 				84C1D2C422C83186008E5C7F /* tone170hz.wav in Resources */,
@@ -370,6 +575,32 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		84176B99234D1BD000E38F9C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84176BA6234D1BD100E38F9C /* GameScene.swift in Sources */,
+				84176BA8234D1BD100E38F9C /* GameViewController.swift in Sources */,
+				84176BA0234D1BD100E38F9C /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84176BB2234D1BD200E38F9C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84176BBB234D1BD300E38F9C /* KalibrateTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84176BBD234D1BD300E38F9C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84176BC6234D1BD300E38F9C /* KalibrateUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2A5F1FC1F4A9144005CD714 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -395,7 +626,36 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		84176BB8234D1BD200E38F9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 84176B9C234D1BD000E38F9C /* Kalibrate */;
+			targetProxy = 84176BB7234D1BD200E38F9C /* PBXContainerItemProxy */;
+		};
+		84176BC3234D1BD300E38F9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 84176B9C234D1BD000E38F9C /* Kalibrate */;
+			targetProxy = 84176BC2234D1BD300E38F9C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
+		84176BA9234D1BD100E38F9C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				84176BAA234D1BD100E38F9C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		84176BAE234D1BD200E38F9C /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				84176BAF234D1BD200E38F9C /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		D2A5F2071F4A9144005CD714 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -408,6 +668,141 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		84176BC9234D1BD300E38F9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4FG9HV6926;
+				INFOPLIST_FILE = Kalibrate/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = trainingstate.Kalibrate;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		84176BCA234D1BD300E38F9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4FG9HV6926;
+				INFOPLIST_FILE = Kalibrate/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = trainingstate.Kalibrate;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		84176BCC234D1BD300E38F9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4FG9HV6926;
+				INFOPLIST_FILE = KalibrateTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = trainingstate.KalibrateTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kalibrate.app/Kalibrate";
+			};
+			name = Debug;
+		};
+		84176BCD234D1BD300E38F9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4FG9HV6926;
+				INFOPLIST_FILE = KalibrateTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = trainingstate.KalibrateTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kalibrate.app/Kalibrate";
+			};
+			name = Release;
+		};
+		84176BCF234D1BD300E38F9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4FG9HV6926;
+				INFOPLIST_FILE = KalibrateUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = trainingstate.KalibrateUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Kalibrate;
+			};
+			name = Debug;
+		};
+		84176BD0234D1BD300E38F9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4FG9HV6926;
+				INFOPLIST_FILE = KalibrateUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = trainingstate.KalibrateUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Kalibrate;
+			};
+			name = Release;
+		};
 		D2A5F2101F4A9144005CD714 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -566,6 +961,33 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		84176BC8234D1BD300E38F9C /* Build configuration list for PBXNativeTarget "Kalibrate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84176BC9234D1BD300E38F9C /* Debug */,
+				84176BCA234D1BD300E38F9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84176BCB234D1BD300E38F9C /* Build configuration list for PBXNativeTarget "KalibrateTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84176BCC234D1BD300E38F9C /* Debug */,
+				84176BCD234D1BD300E38F9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84176BCE234D1BD300E38F9C /* Build configuration list for PBXNativeTarget "KalibrateUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84176BCF234D1BD300E38F9C /* Debug */,
+				84176BD0234D1BD300E38F9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D2A5F1FB1F4A9143005CD714 /* Build configuration list for PBXProject "NinjaAttack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
