@@ -49,6 +49,7 @@ struct DataStore {
         "ballInfo": self.ballInfo
       ]
       self.records.append(record)
+      self.ballInfo = [[String:Any]]()
       self.eventMarkers = [
         "didShift": ["flag": false, "delay": -1],
         "didAttempt": ["flag": false, "success": -1]
@@ -124,6 +125,5 @@ struct DataStore {
       guard let name = ball.name else { break }
       self.ballInfo.append(["speed": ball.currentSpeed(), "id": name, "isTarget": ball.isTarget, "positionHistory": ball.positionHistory.map { ["x": $0.x, "y": $0.y] }])
     }
-    print(self.ballInfo)
   }
 }
