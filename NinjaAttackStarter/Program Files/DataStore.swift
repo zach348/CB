@@ -44,7 +44,7 @@ struct DataStore {
         "distractorTexture": Game.currentTrackSettings.distractorTexture.description,
         "eventMarkers": [
           "didShift": self.eventMarkers["didShift"],
-          "didSAttempt": self.eventMarkers["didAttempt"]
+          "didAttempt": self.eventMarkers["didAttempt"]
         ],
         "ballInfo": self.ballInfo
       ]
