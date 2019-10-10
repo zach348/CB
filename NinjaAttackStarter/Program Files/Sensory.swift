@@ -262,15 +262,15 @@ struct Sensory {
   //Breathloop haptics
     for respSettings in Game.respSettingsArr {
       //BEGIN haptic testing
-        var relativeInTimes = [0.4]
         var factor = 1.0
-        var time = 0.4
+        var relativeInTimes = [respSettings.inDuration/(factor * 23)]
+        var time = relativeInTimes.last!
+      
         while time < respSettings.inDuration - 0.01 {
-          relativeInTimes.append(time + respSettings.inDuration/(factor * 22))
+          relativeInTimes.append(time + respSettings.inDuration/(factor * 23))
           time = relativeInTimes.last!
-          factor += 0.1
+          factor += 0.13
         }
-        
         let minimumDelay = relativeInTimes.last! - relativeInTimes[relativeInTimes.count - 2]
         var relativeHoldTimes = [minimumDelay]
         time = minimumDelay
@@ -278,19 +278,13 @@ struct Sensory {
           relativeHoldTimes.append(time + minimumDelay)
           time = relativeHoldTimes.last!
         }
-        
         var relativeOutTimes = [minimumDelay]
         time = minimumDelay
         while time < respSettings.outDuration - 0.01 {
-          relativeOutTimes.append(time + respSettings.outDuration/(factor * 22))
+          relativeOutTimes.append(time + respSettings.outDuration/(factor * 23))
           time = relativeOutTimes.last!
-          factor -= 0.1
+          factor -= 0.13
         }
-        
-        print("In time", relativeInTimes)
-        print("Hold time", relativeHoldTimes)
-        print("Out time", relativeOutTimes)
-        
         let inEvents = relativeInTimes.map({ relativeTime in
           Sensory.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
         })
@@ -312,7 +306,6 @@ struct Sensory {
           print("problem with test pattern or player: \(error.localizedDescription)")
         }
       //END haptic testing
-      
       
       let incrementalOutDuration = respSettings.outDuration/10
       let incrementalInDuration = respSettings.inDuration/10
@@ -337,12 +330,10 @@ struct Sensory {
         Sensory.hapticPlayers["breathIn\(respSettings.phase)"] = try Sensory.hapticEngine?.makePlayer(with: inPattern)
         let outPattern = try CHHapticPattern(events: hapticOutEvents, parameters: [])
         Sensory.hapticPlayers["breathOut\(respSettings.phase)"] = try Sensory.hapticEngine?.makePlayer(with: outPattern)
-        
       }catch{
         print("error creating haptic pattern or player: \(error.localizedDescription)")
       }
     }
-
   }
 }
 
