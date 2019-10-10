@@ -286,15 +286,15 @@ struct Sensory {
           factor -= 0.13
         }
         let inEvents = relativeInTimes.map({ relativeTime in
-          Sensory.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
+          Sensory.createHapticEvent(isContinuous: false, intensity: 0.6, sharpness: 0.6, relativeTime: relativeTime, duration: 0)
         })
         let holdEvents = relativeHoldTimes.map({ relativeTime in
-          Sensory.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
+          Sensory.createHapticEvent(isContinuous: false, intensity: 0.6, sharpness: 0.6, relativeTime: relativeTime, duration: 0)
         })
         let outEvents = relativeOutTimes.map({ relativeTime in
-          Sensory.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
+          Sensory.createHapticEvent(isContinuous: false, intensity: 0.6, sharpness: 0.6, relativeTime: relativeTime, duration: 0)
         })
-        
+      
         do{
           let inPattern = try CHHapticPattern(events: inEvents, parameterCurves: [])
           self.hapticPlayers["testIn\(respSettings.phase)"] = try self.hapticEngine?.makePlayer(with: inPattern)
