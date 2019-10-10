@@ -257,23 +257,47 @@ struct Sensory {
   }
   
   static func prepareHaptics(){
+    //BEGIN haptic testing
+//        let inDuration = Game.currentRespSettings.inDuration
+//        var relativeTimes = [0.4]
+//        var factor = 1.0
+//        var time = 0.4
+//        while time < inDuration - 0.1 {
+//          relativeTimes.append(time + inDuration/(factor * 22))
+//          time = relativeTimes.last!
+//          factor += 0.1
+//        }
+//        
+//        let inEvents = relativeTimes.map({ relativeTime in
+//          Sensory.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
+//        })
+//        
+//        do{
+//          let pattern = try CHHapticPattern(events: inEvents, parameterCurves: [])
+//          self.hapticPlayers["test"] = try self.hapticEngine?.makePlayer(with: pattern)
+//        }catch{
+//          print("problem with test pattern or player: \(error.localizedDescription)")
+//        }
+  //END haptic testing
+    
+    
   //Breathloop haptics
     for respSettings in Game.respSettingsArr {
-      let incrementalOutDuration = respSettings.outDuration/4
-      let incrementalInDuration = respSettings.inDuration/4
+      let incrementalOutDuration = respSettings.outDuration/14
+      let incrementalInDuration = respSettings.inDuration/14
       var hapticInEvents = [CHHapticEvent]()
       var hapticOutEvents = [CHHapticEvent]()
       var startTime:Double = 0
       var revStartTime:Double = respSettings.outDuration - incrementalOutDuration
-      for i in stride(from: 0.3, to: 0.6, by: (0.6-0.3)/4) {
-        let inEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 1.5 * i, relativeTime: startTime, duration: incrementalInDuration)
-        let outEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: 1.5 * i, relativeTime: revStartTime, duration: incrementalOutDuration)
+      for i in stride(from: 0.3, to: 0.8, by: (0.8-0.3)/14) {
+        let inEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: i, relativeTime: startTime, duration: incrementalInDuration)
+        let outEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: i, relativeTime: revStartTime, duration: incrementalOutDuration)
         startTime = startTime + incrementalInDuration
         revStartTime = revStartTime - incrementalOutDuration
         hapticInEvents.append(inEvent)
         hapticOutEvents.append(outEvent)
       }
-      let holdEvent = Sensory.createHapticEvent(isContinuous: true, intensity: 0.6, sharpness: 1.5*0.6, relativeTime: 0, duration: respSettings.inWait)
+      let holdEvent = Sensory.createHapticEvent(isContinuous: true, intensity: 0.8, sharpness: 0.8, relativeTime: 0, duration: respSettings.inWait)
          
       do{
         let holdPattern = try CHHapticPattern(events: [holdEvent], parameters: [])

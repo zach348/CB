@@ -9,7 +9,7 @@ class Game {
     Settings(phase: 2, missesAllowed: 0, requiredStreak: 4,  phaseDuration: 70, pauseDelay: 16, pauseError: 4, pauseDuration: 3, frequency: 14, toneFile: "tone185hz.wav", targetMeanSpeed: 550, targetSpeedSD: 225, shiftDelay: 7, shiftError: 4, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", borderColor: UIColor.cyan, flashTexture: "sphere-red", alpha: 1),
     Settings(phase: 3, missesAllowed: 0, requiredStreak: 4, phaseDuration: 90, pauseDelay: 22, pauseError: 6, pauseDuration: 5, frequency: 10, toneFile: "tone170hz.wav", targetMeanSpeed: 450, targetSpeedSD: 150, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", borderColor: UIColor.cyan,flashTexture: "sphere-red", alpha: 1),
     Settings(phase: 4, missesAllowed: 0, requiredStreak: 4, phaseDuration: 120, pauseDelay: 30, pauseError: 6, pauseDuration: 6, frequency: 6, toneFile: "tone155hz.wav", targetMeanSpeed: 350, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
-    Settings(phase: 5, missesAllowed: 0, requiredStreak: 3, phaseDuration: 120, pauseDelay: 38, pauseError: 8, pauseDuration: 7, frequency: 3.5, toneFile: "tone140hz.wav", targetMeanSpeed: 200, targetSpeedSD: 0, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-gray", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
+    Settings(phase: 5, missesAllowed: 0, requiredStreak: 1, phaseDuration: 120, pauseDelay: 38, pauseError: 8, pauseDuration: 7, frequency: 3.5, toneFile: "tone140hz.wav", targetMeanSpeed: 200, targetSpeedSD: 0, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-gray", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
     //messing with duration for dev
     Settings(phase: 6, missesAllowed: 0, requiredStreak: 3, phaseDuration: 900, pauseDelay: 40, pauseError: 10, pauseDuration: 8, frequency: 2.5, toneFile: "tone140hz.wav", targetMeanSpeed: 175, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-gray", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
     //Final settings is a dummy phase...
@@ -31,7 +31,7 @@ class Game {
       currentGame.advanceRespFlag = true
     }
   }
-  static var currentTrackSettings:Settings = settingsArr[0] {
+  static var currentTrackSettings:Settings = settingsArr[4] {
     didSet {
       //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
       if self.currentTrackSettings.phase == 6 {

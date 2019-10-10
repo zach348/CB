@@ -95,6 +95,8 @@ class Timer {
         breathOutActions.append(SKAction.group([breathOutMMoveAction]))
       }
       
+    
+      
       let breathInHaptics = SKAction.run {
         do {
           try Sensory.hapticPlayers["breathIn\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
