@@ -100,6 +100,7 @@ class Game {
     currentGame.advanceRespFlag = false
     //Refresh Frequency
     Sensory.applyFrequency()
+
     let circleAction:SKAction = initial ? SKAction.run({ timer.circleMovementTimer(initial: true)}) : SKAction.run({ timer.circleMovementTimer(initial: false)})
     //for transition from trackphase only
     if self.initialRespTransition {
@@ -115,6 +116,8 @@ class Game {
         Sensory.flickerOffAlpha(sprite: statusBall, startingAlpha: statusBall.alpha, endingAlpha: 0)
       }
       
+      Sensory.prepareHaptics()
+      
       //bleed speed and stop master movement timer prior to calling circleMovementTimer
       let bleedSpeed = SKAction.run {
         timer.bleedSpeedTimer()
@@ -122,7 +125,6 @@ class Game {
       let wait = SKAction.wait(forDuration: 5)
       let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
       self.initialRespTransition = false
-      Sensory.prepareHaptics()
       worldTimer.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
     }else{
       print("running non initial circleaction")

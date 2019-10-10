@@ -99,21 +99,21 @@ class Timer {
       
       let breathInHaptics = SKAction.run {
         do {
-          try Sensory.hapticPlayers["breathIn\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
+          try Sensory.hapticPlayers["testIn\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
         }catch{
           print("failed to play haptic pattern: \(error.localizedDescription)")
         }
       }
       let breathInHoldHaptics = SKAction.run {
         do {
-          try Sensory.hapticPlayers["breathHold\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
+          try Sensory.hapticPlayers["testHold\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
         }catch{
           print("failed to play haptic pattern: \(error.localizedDescription)")
         }
       }
       let breathOutHaptics = SKAction.run {
         do {
-          try Sensory.hapticPlayers["breathOut\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
+          try Sensory.hapticPlayers["testOut\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
         }catch{
           print("failed to play haptic pattern: \(error.localizedDescription)")
         }

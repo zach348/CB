@@ -36,7 +36,6 @@ class StartGameScene: SKScene {
 
     //Haptics
     Sensory.createHapticEngine()
-    
     //DataStore
     
     //Testing

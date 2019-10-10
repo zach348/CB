@@ -257,39 +257,70 @@ struct Sensory {
   }
   
   static func prepareHaptics(){
-    //BEGIN haptic testing
-//        let inDuration = Game.currentRespSettings.inDuration
-//        var relativeTimes = [0.4]
-//        var factor = 1.0
-//        var time = 0.4
-//        while time < inDuration - 0.1 {
-//          relativeTimes.append(time + inDuration/(factor * 22))
-//          time = relativeTimes.last!
-//          factor += 0.1
-//        }
-//        
-//        let inEvents = relativeTimes.map({ relativeTime in
-//          Sensory.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
-//        })
-//        
-//        do{
-//          let pattern = try CHHapticPattern(events: inEvents, parameterCurves: [])
-//          self.hapticPlayers["test"] = try self.hapticEngine?.makePlayer(with: pattern)
-//        }catch{
-//          print("problem with test pattern or player: \(error.localizedDescription)")
-//        }
-  //END haptic testing
     
     
   //Breathloop haptics
     for respSettings in Game.respSettingsArr {
-      let incrementalOutDuration = respSettings.outDuration/14
-      let incrementalInDuration = respSettings.inDuration/14
+      //BEGIN haptic testing
+        var relativeInTimes = [0.4]
+        var factor = 1.0
+        var time = 0.4
+        while time < respSettings.inDuration - 0.01 {
+          relativeInTimes.append(time + respSettings.inDuration/(factor * 22))
+          time = relativeInTimes.last!
+          factor += 0.1
+        }
+        
+        let minimumDelay = relativeInTimes.last! - relativeInTimes[relativeInTimes.count - 2]
+        var relativeHoldTimes = [minimumDelay]
+        time = minimumDelay
+        while time < respSettings.inWait - 0.01 {
+          relativeHoldTimes.append(time + minimumDelay)
+          time = relativeHoldTimes.last!
+        }
+        
+        var relativeOutTimes = [minimumDelay]
+        time = minimumDelay
+        while time < respSettings.outDuration - 0.01 {
+          relativeOutTimes.append(time + respSettings.outDuration/(factor * 22))
+          time = relativeOutTimes.last!
+          factor -= 0.1
+        }
+        
+        print("In time", relativeInTimes)
+        print("Hold time", relativeHoldTimes)
+        print("Out time", relativeOutTimes)
+        
+        let inEvents = relativeInTimes.map({ relativeTime in
+          Sensory.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
+        })
+        let holdEvents = relativeHoldTimes.map({ relativeTime in
+          Sensory.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
+        })
+        let outEvents = relativeOutTimes.map({ relativeTime in
+          Sensory.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
+        })
+        
+        do{
+          let inPattern = try CHHapticPattern(events: inEvents, parameterCurves: [])
+          self.hapticPlayers["testIn\(respSettings.phase)"] = try self.hapticEngine?.makePlayer(with: inPattern)
+          let holdPattern = try CHHapticPattern(events: holdEvents, parameterCurves: [])
+          self.hapticPlayers["testHold\(respSettings.phase)"] = try self.hapticEngine?.makePlayer(with: holdPattern)
+          let outPattern = try CHHapticPattern(events: outEvents, parameterCurves: [])
+          self.hapticPlayers["testOut\(respSettings.phase)"] = try self.hapticEngine?.makePlayer(with: outPattern)
+        }catch{
+          print("problem with test pattern or player: \(error.localizedDescription)")
+        }
+      //END haptic testing
+      
+      
+      let incrementalOutDuration = respSettings.outDuration/10
+      let incrementalInDuration = respSettings.inDuration/10
       var hapticInEvents = [CHHapticEvent]()
       var hapticOutEvents = [CHHapticEvent]()
       var startTime:Double = 0
       var revStartTime:Double = respSettings.outDuration - incrementalOutDuration
-      for i in stride(from: 0.3, to: 0.8, by: (0.8-0.3)/14) {
+      for i in stride(from: 0.3, to: 0.8, by: (0.8-0.3)/10) {
         let inEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: i, relativeTime: startTime, duration: incrementalInDuration)
         let outEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: i, relativeTime: revStartTime, duration: incrementalOutDuration)
         startTime = startTime + incrementalInDuration
