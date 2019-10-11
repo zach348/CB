@@ -261,52 +261,60 @@ struct Sensory {
     
   //Breathloop haptics
     for respSettings in Game.respSettingsArr {
-      //BEGIN haptic testing
-        var factor = 1.0
-        var relativeInTimes = [respSettings.inDuration/(factor * 23)]
-        var time = relativeInTimes.last!
-      
-        while time < respSettings.inDuration - 0.01 {
-          relativeInTimes.append(time + respSettings.inDuration/(factor * 23))
-          time = relativeInTimes.last!
-          factor += 0.13
-        }
-        let minimumDelay = relativeInTimes.last! - relativeInTimes[relativeInTimes.count - 2]
-        var relativeHoldTimes = [minimumDelay]
-        time = minimumDelay
-        while time < respSettings.inWait - 0.01 {
-          relativeHoldTimes.append(time + minimumDelay)
-          time = relativeHoldTimes.last!
-        }
-        var relativeOutTimes = [minimumDelay]
-        time = minimumDelay
-        while time < respSettings.outDuration - 0.01 {
-          relativeOutTimes.append(time + respSettings.outDuration/(factor * 23))
-          time = relativeOutTimes.last!
-          factor -= 0.13
-        }
-        let inEvents = relativeInTimes.map({ relativeTime in
-          Sensory.createHapticEvent(isContinuous: false, intensity: 0.6, sharpness: 0.6, relativeTime: relativeTime, duration: 0)
-        })
-        let holdEvents = relativeHoldTimes.map({ relativeTime in
-          Sensory.createHapticEvent(isContinuous: false, intensity: 0.6, sharpness: 0.6, relativeTime: relativeTime, duration: 0)
-        })
-        let outEvents = relativeOutTimes.map({ relativeTime in
-          Sensory.createHapticEvent(isContinuous: false, intensity: 0.6, sharpness: 0.6, relativeTime: relativeTime, duration: 0)
-        })
-      
-        do{
-          let inPattern = try CHHapticPattern(events: inEvents, parameterCurves: [])
-          self.hapticPlayers["testIn\(respSettings.phase)"] = try self.hapticEngine?.makePlayer(with: inPattern)
-          let holdPattern = try CHHapticPattern(events: holdEvents, parameterCurves: [])
-          self.hapticPlayers["testHold\(respSettings.phase)"] = try self.hapticEngine?.makePlayer(with: holdPattern)
-          let outPattern = try CHHapticPattern(events: outEvents, parameterCurves: [])
-          self.hapticPlayers["testOut\(respSettings.phase)"] = try self.hapticEngine?.makePlayer(with: outPattern)
-        }catch{
-          print("problem with test pattern or player: \(error.localizedDescription)")
-        }
-      //END haptic testing
-      
+    //BEGIN haptic testing
+      var factor = 1.0
+      var relativeInTimes = [respSettings.inDuration/(factor * 23)]
+      var time = relativeInTimes.last!
+    
+      while time < respSettings.inDuration - 0.01 {
+        relativeInTimes.append(time + respSettings.inDuration/(factor * 23))
+        time = relativeInTimes.last!
+        factor += 0.13
+      }
+      let minimumDelay = relativeInTimes.last! - relativeInTimes[relativeInTimes.count - 2]
+      var relativeHoldTimes = [minimumDelay]
+      time = minimumDelay
+      while time < respSettings.inWait - 0.01 {
+        relativeHoldTimes.append(time + minimumDelay)
+        time = relativeHoldTimes.last!
+      }
+      var relativeOutTimes = [minimumDelay]
+      time = minimumDelay
+      while time < respSettings.outDuration - 0.01 {
+        relativeOutTimes.append(time + respSettings.outDuration/(factor * 23))
+        time = relativeOutTimes.last!
+        factor -= 0.13
+      }
+      var inEvents = [CHHapticEvent]()
+      var increment = (0.8-0.35)/Double(relativeInTimes.count)
+      var paramVal = 0.35
+      relativeInTimes.forEach({ relativeTime in
+        inEvents.append(Sensory.createHapticEvent(isContinuous: false, intensity: paramVal, sharpness: paramVal, relativeTime: relativeTime, duration: 0))
+        paramVal += increment
+      })
+      let holdEvents = relativeHoldTimes.map({ relativeTime in
+        Sensory.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
+      })
+      increment = (0.8-0.35)/Double(relativeOutTimes.count)
+      paramVal = 0.8
+      var outEvents = [CHHapticEvent]()
+      relativeOutTimes.forEach({ relativeTime in
+        outEvents.append(Sensory.createHapticEvent(isContinuous: false, intensity: paramVal, sharpness: paramVal, relativeTime: relativeTime, duration: 0))
+        paramVal -= increment
+      })
+    
+      do{
+        let inPattern = try CHHapticPattern(events: inEvents, parameterCurves: [])
+        self.hapticPlayers["testIn\(respSettings.phase)"] = try self.hapticEngine?.makePlayer(with: inPattern)
+        let holdPattern = try CHHapticPattern(events: holdEvents, parameterCurves: [])
+        self.hapticPlayers["testHold\(respSettings.phase)"] = try self.hapticEngine?.makePlayer(with: holdPattern)
+        let outPattern = try CHHapticPattern(events: outEvents, parameterCurves: [])
+        self.hapticPlayers["testOut\(respSettings.phase)"] = try self.hapticEngine?.makePlayer(with: outPattern)
+      }catch{
+        print("problem with test pattern or player: \(error.localizedDescription)")
+      }
+    //END haptic testing
+    
       let incrementalOutDuration = respSettings.outDuration/10
       let incrementalInDuration = respSettings.inDuration/10
       var hapticInEvents = [CHHapticEvent]()
