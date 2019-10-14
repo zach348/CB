@@ -14,6 +14,15 @@ struct Sensory {
     "blip": SKAudioNode(fileNamed: "radar_blip")
   ]
   
+  static var freqToneActions: [String: SKAction] = [
+    "freq1": SKAction.playSoundFileNamed("tone200hz", waitForCompletion: true),
+    "freq2": SKAction.playSoundFileNamed("tone185hz", waitForCompletion: true),
+    "freq3": SKAction.playSoundFileNamed("tone170hz", waitForCompletion: true),
+    "freq4": SKAction.playSoundFileNamed("tone155hz", waitForCompletion: true),
+    "freq5": SKAction.playSoundFileNamed("tone140hz", waitForCompletion: true)
+  ]
+  
+  
   static var hapticEngine: CHHapticEngine?
   
   static var hapticPlayers: [String: CHHapticPatternPlayer] = [String: CHHapticPatternPlayer]()
@@ -204,7 +213,6 @@ struct Sensory {
   static func applyFrequency() {
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
-    let tone = Game.currentTrackSettings.toneFile
     let event = self.createHapticEvent(intensity: 0.5, sharpness: 1, relativeTime: 0, duration: 0)
 
      do{
@@ -214,7 +222,7 @@ struct Sensory {
       print("Problem creating haptic pattern or player: \(error.localizedDescription)")
      }
     if let gameScene = currentGame.gameScene {
-      let tone = SKAction.playSoundFileNamed(tone, waitForCompletion: true)
+      let tone = self.freqToneActions["freq\(Game.currentTrackSettings.phase)"]!
       let haptic = SKAction.run {
         do {
           try Sensory.hapticPlayers["frequency"]?.start(atTime: 0)
