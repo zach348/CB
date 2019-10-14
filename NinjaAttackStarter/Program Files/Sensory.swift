@@ -19,7 +19,8 @@ struct Sensory {
     "freq2": SKAction.playSoundFileNamed("tone185hz", waitForCompletion: true),
     "freq3": SKAction.playSoundFileNamed("tone170hz", waitForCompletion: true),
     "freq4": SKAction.playSoundFileNamed("tone155hz", waitForCompletion: true),
-    "freq5": SKAction.playSoundFileNamed("tone140hz", waitForCompletion: true)
+    "freq5": SKAction.playSoundFileNamed("tone140hz", waitForCompletion: true),
+    "freq6": SKAction.playSoundFileNamed("tone140hz", waitForCompletion: true)
   ]
   
   
