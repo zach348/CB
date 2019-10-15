@@ -224,9 +224,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D2A5F1FF1F4A9144005CD714 /* NinjaAttack */ = {
+		D2A5F1FF1F4A9144005CD714 /* Kalibr8 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D2A5F2121F4A9144005CD714 /* Build configuration list for PBXNativeTarget "NinjaAttack" */;
+			buildConfigurationList = D2A5F2121F4A9144005CD714 /* Build configuration list for PBXNativeTarget "Kalibr8" */;
 			buildPhases = (
 				8BEBCD5E9AC838B98EBAED0A /* [CP] Check Pods Manifest.lock */,
 				D2A5F1FC1F4A9144005CD714 /* Sources */,
@@ -238,7 +238,7 @@
 			);
 			dependencies = (
 			);
-			name = NinjaAttack;
+			name = Kalibr8;
 			productName = MyRWTutorial;
 			productReference = D2A5F2001F4A9144005CD714 /* Kalibr8.app */;
 			productType = "com.apple.product-type.application";
@@ -273,7 +273,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D2A5F1FF1F4A9144005CD714 /* NinjaAttack */,
+				D2A5F1FF1F4A9144005CD714 /* Kalibr8 */,
 			);
 		};
 /* End PBXProject section */
@@ -579,7 +579,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D2A5F2121F4A9144005CD714 /* Build configuration list for PBXNativeTarget "NinjaAttack" */ = {
+		D2A5F2121F4A9144005CD714 /* Build configuration list for PBXNativeTarget "Kalibr8" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D2A5F2131F4A9144005CD714 /* Debug */,

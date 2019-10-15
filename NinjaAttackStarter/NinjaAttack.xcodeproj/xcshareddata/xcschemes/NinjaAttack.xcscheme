@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D2A5F1FF1F4A9144005CD714"
                BuildableName = "Kalibr8.app"
-               BlueprintName = "NinjaAttack"
+               BlueprintName = "Kalibr8"
                ReferencedContainer = "container:NinjaAttack.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,7 +46,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D2A5F1FF1F4A9144005CD714"
             BuildableName = "Kalibr8.app"
-            BlueprintName = "NinjaAttack"
+            BlueprintName = "Kalibr8"
             ReferencedContainer = "container:NinjaAttack.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D2A5F1FF1F4A9144005CD714"
             BuildableName = "Kalibr8.app"
-            BlueprintName = "NinjaAttack"
+            BlueprintName = "Kalibr8"
             ReferencedContainer = "container:NinjaAttack.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
