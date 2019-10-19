@@ -5,20 +5,20 @@ import SpriteKit
 class Game {
   
   static var settingsArr:[Settings] = [
-    Settings(phase: 1, missesAllowed: 0, requiredStreak: 5, phaseDuration: 50, pauseDelay: 10, pauseError: 2, pauseDuration: 2, frequency: 18, toneFile: "tone200hz.wav", targetMeanSpeed: 600, targetSpeedSD: 325, shiftDelay: 4, shiftError: 2, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", borderColor: UIColor.cyan, flashTexture: "sphere-red", alpha: 1),
-    Settings(phase: 2, missesAllowed: 0, requiredStreak: 5,  phaseDuration: 70, pauseDelay: 15, pauseError: 4, pauseDuration: 3, frequency: 14, toneFile: "tone185hz.wav", targetMeanSpeed: 550, targetSpeedSD: 275, shiftDelay: 7, shiftError: 4, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", borderColor: UIColor.cyan, flashTexture: "sphere-red", alpha: 1),
-    Settings(phase: 3, missesAllowed: 0, requiredStreak: 5, phaseDuration: 90, pauseDelay: 22, pauseError: 6, pauseDuration: 5, frequency: 10, toneFile: "tone170hz.wav", targetMeanSpeed: 500, targetSpeedSD: 175, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", borderColor: UIColor.cyan,flashTexture: "sphere-red", alpha: 1),
-    Settings(phase: 4, missesAllowed: 0, requiredStreak: 4, phaseDuration: 120, pauseDelay: 30, pauseError: 6, pauseDuration: 6, frequency: 6, toneFile: "tone155hz.wav", targetMeanSpeed: 375, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
-    Settings(phase: 5, missesAllowed: 0, requiredStreak: 1, phaseDuration: 120, pauseDelay: 35, pauseError: 8, pauseDuration: 7, frequency: 3.5, toneFile: "tone140hz.wav", targetMeanSpeed: 200, targetSpeedSD: 0, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-gray", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
+    Settings(phase: 1, missesAllowed: 0, requiredStreak: 3, phaseDuration: 50, pauseDelay: 10, pauseError: 2, pauseDuration: 2.5, frequency: 18, toneFile: "tone200hz.wav", targetMeanSpeed: 600, targetSpeedSD: 300, shiftDelay: 4, shiftError: 2, numTargets: 1, targetTexture: "sphere-darkGray", distractorTexture: "sphere-darkGray", borderColor: UIColor.cyan, flashTexture: "sphere-red", alpha: 1),
+    Settings(phase: 2, missesAllowed: 0, requiredStreak: 3,  phaseDuration: 70, pauseDelay: 14, pauseError: 4, pauseDuration: 4, frequency: 14, toneFile: "tone185hz.wav", targetMeanSpeed: 500, targetSpeedSD: 225, shiftDelay: 7, shiftError: 4, numTargets: 2, targetTexture: "sphere-blue1", distractorTexture: "sphere-blue2", borderColor: UIColor.cyan, flashTexture: "sphere-red", alpha: 1),
+    Settings(phase: 3, missesAllowed: 0, requiredStreak: 3, phaseDuration: 90, pauseDelay: 18, pauseError: 4, pauseDuration: 5, frequency: 10, toneFile: "tone170hz.wav", targetMeanSpeed: 400, targetSpeedSD: 150, shiftDelay: 10, shiftError: 6, numTargets: 3, targetTexture: "sphere-purple", distractorTexture: "sphere-magenta", borderColor: UIColor.cyan,flashTexture: "sphere-red", alpha: 1),
+    Settings(phase: 4, missesAllowed: 0, requiredStreak: 3, phaseDuration: 120, pauseDelay: 21, pauseError: 5, pauseDuration: 6, frequency: 8, toneFile: "tone155hz.wav", targetMeanSpeed: 300, targetSpeedSD: 75, shiftDelay: 25, shiftError: 8, numTargets: 4, targetTexture: "sphere-darkTurquoise", distractorTexture: "sphere-green", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
+    Settings(phase: 5, missesAllowed: 0, requiredStreak: 3, phaseDuration: 120, pauseDelay: 24, pauseError: 6, pauseDuration: 8, frequency: 5, toneFile: "tone140hz.wav", targetMeanSpeed: 200, targetSpeedSD: 0, shiftDelay: 40, shiftError: 10, numTargets: 5, targetTexture: "sphere-orange", distractorTexture: "sphere-gray", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
     //messing with duration for dev
-    Settings(phase: 6, missesAllowed: 0, requiredStreak: 3, phaseDuration: 900, pauseDelay: 40, pauseError: 10, pauseDuration: 8, frequency: 2.5, toneFile: "tone140hz.wav", targetMeanSpeed: 175, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-gray", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
+    Settings(phase: 6, missesAllowed: 0, requiredStreak: 3, phaseDuration: 900, pauseDelay: 40, pauseError: 10, pauseDuration: 8, frequency: 4.5, toneFile: "tone140hz.wav", targetMeanSpeed: 175, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange", distractorTexture: "sphere-gray", borderColor: UIColor.cyan, flashTexture: "sphere-white", alpha: 1),
     //Final settings is a dummy phase...
     Settings(phase: 7, missesAllowed: 0, requiredStreak: 2, phaseDuration: 900, pauseDelay: 40, pauseError: 10, pauseDuration: 8, frequency: 2.5, toneFile: "tone140hz.wav", targetMeanSpeed: 0, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange-1", distractorTexture: "sphere-black", borderColor: UIColor.cyan, flashTexture: "sphere-orange", alpha: 1)
   ]
   static var respSettingsArr:[RespSettings] = [
-    RespSettings(phase: 7, phaseDuration: 60, frequency: 2.5, inDuration: 4.5, inWait: 2, outDuration: 7, outWait: 3, moveToCenterDuration: 8.5, moveCenterWait: 2),
-    RespSettings(phase: 8, phaseDuration: 90, frequency: 1.5, inDuration: 6, inWait: 3, outDuration: 10, outWait: 4.5, moveToCenterDuration: 8.5, moveCenterWait: 2),
-    RespSettings(phase: 9, phaseDuration: 999, frequency: 1.5, inDuration: 7.5, inWait: 4, outDuration: 12, outWait: 6, moveToCenterDuration: 10, moveCenterWait: 2)
+    RespSettings(phase: 7, phaseDuration: 60, frequency: 4, inDuration: 4, inWait: 2, outDuration: 8, outWait: 3, moveToCenterDuration: 8.5, moveCenterWait: 2),
+    RespSettings(phase: 8, phaseDuration: 120, frequency: 3.5, inDuration: 5, inWait: 3, outDuration: 10, outWait: 4.5, moveToCenterDuration: 8.5, moveCenterWait: 2),
+    RespSettings(phase: 9, phaseDuration: 999, frequency: 3, inDuration: 6, inWait: 4, outDuration: 12, outWait: 6, moveToCenterDuration: 10, moveCenterWait: 2)
   ]
   static var willSaveGame:Bool = false
   static var didSaveGame:Bool = false
@@ -31,7 +31,7 @@ class Game {
       currentGame.advanceRespFlag = true
     }
   }
-  static var currentTrackSettings:Settings = settingsArr[4] {
+  static var currentTrackSettings:Settings = settingsArr[0] {
     didSet {
       //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
       if self.currentTrackSettings.phase == 6 {
@@ -58,7 +58,7 @@ class Game {
         guard let respIndex = self.respSettingsArr.firstIndex(where: { respSetting in respSetting.phase == self.currentRespSettings.phase + 1 }) else { return }
         self.currentRespSettings = self.respSettingsArr[respIndex]
         timer.lastPhaseShiftTime = timer.elapsedTime
-        if Game.currentRespSettings.phase == 9 { Sensory.fadeScreen() }
+        if Game.currentRespSettings.phase == 8 { Sensory.fadeScreen() }
         print("Advanced resp phase")
       }
     
@@ -100,6 +100,7 @@ class Game {
     currentGame.advanceRespFlag = false
     //Refresh Frequency
     Sensory.applyFrequency()
+
     let circleAction:SKAction = initial ? SKAction.run({ timer.circleMovementTimer(initial: true)}) : SKAction.run({ timer.circleMovementTimer(initial: false)})
     //for transition from trackphase only
     if self.initialRespTransition {
@@ -115,6 +116,8 @@ class Game {
         Sensory.flickerOffAlpha(sprite: statusBall, startingAlpha: statusBall.alpha, endingAlpha: 0)
       }
       
+      Sensory.prepareHaptics()
+      
       //bleed speed and stop master movement timer prior to calling circleMovementTimer
       let bleedSpeed = SKAction.run {
         timer.bleedSpeedTimer()
@@ -122,7 +125,6 @@ class Game {
       let wait = SKAction.wait(forDuration: 5)
       let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
       self.initialRespTransition = false
-      Sensory.prepareHaptics()
       worldTimer.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
     }else{
       print("running non initial circleaction")
@@ -220,7 +222,7 @@ class Game {
       self.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
       
       //stimuli
-      Ball.createBalls(num: 12, game: self)
+      self.gameScene!.view!.frame.width < 670 ? Ball.createBalls(num: 10, game: self) : Ball.createBalls(num: 12, game: self)
       Tile.createTiles()
       self.addMemberstoScene(collections: [Ball.members, Tile.members])
     }
@@ -232,9 +234,6 @@ class Game {
       Ball.startMovement()
       self.timer?.startTimerActions()
       Sensory.applyFrequency()
-      
-      
-      //testing
     }
   }
   

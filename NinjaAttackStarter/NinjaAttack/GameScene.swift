@@ -26,6 +26,7 @@ class GameScene: SKScene {
       if timer.elapsedTime - timer.lastPhaseShiftTime > 60 {
         DataStore.saveGame()
         Game.didSaveGame = true
+        print("save command executed")
       }
     }
   }

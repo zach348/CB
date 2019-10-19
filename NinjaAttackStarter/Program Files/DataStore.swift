@@ -14,7 +14,7 @@ struct DataStore {
     "didShift": ["flag": false, "delay": -1],
     "didAttempt": ["flag": false, "success": -1, "streakLength": -1]
   ]
-  static var ballInfo:[String:Any] = ["speed": -1, "id": -1, "isTarget": -1, "positionHistory": -1]
+  static var ballInfo:[[String:Any]] = [[String:Any]]()
   
   static func addRecord(){
     if let timer = currentGame.timer, let scene = currentGame.gameScene {
@@ -44,11 +44,12 @@ struct DataStore {
         "distractorTexture": Game.currentTrackSettings.distractorTexture.description,
         "eventMarkers": [
           "didShift": self.eventMarkers["didShift"],
-          "didSAttempt": self.eventMarkers["didAttempt"]
+          "didAttempt": self.eventMarkers["didAttempt"]
         ],
         "ballInfo": self.ballInfo
       ]
       self.records.append(record)
+      self.ballInfo = [[String:Any]]()
       self.eventMarkers = [
         "didShift": ["flag": false, "delay": -1],
         "didAttempt": ["flag": false, "success": -1]
@@ -115,13 +116,14 @@ struct DataStore {
       }
     }
   }
+
   
   private
   
   static func updateBallStats(){
     for ball in Ball.members{
       guard let name = ball.name else { break }
-      self.ballInfo = ["speed": ball.currentSpeed(), "id": name, "isTarget": ball.isTarget, "positionHistory": ball.positionHistory.map { ["x": $0.x, "y": $0.y] }]
+      self.ballInfo.append(["speed": ball.currentSpeed(), "id": name, "isTarget": ball.isTarget, "positionHistory": ball.positionHistory.map { ["x": $0.x, "y": $0.y] }])
     }
   }
 }

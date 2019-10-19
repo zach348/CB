@@ -30,10 +30,15 @@ class StartGameScene: SKScene {
     self.saveGameButton.position = CGPoint(x: self.frame.width/2, y: self.frame.height/3)
     self.saveGameButton.zPosition = 1
     self.saveGameButton.name = "saveButton"
-    self.addChild(self.saveGameButton)
     
-    //Haptic testing
+    //commented out for testflight
+//    self.addChild(self.saveGameButton)
+
+    //Haptics
     Sensory.createHapticEngine()
+    //DataStore
+    
+    //Testing
   }
   
 
