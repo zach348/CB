@@ -28,6 +28,7 @@ class Timer {
   }
   var lastPhaseShiftTime:Double = 0
   var remainingInPhase:Double
+  var breathLabel:SKLabelNode = SKLabelNode(text: "")
   init(){
     self.members = []
     self.lastPhaseShiftTime = 0
@@ -97,21 +98,24 @@ class Timer {
       
     
       
-      let breathInHaptics = SKAction.run {
+      let breathInBlock = SKAction.run {
+        self.breathLabel.text = "Inhale"
         do {
           try Sensory.hapticPlayers["testIn\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
         }catch{
           print("failed to play haptic pattern: \(error.localizedDescription)")
         }
       }
-      let breathInHoldHaptics = SKAction.run {
+      let breathInHoldBlock = SKAction.run {
+        self.breathLabel.text = "Hold"
         do {
           try Sensory.hapticPlayers["testHold\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
         }catch{
           print("failed to play haptic pattern: \(error.localizedDescription)")
         }
       }
-      let breathOutHaptics = SKAction.run {
+      let breathOutBlock = SKAction.run {
+        self.breathLabel.text = "Exhale"
         do {
           try Sensory.hapticPlayers["testOut\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
         }catch{
@@ -119,13 +123,18 @@ class Timer {
         }
       }
       
+      let breathOutHoldBlock = SKAction.run{
+        self.breathLabel.text = "Hold"
+      }
+      
       let breathOutSequence = SKAction.sequence(breathOutActions)
-      let breathOutGroup = SKAction.group([breathOutSequence,breathOutHaptics])
+      let breathOutGroup = SKAction.group([breathOutSequence,breathOutBlock])
       let breathInSequence = SKAction.sequence(breathInActions)
-      let breathInGroup = SKAction.group([breathInSequence,breathInHaptics])
+      let breathInGroup = SKAction.group([breathInSequence,breathInBlock])
       let breathInWait = SKAction.wait(forDuration: Game.currentRespSettings.inWait)
-      let breathInWaitGroup = SKAction.group([breathInWait,breathInHoldHaptics])
+      let breathInWaitGroup = SKAction.group([breathInWait,breathInHoldBlock])
       let breathOutWait = SKAction.wait(forDuration: Game.currentRespSettings.outWait)
+      let breathOutWaitGroup = SKAction.group([breathOutWait,breathOutHoldBlock])
       let checkForPhaseAdv = SKAction.run {
         if currentGame.advanceRespFlag {
           self.stopTimer(timerID: "breathLoop")
@@ -142,7 +151,7 @@ class Timer {
       let moveToCenter = SKAction.move(to: trajectory.first!, duration: Game.currentRespSettings.moveToCenterDuration)
       let moveToCenterWait = SKAction.wait(forDuration: Game.currentRespSettings.moveCenterWait)
       let centerSequence = SKAction.sequence([moveToCenter,moveToCenterWait])
-      let finalSequence = SKAction.repeatForever(SKAction.sequence([breathInGroup,breathInWaitGroup,breathOutGroup,breathOutWait,checkForPhaseAdv]))
+      let finalSequence = SKAction.repeatForever(SKAction.sequence([breathInGroup,breathInWaitGroup,breathOutGroup,breathOutWaitGroup,checkForPhaseAdv]))
       self.members.append("breathLoop")
       
       if initial {

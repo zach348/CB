@@ -27,7 +27,6 @@ class Game {
   ///STARTING POINTS
   static var currentRespSettings:RespSettings = respSettingsArr[0] {
     didSet {
-      guard let timer = currentGame.timer, let worldTimer = currentGame.worldTimer else { return }
       currentGame.advanceRespFlag = true
     }
   }
@@ -116,6 +115,14 @@ class Game {
         Sensory.flickerOffAlpha(sprite: statusBall, startingAlpha: statusBall.alpha, endingAlpha: 0)
       }
       
+      //Prep
+      timer.breathLabel.fontColor = SKColor.black
+      timer.breathLabel.fontSize = 30
+      timer.breathLabel.fontName = "AvenirNext-Bold"
+      timer.breathLabel.position.x = currentGame.gameScene!.size.width / 2
+      timer.breathLabel.position.y = currentGame.gameScene!.size.height / 2
+      timer.breathLabel.zPosition = -0.50
+      if let gameScene = currentGame.gameScene { gameScene.addChild(timer.breathLabel)}
       Sensory.prepareHaptics()
       
       //bleed speed and stop master movement timer prior to calling circleMovementTimer
