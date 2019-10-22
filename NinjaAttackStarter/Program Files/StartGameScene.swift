@@ -10,7 +10,7 @@ class StartGameScene: SKScene {
   
   override func didMove(to view: SKView) {
     background.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
-    background.size = self.frame.size
+    background.size = CGSize(width: self.frame.width/2, height: self.frame.height/2)
     addChild(background)
     
     backgroundColor = SKColor.white
