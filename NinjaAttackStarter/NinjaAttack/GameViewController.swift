@@ -21,6 +21,7 @@ class GameViewController: UIViewController {
     skView.presentScene(startScene)
   }
   
+  
   override func viewWillDisappear(_ animated: Bool) {
       UIApplication.shared.isIdleTimerDisabled = false
   }

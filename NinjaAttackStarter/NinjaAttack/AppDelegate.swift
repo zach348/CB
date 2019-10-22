@@ -13,5 +13,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     FirebaseApp.configure()
     return true
   }
+  
+  func applicationWillEnterForeground(_ application: UIApplication) {
+    if currentGame.isRunning{
+      Sensory.createHapticEngine()
+      Sensory.prepareHaptics()
+      Sensory.applyFrequency()
+    }
+  }
+    
 }
 

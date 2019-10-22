@@ -133,7 +133,7 @@ class Game {
   }
   
   
-  
+  var isRunning:Bool = false
   var gameScene:GameScene?
   var timer:Timer?
   var worldTimer:SKNode?
@@ -234,6 +234,7 @@ class Game {
       Ball.startMovement()
       self.timer?.startTimerActions()
       Sensory.applyFrequency()
+      self.isRunning = true
     }
   }
   

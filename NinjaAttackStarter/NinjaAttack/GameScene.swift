@@ -19,7 +19,7 @@ class GameScene: SKScene {
     currentGame.setupGame()
     currentGame.startGame()
   }
-  
+    
   override func update(_ currentTime: TimeInterval) {
     if (Game.willSaveGame && !Game.didSaveGame && Game.respActive){
       guard let timer = currentGame.timer else {return}
