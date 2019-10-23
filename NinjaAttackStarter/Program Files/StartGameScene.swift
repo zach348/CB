@@ -2,10 +2,29 @@
 
 import Foundation
 import SpriteKit
+import UIKit
+
+enum DiffSetting {
+  case Easy
+  case Normal
+  case Hard
+}
 
 class StartGameScene: SKScene {
   var startButton: Button! = nil
   var saveGameButton: Button! = nil
+  var difficultyButton: Button! = nil
+  var diffSetting = DiffSetting.Normal {
+    didSet{
+      switch self.diffSetting {
+        case .Normal: Game.settingsArr = Settings.normalSettings
+        case .Hard: Game.settingsArr = Settings.hardSettings
+        case .Easy: Game.settingsArr = Settings.easySettings
+      }
+    }
+  }
+  
+  
   var background = SKSpriteNode(imageNamed: "sphere-gray")
   
   override func didMove(to view: SKView) {
@@ -16,23 +35,41 @@ class StartGameScene: SKScene {
     backgroundColor = SKColor.white
     let buttonTexture:SKTexture! = SKTexture(imageNamed: "buttonUnselected.png")
     let buttonTextureSelected:SKTexture! = SKTexture(imageNamed: "buttonSelected.png")
+    
     self.startButton = Button(normalTexture: buttonTexture, selectedTexture: buttonTextureSelected, disabledTexture: buttonTexture)
     self.startButton.setButtonAction(target: self, triggerEvent: .TouchUpInside, action: #selector(StartGameScene.startGame))
     self.startButton.setButtonLabel(title: "Start Game", font: "Arial", fontSize: 20)
-    self.startButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+    self.startButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY + 50)
     self.startButton.zPosition = 1
     self.startButton.name = "button"
     self.addChild(self.startButton)
+    print(self.startButton.size.width, self.startButton.size.height)
+    
+    
+    self.difficultyButton = Button(normalTexture: buttonTexture, selectedTexture: buttonTextureSelected, disabledTexture: buttonTexture, toggleButton: false)
+    self.difficultyButton.setButtonAction(target: self, triggerEvent: .TouchDown, action: #selector(StartGameScene.changeDifficulty))
+    self.difficultyButton.setButtonLabel(title: "\(self.diffSetting)" as NSString, font: "Arial", fontSize: 20)
+    self.difficultyButton.size = CGSize(width: 250, height: 30)
+    self.difficultyButton.position = CGPoint(x: self.frame.width/2, y: self.frame.midY)
+    self.difficultyButton.zPosition = 1
+    self.difficultyButton.name = "diffBtn"
+    
+    self.addChild(self.difficultyButton)
+    
+    //commented out for testflight
+    
+    
     
     self.saveGameButton = Button(normalTexture: buttonTexture, selectedTexture: buttonTextureSelected, disabledTexture: buttonTexture, toggleButton: true)
     self.saveGameButton.setButtonAction(target: self, triggerEvent: .TouchDown, action: #selector(StartGameScene.toggleSaveGame))
     self.saveGameButton.setButtonLabel(title: "Save Game", font: "Arial", fontSize: 20)
-    self.saveGameButton.position = CGPoint(x: self.frame.width/2, y: self.frame.height/3)
+    self.saveGameButton.size = CGSize(width: 250, height: 30)
+    self.saveGameButton.position = CGPoint(x: self.frame.width/2, y: self.frame.midY - 40)
     self.saveGameButton.zPosition = 1
     self.saveGameButton.name = "saveButton"
     
     //commented out for testflight
-//    self.addChild(self.saveGameButton)
+    self.addChild(self.saveGameButton)
 
     //Haptics
     Sensory.createHapticEngine()
@@ -53,6 +90,15 @@ class StartGameScene: SKScene {
         self.view?.presentScene(scene, transition:reveal)
       }
       ]))
+  }
+  
+  @objc func changeDifficulty(){
+    switch self.diffSetting {
+      case .Normal: self.diffSetting = .Hard
+      case .Hard: self.diffSetting = .Easy
+      case .Easy: self.diffSetting = .Normal
+    }
+    self.difficultyButton.setButtonLabel(title: "\(self.diffSetting)" as NSString, font: "Arial", fontSize: 20)
   }
   
   @objc func toggleSaveGame(){

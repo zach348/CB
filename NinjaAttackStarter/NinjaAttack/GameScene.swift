@@ -14,7 +14,6 @@ let currentGame:Game = Game()
 class GameScene: SKScene {
   
   override func didMove(to view: SKView) {
-    
     currentGame.gameScene = self
     currentGame.setupGame()
     currentGame.startGame()

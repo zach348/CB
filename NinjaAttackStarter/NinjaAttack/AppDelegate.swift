@@ -16,8 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   
   func applicationWillEnterForeground(_ application: UIApplication) {
     if currentGame.isRunning{
-      Sensory.createHapticEngine()
-      Sensory.prepareHaptics()
+      do {
+        try Sensory.hapticEngine?.start()
+      }catch{
+        print(error.localizedDescription)
+      }
       Sensory.applyFrequency()
     }
   }
