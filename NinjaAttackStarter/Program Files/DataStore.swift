@@ -12,7 +12,7 @@ struct DataStore {
   static var records = [[String:Any]]()
   static var eventMarkers:[String:Any] = [
     "didShift": ["flag": false, "delay": -1],
-    "didAttempt": ["flag": false, "success": -1, "streakLength": -1]
+    "didAttempt": ["flag": false, "success": -1, "stagePoints": -1]
   ]
   static var ballInfo:[[String:Any]] = [[String:Any]]()
   
@@ -28,7 +28,7 @@ struct DataStore {
         "speedSD": Ball.standardDev(),
         "phase": Game.currentTrackSettings.phase,
         "requiredStreak": Game.currentTrackSettings.requiredStreak,
-        "streakLength": currentGame.streakLength,
+        "stagePoints": currentGame.stagePoints,
         "pauseDelay": Game.currentTrackSettings.pauseDelay,
         "pauseError": Game.currentTrackSettings.pauseError,
         "pauseDuration": Game.currentTrackSettings.pauseDuration,

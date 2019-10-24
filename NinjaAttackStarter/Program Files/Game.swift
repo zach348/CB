@@ -58,8 +58,7 @@ class Game {
   
   class func transitionTrackPhase(timer:Timer){
     currentGame.streakAchieved = false
-    currentGame.successHistory = [Bool]()
-    currentGame.streakLength = 0
+    currentGame.stagePoints = 0
     currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
     
     for (_, node) in Sensory.audioNodes {
@@ -143,36 +142,37 @@ class Game {
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
   var advanceRespFlag:Bool = false
-  var successHistory = [Bool]() {
-    didSet {
-      if successHistory.count >= Game.currentTrackSettings.requiredStreak {
-        if !successHistory.dropFirst(successHistory.count - Game.currentTrackSettings.requiredStreak).contains(false) {
-          self.streakAchieved = true
-        }
+  var diffSetting = DiffSetting.Easy {
+    didSet{
+      switch self.diffSetting {
+        case .Normal: Game.settingsArr = Settings.normalSettings
+        case .Hard: Game.settingsArr = Settings.hardSettings
+        case .Easy: Game.settingsArr = Settings.easySettings
       }
     }
   }
+
   var foundTargets = 0 {
     didSet {
       if self.foundTargets == Game.currentTrackSettings.numTargets {
-        currentGame.successHistory.append(true)
+        currentGame.stagePoints += 1
       }
     }
   }
   var streakAchieved = false {
     didSet {
-      if self.streakAchieved {
+      if streakAchieved {
         Sensory.streakAchievedFeedback()
       }
     }
   }
-  var failedAttempt = false {
-    didSet {
-      if self.failedAttempt { self.successHistory.append(false)}
+  var failedAttempt = false
+  
+  var stagePoints = 0 {
+    didSet{
+      if stagePoints == Game.currentTrackSettings.requiredStreak { currentGame.streakAchieved = true }
     }
   }
-  
-  var streakLength = 0
   var isPaused:Bool {
     didSet {
       if let worldTimer = currentGame.worldTimer {
@@ -275,13 +275,24 @@ class Game {
   }
   
   func incrementStatusBalls(emitter:Bool = false) {
-    self.streakLength += 1
     for ball in self.statusBalls {
       if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
         ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
         if emitter { Sensory.addParticles(sprite: ball, emitterFile: "ball_fire")}
         return
       }
+    }
+  }
+  
+  func decrementStatusBalls(){
+    if(self.stagePoints > 0){
+      let streakArr = self.statusBalls.filter { statusBall in
+        statusBall.texture!.description == "<SKTexture> 'sphere-yellow' (256 x 256)"
+      }
+      for node in streakArr.last!.children {
+        if node is SKEmitterNode { node.removeFromParent() }
+      }
+      streakArr.last!.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-black")))
     }
   }
   

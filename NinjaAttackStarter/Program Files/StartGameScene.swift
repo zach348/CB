@@ -14,15 +14,6 @@ class StartGameScene: SKScene {
   var startButton: Button! = nil
   var saveGameButton: Button! = nil
   var difficultyButton: Button! = nil
-  var diffSetting = DiffSetting.Normal {
-    didSet{
-      switch self.diffSetting {
-        case .Normal: Game.settingsArr = Settings.normalSettings
-        case .Hard: Game.settingsArr = Settings.hardSettings
-        case .Easy: Game.settingsArr = Settings.easySettings
-      }
-    }
-  }
   
   
   var background = SKSpriteNode(imageNamed: "sphere-gray")
@@ -48,7 +39,7 @@ class StartGameScene: SKScene {
     
     self.difficultyButton = Button(normalTexture: buttonTexture, selectedTexture: buttonTextureSelected, disabledTexture: buttonTexture, toggleButton: false)
     self.difficultyButton.setButtonAction(target: self, triggerEvent: .TouchDown, action: #selector(StartGameScene.changeDifficulty))
-    self.difficultyButton.setButtonLabel(title: "\(self.diffSetting)" as NSString, font: "Arial", fontSize: 20)
+    self.difficultyButton.setButtonLabel(title: "\(currentGame.diffSetting)" as NSString, font: "Arial", fontSize: 20)
     self.difficultyButton.size = CGSize(width: 250, height: 30)
     self.difficultyButton.position = CGPoint(x: self.frame.width/2, y: self.frame.midY)
     self.difficultyButton.zPosition = 1
@@ -93,12 +84,12 @@ class StartGameScene: SKScene {
   }
   
   @objc func changeDifficulty(){
-    switch self.diffSetting {
-      case .Normal: self.diffSetting = .Hard
-      case .Hard: self.diffSetting = .Easy
-      case .Easy: self.diffSetting = .Normal
+    switch currentGame.diffSetting {
+      case .Normal: currentGame.diffSetting = .Hard
+      case .Hard: currentGame.diffSetting = .Easy
+      case .Easy: currentGame.diffSetting = .Normal
     }
-    self.difficultyButton.setButtonLabel(title: "\(self.diffSetting)" as NSString, font: "Arial", fontSize: 20)
+    self.difficultyButton.setButtonLabel(title: "\(currentGame.diffSetting)" as NSString, font: "Arial", fontSize: 20)
   }
   
   @objc func toggleSaveGame(){

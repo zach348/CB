@@ -57,6 +57,7 @@ struct Sensory {
         foundTarget.run(SKAction.run({
           self.audioNodes["correct"]?.run(SKAction.play())
         }))
+        Ball.disableInteraction()
         currentGame.incrementStatusBalls(emitter: true)
       }
     case 3:
@@ -67,6 +68,7 @@ struct Sensory {
         foundTarget.run(SKAction.run({
           Sensory.audioNodes["correct"]?.run(SKAction.play())
         }))
+        Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
     case 4:
@@ -76,12 +78,14 @@ struct Sensory {
         foundTarget.run(SKAction.run({
           Sensory.audioNodes["correct"]?.run(SKAction.play())
         }))
+        Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
     case 5:
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
+        Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
     default:
@@ -257,9 +261,6 @@ struct Sensory {
   }
   
   static func prepareHaptics(){
-    
-    
-  //Breathloop haptics
     for respSettings in Game.respSettingsArr {
     //BEGIN haptic testing
       var factor = 1.0
@@ -312,34 +313,6 @@ struct Sensory {
         self.hapticPlayers["testOut\(respSettings.phase)"] = try self.hapticEngine?.makePlayer(with: outPattern)
       }catch{
         print("problem with test pattern or player: \(error.localizedDescription)")
-      }
-    //END haptic testing
-    
-      let incrementalOutDuration = respSettings.outDuration/10
-      let incrementalInDuration = respSettings.inDuration/10
-      var hapticInEvents = [CHHapticEvent]()
-      var hapticOutEvents = [CHHapticEvent]()
-      var startTime:Double = 0
-      var revStartTime:Double = respSettings.outDuration - incrementalOutDuration
-      for i in stride(from: 0.3, to: 0.8, by: (0.8-0.3)/10) {
-        let inEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: i, relativeTime: startTime, duration: incrementalInDuration)
-        let outEvent = Sensory.createHapticEvent(isContinuous: true, intensity: i, sharpness: i, relativeTime: revStartTime, duration: incrementalOutDuration)
-        startTime = startTime + incrementalInDuration
-        revStartTime = revStartTime - incrementalOutDuration
-        hapticInEvents.append(inEvent)
-        hapticOutEvents.append(outEvent)
-      }
-      let holdEvent = Sensory.createHapticEvent(isContinuous: true, intensity: 0.8, sharpness: 0.8, relativeTime: 0, duration: respSettings.inWait)
-         
-      do{
-        let holdPattern = try CHHapticPattern(events: [holdEvent], parameters: [])
-        Sensory.hapticPlayers["breathHold\(respSettings.phase)"] = try Sensory.hapticEngine?.makePlayer(with: holdPattern)
-        let inPattern = try CHHapticPattern(events: hapticInEvents, parameters: [])
-        Sensory.hapticPlayers["breathIn\(respSettings.phase)"] = try Sensory.hapticEngine?.makePlayer(with: inPattern)
-        let outPattern = try CHHapticPattern(events: hapticOutEvents, parameters: [])
-        Sensory.hapticPlayers["breathOut\(respSettings.phase)"] = try Sensory.hapticEngine?.makePlayer(with: outPattern)
-      }catch{
-        print("error creating haptic pattern or player: \(error.localizedDescription)")
       }
     }
   }
