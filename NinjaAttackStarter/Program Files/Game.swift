@@ -66,7 +66,7 @@ class Game {
     currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
     
     for (_, node) in Sensory.audioNodes {
-      node.run(SKAction.changeVolume(by: Float(-0.3), duration: 0))
+      node.run(SKAction.changeVolume(by: Float(-0.23), duration: 0))
     }
     Sensory.applyFrequency()
     if(Game.currentTrackSettings.phase < 5){

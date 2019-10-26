@@ -85,6 +85,9 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
+        foundTarget.run(SKAction.run({
+          Sensory.audioNodes["correct"]?.run(SKAction.play())
+        }))
         Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }

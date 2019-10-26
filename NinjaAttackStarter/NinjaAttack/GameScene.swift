@@ -29,8 +29,6 @@ class GameScene: SKScene {
         print("save command executed")
       }
     }
-    print("arr: \(Game.currentTrackSettings.difficulty)")
-    print("setting: \(currentGame.diffSetting)")
   }
 }
 
