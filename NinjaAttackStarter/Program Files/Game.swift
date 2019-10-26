@@ -6,7 +6,11 @@ class Game {
       
   
   
-  static var settingsArr:[Settings] = Settings.easySettings
+  static var settingsArr:[Settings] = Settings.settings[DiffSetting.Easy]! {
+    didSet {
+      self.currentTrackSettings = settingsArr[0]
+    }
+  }
 
   static var respSettingsArr:[RespSettings] = [
     RespSettings(phase: 7, phaseDuration: 60, frequency: 4, inDuration: 4, inWait: 2, outDuration: 8, outWait: 3, moveToCenterDuration: 8.5, moveCenterWait: 2),
@@ -144,11 +148,11 @@ class Game {
   var advanceRespFlag:Bool = false
   var diffSetting = DiffSetting.Easy {
     didSet{
-      switch self.diffSetting {
-        case .Normal: Game.settingsArr = Settings.normalSettings
-        case .Hard: Game.settingsArr = Settings.hardSettings
-        case .Easy: Game.settingsArr = Settings.easySettings
-      }
+//      switch self.diffSetting {
+//        case .Normal: Game.settingsArr = Settings.normalSettings
+//        case .Hard: Game.settingsArr = Settings.hardSettings
+//        case .Easy: Game.settingsArr = Settings.easySettings
+//      }
     }
   }
 

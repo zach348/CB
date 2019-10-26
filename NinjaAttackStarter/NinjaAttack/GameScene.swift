@@ -15,6 +15,7 @@ class GameScene: SKScene {
   
   override func didMove(to view: SKView) {
     currentGame.gameScene = self
+    Game.settingsArr = Settings.settings[currentGame.diffSetting]!
     currentGame.setupGame()
     currentGame.startGame()
   }
@@ -28,6 +29,8 @@ class GameScene: SKScene {
         print("save command executed")
       }
     }
+    print("arr: \(Game.currentTrackSettings.difficulty)")
+    print("setting: \(currentGame.diffSetting)")
   }
 }
 
