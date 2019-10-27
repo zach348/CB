@@ -121,7 +121,7 @@ struct Sensory {
   static func streakAchievedFeedback(){
     if let gameScene = currentGame.gameScene {
       switch Game.currentTrackSettings.phase {
-      case 1,2,3,4:
+      case 1,2,3,4,5:
         gameScene.run(SKAction.run({
           Sensory.audioNodes["streak"]?.run(SKAction.play())
         }))
