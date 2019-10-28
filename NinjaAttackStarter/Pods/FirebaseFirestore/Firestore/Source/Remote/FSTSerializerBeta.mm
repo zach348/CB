@@ -390,7 +390,7 @@ absl::any Wrap(GCFSDocument *doc) {
   const DocumentKey key{[self localResourcePathForQualifiedResourcePath:path]};
 
   const DatabaseId database_id(project, database);
-  HARD_ASSERT(database_id == _databaseID, "Database %s:%s cannot encode reference from %s:%s",
+  HARD_ASSERT(database_id == _databaseID, "Database %s:%s cannot decode reference from %s:%s",
               _databaseID.project_id(), _databaseID.database_id(), database_id.project_id(),
               database_id.database_id());
   return FieldValue::FromReference(_databaseID, key);
@@ -450,7 +450,7 @@ absl::any Wrap(GCFSDocument *doc) {
 - (ObjectValue)decodedFields:(NSDictionary<NSString *, GCFSValue *> *)fields {
   __block ObjectValue result = ObjectValue::Empty();
   [fields enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, GCFSValue *_Nonnull obj,
-                                              BOOL *_Nonnull stop) {
+                                              BOOL *_Nonnull) {
     FieldPath path{util::MakeString(key)};
     FieldValue value = [self decodedFieldValue:obj];
     result = result.Set(path, std::move(value));
@@ -725,7 +725,7 @@ absl::any Wrap(GCFSDocument *doc) {
 
 - (std::vector<FieldValue>)decodedArrayTransformElements:(GCFSArrayValue *)proto {
   __block std::vector<FieldValue> elements;
-  [proto.valuesArray enumerateObjectsUsingBlock:^(GCFSValue *value, NSUInteger idx, BOOL *stop) {
+  [proto.valuesArray enumerateObjectsUsingBlock:^(GCFSValue *value, NSUInteger, BOOL *) {
     elements.push_back([self decodedFieldValue:value]);
   }];
   return elements;
@@ -840,7 +840,7 @@ absl::any Wrap(GCFSDocument *doc) {
   }
 
   if (query.limit() != Query::kNoLimit) {
-    queryTarget.structuredQuery.limit.value = (int32_t)query.limit();
+    queryTarget.structuredQuery.limit.value = query.limit();
   }
 
   if (query.start_at()) {
@@ -1167,7 +1167,7 @@ absl::any Wrap(GCFSDocument *doc) {
   WatchTargetChangeState state = [self decodedWatchTargetChangeState:change.targetChangeType];
   __block std::vector<TargetId> targetIDs;
 
-  [change.targetIdsArray enumerateValuesWithBlock:^(int32_t value, NSUInteger idx, BOOL *stop) {
+  [change.targetIdsArray enumerateValuesWithBlock:^(int32_t value, NSUInteger, BOOL *) {
     targetIDs.push_back(value);
   }];
 
@@ -1203,7 +1203,7 @@ absl::any Wrap(GCFSDocument *doc) {
 - (std::vector<TargetId>)decodedIntegerArray:(GPBInt32Array *)values {
   __block std::vector<TargetId> result;
   result.reserve(values.count);
-  [values enumerateValuesWithBlock:^(int32_t value, NSUInteger idx, BOOL *stop) {
+  [values enumerateValuesWithBlock:^(int32_t value, NSUInteger, BOOL *) {
     result.push_back(value);
   }];
   return result;
