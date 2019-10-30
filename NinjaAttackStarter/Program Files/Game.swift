@@ -222,6 +222,10 @@ class Game {
         if name == "blip" {audioNode.run(SKAction.changeVolume(by: -0.6, duration: 0))}
         scene.addChild(audioNode)
       }
+      for (name, toneNode) in Sensory.toneNodes {
+        toneNode.autoplayLooped = false
+        scene.addChild(toneNode)
+      }
       
       self.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
       

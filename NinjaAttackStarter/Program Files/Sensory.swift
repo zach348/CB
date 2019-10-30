@@ -11,14 +11,19 @@ struct Sensory {
     "correct": SKAudioNode(fileNamed: "correct_sound"),
     "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
     "streak": SKAudioNode(fileNamed: "streak_sound"),
-    "blip": SKAudioNode(fileNamed: "radar_blip"),
+    "blip": SKAudioNode(fileNamed: "radar_blip")
+  ]
+  
+  static var toneNodes: [String: SKAudioNode] = [
     "tone1": SKAudioNode(fileNamed: "tone200hz.wav"),
     "tone2": SKAudioNode(fileNamed: "tone185hz.wav"),
     "tone3": SKAudioNode(fileNamed: "tone170hz.wav"),
     "tone4": SKAudioNode(fileNamed: "tone155hz.wav"),
-    "tone5": SKAudioNode(fileNamed: "tone140hz.wav")
+    "tone5": SKAudioNode(fileNamed: "tone140hz.wav"),
+    "tone6": SKAudioNode(fileNamed: "tone140hz.wav"),
+    "tone7": SKAudioNode(fileNamed: "tone140hz.wav")
+
   ]
-  
   
   static var hapticEngine: CHHapticEngine?
   
@@ -99,10 +104,10 @@ struct Sensory {
     let vibration = SystemSoundID(kSystemSoundID_Vibrate)
     switch Game.currentTrackSettings.phase {
     case 1,2:
-      Sensory.audioNodes["incorrect"]!.run(SKAction.play())
+      self.audioNodes["incorrect"]!.run(SKAction.play())
       AudioServicesPlaySystemSound(vibration)
     case 3,4,5:
-      Sensory.audioNodes["incorrect"]!.run(SKAction.play())
+      self.audioNodes["incorrect"]!.run(SKAction.play())
       AudioServicesPlaySystemSound(cancelled)
     default:
       break
@@ -112,7 +117,7 @@ struct Sensory {
   static func streakAchievedFeedback(){
     switch Game.currentTrackSettings.phase {
     case 1,2,3,4,5:
-      Sensory.audioNodes["streak"]?.run(SKAction.play())
+      self.audioNodes["streak"]?.run(SKAction.play())
     default:
       break
     }
@@ -198,20 +203,21 @@ struct Sensory {
   static func applyFrequency() {
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
-    let tone = Game.currentTrackSettings.toneFile
     let event = self.createHapticEvent(intensity: 0.5, sharpness: 1, relativeTime: 0, duration: 0)
 
      do{
       let pattern = try CHHapticPattern(events: [event], parameters: [])
-      Sensory.hapticPlayers["frequency"] = try self.hapticEngine?.makePlayer(with: pattern)
+      self.hapticPlayers["frequency"] = try self.hapticEngine?.makePlayer(with: pattern)
      }catch{
       print("Problem creating haptic pattern or player: \(error.localizedDescription)")
      }
     if let gameScene = currentGame.gameScene {
-      let tone = SKAction.playSoundFileNamed(tone, waitForCompletion: true)
+      let tone = SKAction.run {
+        self.toneNodes["tone\(Game.currentTrackSettings.phase)"]!.run(SKAction.play())
+      }
       let haptic = SKAction.run {
         do {
-          try Sensory.hapticPlayers["frequency"]?.start(atTime: 0)
+          try self.hapticPlayers["frequency"]?.start(atTime: 0)
         }catch{
           print("Failed to play pattern: \(error.localizedDescription)")
         }
@@ -280,17 +286,17 @@ struct Sensory {
       var increment = (0.8-0.35)/Double(relativeInTimes.count)
       var paramVal = 0.35
       relativeInTimes.forEach({ relativeTime in
-        inEvents.append(Sensory.createHapticEvent(isContinuous: false, intensity: paramVal, sharpness: paramVal, relativeTime: relativeTime, duration: 0))
+        inEvents.append(self.createHapticEvent(isContinuous: false, intensity: paramVal, sharpness: paramVal, relativeTime: relativeTime, duration: 0))
         paramVal += increment
       })
       let holdEvents = relativeHoldTimes.map({ relativeTime in
-        Sensory.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
+        self.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: 0.8, relativeTime: relativeTime, duration: 0)
       })
       increment = (0.8-0.35)/Double(relativeOutTimes.count)
       paramVal = 0.8
       var outEvents = [CHHapticEvent]()
       relativeOutTimes.forEach({ relativeTime in
-        outEvents.append(Sensory.createHapticEvent(isContinuous: false, intensity: paramVal, sharpness: paramVal, relativeTime: relativeTime, duration: 0))
+        outEvents.append(self.createHapticEvent(isContinuous: false, intensity: paramVal, sharpness: paramVal, relativeTime: relativeTime, duration: 0))
         paramVal -= increment
       })
     
