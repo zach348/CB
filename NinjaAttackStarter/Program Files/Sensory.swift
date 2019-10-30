@@ -11,8 +11,14 @@ struct Sensory {
     "correct": SKAudioNode(fileNamed: "correct_sound"),
     "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
     "streak": SKAudioNode(fileNamed: "streak_sound"),
-    "blip": SKAudioNode(fileNamed: "radar_blip")
+    "blip": SKAudioNode(fileNamed: "radar_blip"),
+    "tone1": SKAudioNode(fileNamed: "tone200hz.wav"),
+    "tone2": SKAudioNode(fileNamed: "tone185hz.wav"),
+    "tone3": SKAudioNode(fileNamed: "tone170hz.wav"),
+    "tone4": SKAudioNode(fileNamed: "tone155hz.wav"),
+    "tone5": SKAudioNode(fileNamed: "tone140hz.wav")
   ]
+  
   
   static var hapticEngine: CHHapticEngine?
   
@@ -54,9 +60,7 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(strongPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        foundTarget.run(SKAction.run({
-          self.audioNodes["correct"]?.run(SKAction.play())
-        }))
+        self.audioNodes["correct"]?.run(SKAction.play())
         Ball.disableInteraction()
         currentGame.incrementStatusBalls(emitter: true)
       }
@@ -65,9 +69,7 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        foundTarget.run(SKAction.run({
-          Sensory.audioNodes["correct"]?.run(SKAction.play())
-        }))
+        self.audioNodes["correct"]?.run(SKAction.play())
         Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
@@ -75,9 +77,7 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        foundTarget.run(SKAction.run({
-          Sensory.audioNodes["correct"]?.run(SKAction.play())
-        }))
+        self.audioNodes["correct"]?.run(SKAction.play())
         Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
@@ -85,9 +85,7 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        foundTarget.run(SKAction.run({
-          Sensory.audioNodes["correct"]?.run(SKAction.play())
-        }))
+        self.audioNodes["correct"]?.run(SKAction.play())
         Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
@@ -99,35 +97,24 @@ struct Sensory {
   static func missedTargetFeedback(){
     let cancelled = SystemSoundID(1521)
     let vibration = SystemSoundID(kSystemSoundID_Vibrate)
-
-    if let gameScene = currentGame.gameScene {
-      switch Game.currentTrackSettings.phase {
-      case 1,2:
-        gameScene.run(SKAction.run({
-          Sensory.audioNodes["incorrect"]!.run(SKAction.play())
-        }))
-        AudioServicesPlaySystemSound(vibration)
-      case 3,4,5:
-        gameScene.run(SKAction.run({
-          Sensory.audioNodes["incorrect"]!.run(SKAction.play())
-        }))
-        AudioServicesPlaySystemSound(cancelled)
-      default:
-        break
+    switch Game.currentTrackSettings.phase {
+    case 1,2:
+      Sensory.audioNodes["incorrect"]!.run(SKAction.play())
+      AudioServicesPlaySystemSound(vibration)
+    case 3,4,5:
+      Sensory.audioNodes["incorrect"]!.run(SKAction.play())
+      AudioServicesPlaySystemSound(cancelled)
+    default:
+      break
       }
-    }
   }
   
   static func streakAchievedFeedback(){
-    if let gameScene = currentGame.gameScene {
-      switch Game.currentTrackSettings.phase {
-      case 1,2,3,4,5:
-        gameScene.run(SKAction.run({
-          Sensory.audioNodes["streak"]?.run(SKAction.play())
-        }))
-      default:
-        break
-      }
+    switch Game.currentTrackSettings.phase {
+    case 1,2,3,4,5:
+      Sensory.audioNodes["streak"]?.run(SKAction.play())
+    default:
+      break
     }
   }
   
