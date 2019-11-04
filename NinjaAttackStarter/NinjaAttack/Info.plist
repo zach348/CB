@@ -29,9 +29,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Bluetooth is used to enable the optional capability of communicating with bluetooth enabled heart rate sensors to log heart rate with heart game data.</string>
+	<string>Kalibrate uses bluetooth to log heart rate with game data.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Bluetooth peripheral capability is used to optionally connect to a bluetooth-enabled heart rate monitor.</string>
+	<string>Kalibrate uses bluetooth peripheral capabilities to optionally connect to a heart rate monitor.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
