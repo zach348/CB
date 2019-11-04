@@ -1,0 +1,6 @@
+framework module Pods_Kalibrate {
+  umbrella header "Pods-Kalibrate-umbrella.h"
+
+  export *
+  module * { export * }
+}

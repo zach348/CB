@@ -327,7 +327,20 @@ class Ball: SKSpriteNode {
         DataStore.eventMarkers["didAttempt"] = ["flag": true, "success": true]
       }else{
         currentGame.failedAttempt = true
-        currentGame.resetStatusBalls()
+        
+        switch currentGame.diffSetting{
+        case .Easy:
+          if currentGame.stagePoints > 0 {
+            currentGame.decrementStatusBalls()
+            currentGame.stagePoints -= 1
+          }
+        case .Normal:
+          currentGame.stagePoints = 0
+          currentGame.resetStatusBalls()
+        case .Hard:
+          currentGame.stagePoints = 0
+          currentGame.resetStatusBalls()
+        }
         Sensory.missedTargetFeedback()
         DataStore.eventMarkers["didAttempt"] = ["flag": true, "success": false]
         //irrelevant for now

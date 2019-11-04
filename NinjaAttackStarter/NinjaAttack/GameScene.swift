@@ -14,12 +14,12 @@ let currentGame:Game = Game()
 class GameScene: SKScene {
   
   override func didMove(to view: SKView) {
-    
     currentGame.gameScene = self
+    Game.settingsArr = Settings.settings[currentGame.diffSetting]!
     currentGame.setupGame()
     currentGame.startGame()
   }
-  
+    
   override func update(_ currentTime: TimeInterval) {
     if (Game.willSaveGame && !Game.didSaveGame && Game.respActive){
       guard let timer = currentGame.timer else {return}
