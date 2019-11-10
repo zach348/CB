@@ -4,12 +4,6 @@ import Foundation
 import SpriteKit
 import UIKit
 
-enum DiffSetting {
-  case Easy
-  case Normal
-  case Hard
-}
-
 class StartGameScene: SKScene {
   var startButton: Button! = nil
   var saveGameButton: Button! = nil

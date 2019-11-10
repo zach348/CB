@@ -325,6 +325,7 @@ class Ball: SKSpriteNode {
         self.foundTarget = true
         Sensory.foundTargetsFeedback(foundTarget: self)
         DataStore.eventMarkers["didAttempt"] = ["flag": true, "success": true]
+   
       }else{
         currentGame.failedAttempt = true
         

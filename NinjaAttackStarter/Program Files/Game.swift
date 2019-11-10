@@ -4,8 +4,6 @@ import SpriteKit
 
 class Game {
       
-  
-  
   static var settingsArr:[Settings] = Settings.settings[DiffSetting.Easy]! {
     didSet {
       self.currentTrackSettings = settingsArr[0]
@@ -146,20 +144,13 @@ class Game {
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
   var advanceRespFlag:Bool = false
-  var diffSetting = DiffSetting.Easy {
-    didSet{
-//      switch self.diffSetting {
-//        case .Normal: Game.settingsArr = Settings.normalSettings
-//        case .Hard: Game.settingsArr = Settings.hardSettings
-//        case .Easy: Game.settingsArr = Settings.easySettings
-//      }
-    }
-  }
-
+  var diffSetting = DiffSetting.Easy
+  var diffMod:CGFloat = 1
   var foundTargets = 0 {
     didSet {
       if self.foundTargets == Game.currentTrackSettings.numTargets {
         currentGame.stagePoints += 1
+        currentGame.outcomeHistory.append(Outcome.Success)
       }
     }
   }
@@ -170,7 +161,16 @@ class Game {
       }
     }
   }
-  var failedAttempt = false
+  var failedAttempt = false {
+    didSet{
+      if self.failedAttempt { currentGame.outcomeHistory.append(Outcome.Failure) }
+    }
+  }
+  var outcomeHistory = [Outcome]() {
+    didSet{
+      print(outcomeHistory)
+    }
+  }
   
   var stagePoints = 0 {
     didSet{
@@ -270,6 +270,7 @@ class Game {
   }
   
   func unpauseGame(){
+    if !self.failedAttempt && self.foundTargets < Game.currentTrackSettings.numTargets { currentGame.outcomeHistory.append(Outcome.Pass)}
     self.isPaused = false
     Ball.removeEmitters()
     Ball.unfreezeMovement()
