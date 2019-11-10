@@ -38,8 +38,14 @@ struct Settings {
       Settings(difficulty: DiffSetting.Hard,phase: 7, missesAllowed: 0, requiredStreak: 2, phaseDuration: 900, pauseDelay: 40, pauseError: 10, pauseDuration: 8, frequency: 2.5, toneFile: "tone140hz.wav", targetMeanSpeed: 0, targetSpeedSD: 0, shiftDelay: 50, shiftError: 15, numTargets: 6, targetTexture: "sphere-orange-1", distractorTexture: "sphere-black", borderColor: UIColor.cyan, flashTexture: "sphere-orange", alpha: 1)
     ]
   ]
+  
+  static var diffMod:CGFloat = 1 {
+    didSet{
+      print(diffMod)
+    }
+  }
 
-
+  
   let difficulty:DiffSetting
   let phase:Int
   let missesAllowed:Int
@@ -51,7 +57,17 @@ struct Settings {
   let frequency:Double
   let toneFile:String
   let targetMeanSpeed:CGFloat
+  var activeMeanSpeed:CGFloat {
+    get {
+      return self.targetMeanSpeed * Settings.diffMod
+    }
+  }
   let targetSpeedSD:CGFloat
+  var activeSpeedSD:CGFloat {
+    get {
+      return self.targetSpeedSD * Settings.diffMod
+    }
+  }
   let shiftDelay:Double
   let shiftError:Double
   let numTargets:Int
@@ -62,12 +78,12 @@ struct Settings {
   let alpha:CGFloat
   var minSpeed:CGFloat {
     get {
-      return self.targetMeanSpeed - 5*self.targetSpeedSD
+      return self.activeMeanSpeed - 5*self.targetSpeedSD
     }
   }
   var maxSpeed:CGFloat {
     get {
-      return self.targetMeanSpeed + 5*self.targetSpeedSD
+      return self.activeMeanSpeed + 5*self.targetSpeedSD
     }
   }
   

@@ -145,7 +145,6 @@ class Game {
   var missesRemaining = Game.currentTrackSettings.missesAllowed
   var advanceRespFlag:Bool = false
   var diffSetting = DiffSetting.Easy
-  var diffMod:CGFloat = 1
   var foundTargets = 0 {
     didSet {
       if self.foundTargets == Game.currentTrackSettings.numTargets {
@@ -168,7 +167,16 @@ class Game {
   }
   var outcomeHistory = [Outcome]() {
     didSet{
-      print(outcomeHistory)
+      if self.outcomeHistory.count >= 4 {
+        let history = self.outcomeHistory[self.outcomeHistory.count - 4..<self.outcomeHistory.count]
+        if !history.contains(Outcome.Success){
+          if Settings.diffMod > 0.5 { Settings.diffMod -= 0.1 }
+          print("downregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
+        }else if !history.contains(Outcome.Failure) && !history.contains(Outcome.Pass){
+          Settings.diffMod += 0.1
+          print("upregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
+        }
+      }
     }
   }
   
