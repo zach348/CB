@@ -59,6 +59,7 @@ class Game {
   }
   
   class func transitionTrackPhase(timer:Timer){
+    currentGame.outcomeHistory.append(Outcome.Transition)
     currentGame.streakAchieved = false
     currentGame.stagePoints = 0
     currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
@@ -167,12 +168,12 @@ class Game {
   }
   var outcomeHistory = [Outcome]() {
     didSet{
-      if self.outcomeHistory.count >= 4 {
-        let history = self.outcomeHistory[self.outcomeHistory.count - 4..<self.outcomeHistory.count]
-        if !history.contains(Outcome.Success){
-          if Settings.diffMod > 0.5 { Settings.diffMod -= 0.1 }
+      if self.outcomeHistory.count >= 3 {
+        let history = self.outcomeHistory[self.outcomeHistory.count - 3..<self.outcomeHistory.count]
+        if !history.contains(Outcome.Success) && !history.contains(Outcome.Transition){
+          if Settings.diffMod > 0.5 { Settings.diffMod -= 0.15 }
           print("downregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
-        }else if !history.contains(Outcome.Failure) && !history.contains(Outcome.Pass){
+        }else if !history.contains(Outcome.Failure) && !history.contains(Outcome.Pass) && !history.contains(Outcome.Transition){
           Settings.diffMod += 0.1
           print("upregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
         }
