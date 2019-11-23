@@ -167,15 +167,22 @@ class Game {
     }
   }
   var outcomeHistory = [Outcome]() {
+    //implement different length histories for upregulation(3) and downregulation(2)
     didSet{
-      if self.outcomeHistory.count >= 3 {
-        let history = self.outcomeHistory[self.outcomeHistory.count - 3..<self.outcomeHistory.count]
-        if !history.contains(Outcome.Success) && !history.contains(Outcome.Transition){
-          if Settings.diffMod > 0.5 { Settings.diffMod -= 0.15 }
-          print("downregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
-        }else if !history.contains(Outcome.Failure) && !history.contains(Outcome.Pass) && !history.contains(Outcome.Transition){
-          Settings.diffMod += 0.1
-          print("upregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
+      if self.outcomeHistory.last != Outcome.Transition{
+        if self.outcomeHistory.count >= 2 {
+          let last2Outcomes = self.outcomeHistory[self.outcomeHistory.count - 2..<self.outcomeHistory.count]
+          if !last2Outcomes.contains(Outcome.Success) && !last2Outcomes.contains(Outcome.Transition){
+            if Settings.diffMod > 0.5 { Settings.diffMod -= 0.1 }
+            print("downregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
+          }
+        }
+        if self.outcomeHistory.count >= 3 {
+          let last3Outcomes = self.outcomeHistory[self.outcomeHistory.count - 3..<self.outcomeHistory.count]
+          if !last3Outcomes.contains(Outcome.Failure) && !last3Outcomes.contains(Outcome.Pass) && !last3Outcomes.contains(Outcome.Transition) {
+            if Settings.diffMod < 1.5 { Settings.diffMod += 0.075 }
+            print("upregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
+          }
         }
       }
     }
