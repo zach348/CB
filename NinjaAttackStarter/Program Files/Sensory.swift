@@ -288,7 +288,7 @@ struct Sensory {
       var increment = (0.8-0.35)/Double(relativeInTimes.count)
       var paramVal = 0.35
       relativeInTimes.forEach({ relativeTime in
-        inEvents.append(self.createHapticEvent(isContinuous: false, intensity: paramVal, sharpness: paramVal, relativeTime: relativeTime, duration: 0))
+        inEvents.append(self.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: paramVal, relativeTime: relativeTime, duration: 0))
         paramVal += increment
       })
       let holdEvents = relativeHoldTimes.map({ relativeTime in
@@ -298,7 +298,7 @@ struct Sensory {
       paramVal = 0.8
       var outEvents = [CHHapticEvent]()
       relativeOutTimes.forEach({ relativeTime in
-        outEvents.append(self.createHapticEvent(isContinuous: false, intensity: paramVal, sharpness: paramVal, relativeTime: relativeTime, duration: 0))
+        outEvents.append(self.createHapticEvent(isContinuous: false, intensity: 0.8, sharpness: paramVal, relativeTime: relativeTime, duration: 0))
         paramVal -= increment
       })
     
