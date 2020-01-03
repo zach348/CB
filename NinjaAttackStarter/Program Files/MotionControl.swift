@@ -45,10 +45,10 @@ struct MotionControl {
   private static func correctMeanSpeed(){
     let currentMeanSpeed = Ball.mean()
     for ball in Ball.members {
-      if currentMeanSpeed < Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed {
+      if currentMeanSpeed < Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed {
         ball.modifySpeed(factor: 1.02)
       }
-      else if currentMeanSpeed > Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed {
+      else if currentMeanSpeed > Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed {
         ball.modifySpeed(factor: 0.98)
       }
     }
@@ -57,16 +57,16 @@ struct MotionControl {
   private static func correctSpeedSD(){
     let currentSD = Ball.standardDev()
     for ball in Ball.members {
-      if currentSD < Game.currentTrackSettings.targetSpeedSD {
-        if ball.currentSpeed() > Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed {
+      if currentSD < Game.currentTrackSettings.activeSpeedSD {
+        if ball.currentSpeed() > Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed {
           ball.modifySpeed(factor: 1.02)
-        }else if ball.currentSpeed() < Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed{
+        }else if ball.currentSpeed() < Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed{
           ball.modifySpeed(factor: 0.98)
         }
-      }else if currentSD > Game.currentTrackSettings.targetSpeedSD{
-        if ball.currentSpeed() > Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed {
+      }else if currentSD > Game.currentTrackSettings.activeSpeedSD{
+        if ball.currentSpeed() > Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed {
           ball.modifySpeed(factor: 0.98)
-        }else if ball.currentSpeed() < Game.currentTrackSettings.targetMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed{
+        }else if ball.currentSpeed() < Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed{
           ball.modifySpeed(factor: 1.02)
         }
       }

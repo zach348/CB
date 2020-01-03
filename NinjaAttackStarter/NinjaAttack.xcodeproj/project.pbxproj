@@ -13,6 +13,8 @@
 		84124FB8229C659B008A1510 /* Ball.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84124FB7229C659B008A1510 /* Ball.swift */; };
 		842E25552321F96500151D44 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 842E25542321F96500151D44 /* GoogleService-Info.plist */; };
 		8436334422BF1D1800F4BC97 /* Sensory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8436334322BF1D1800F4BC97 /* Sensory.swift */; };
+		84571168237888EB006AD51F /* DiffSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84571167237888EB006AD51F /* DiffSetting.swift */; };
+		8457116A23788908006AD51F /* Outcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8457116923788908006AD51F /* Outcome.swift */; };
 		846E09A622CBAF49005A1C27 /* tone185hz.wav in Resources */ = {isa = PBXBuildFile; fileRef = 846E09A422CBAF49005A1C27 /* tone185hz.wav */; };
 		846E09A722CBAF49005A1C27 /* tone200hz.wav in Resources */ = {isa = PBXBuildFile; fileRef = 846E09A522CBAF49005A1C27 /* tone200hz.wav */; };
 		849432AC22A0A57800CCD6CD /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849432AB22A0A57800CCD6CD /* Game.swift */; };
@@ -60,6 +62,8 @@
 		84124FB7229C659B008A1510 /* Ball.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ball.swift; sourceTree = "<group>"; };
 		842E25542321F96500151D44 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8436334322BF1D1800F4BC97 /* Sensory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensory.swift; sourceTree = "<group>"; };
+		84571167237888EB006AD51F /* DiffSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffSetting.swift; sourceTree = "<group>"; };
+		8457116923788908006AD51F /* Outcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Outcome.swift; sourceTree = "<group>"; };
 		8457E0DA23678714000C8B14 /* Kalibrate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Kalibrate.entitlements; sourceTree = "<group>"; };
 		846E09A422CBAF49005A1C27 /* tone185hz.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tone185hz.wav; sourceTree = "<group>"; };
 		846E09A522CBAF49005A1C27 /* tone200hz.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tone200hz.wav; sourceTree = "<group>"; };
@@ -136,6 +140,8 @@
 				849432AB22A0A57800CCD6CD /* Game.swift */,
 				84BD930B231C2EC70068E47D /* HeartRateController.swift */,
 				84F7EDA923393D7500ED432F /* StartGameScene.swift */,
+				84571167237888EB006AD51F /* DiffSetting.swift */,
+				8457116923788908006AD51F /* Outcome.swift */,
 				84C153912300636700C60973 /* TIle.swift */,
 				84BD930D231C4E450068E47D /* DataStore.swift */,
 				8408B9B722D3FFF1001ACC95 /* RespSettings.swift */,
@@ -389,6 +395,7 @@
 			files = (
 				AFD63F892036497100E08C66 /* GameScene.swift in Sources */,
 				84DF3B1222ABF97200AAAA8A /* Extensions.swift in Sources */,
+				8457116A23788908006AD51F /* Outcome.swift in Sources */,
 				8408B9B822D3FFF2001ACC95 /* RespSettings.swift in Sources */,
 				84F7EDAC23393EA700ED432F /* Button.swift in Sources */,
 				AFD63F872036493600E08C66 /* GameViewController.swift in Sources */,
@@ -403,6 +410,7 @@
 				D2A5F2211F4A96D0005CD714 /* AppDelegate.swift in Sources */,
 				8436334422BF1D1800F4BC97 /* Sensory.swift in Sources */,
 				84CD8ED322A9685100D4B4D2 /* Timer.swift in Sources */,
+				84571168237888EB006AD51F /* DiffSetting.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -548,7 +556,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.3;
+				MARKETING_VERSION = 0.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.kalibrate;
 				PRODUCT_NAME = Kalibrate;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -573,7 +581,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.3;
+				MARKETING_VERSION = 0.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.kalibrate;
 				PRODUCT_NAME = Kalibrate;
 				PROVISIONING_PROFILE_SPECIFIER = "";

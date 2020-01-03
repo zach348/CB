@@ -46,7 +46,8 @@ struct DataStore {
           "didShift": self.eventMarkers["didShift"],
           "didAttempt": self.eventMarkers["didAttempt"]
         ],
-        "ballInfo": self.ballInfo
+        "ballInfo": self.ballInfo,
+        "outcomeHistory": currentGame.outcomeHistory
       ]
       self.records.append(record)
       self.ballInfo = [[String:Any]]()

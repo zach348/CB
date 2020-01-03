@@ -4,8 +4,6 @@ import SpriteKit
 
 class Game {
       
-  
-  
   static var settingsArr:[Settings] = Settings.settings[DiffSetting.Easy]! {
     didSet {
       self.currentTrackSettings = settingsArr[0]
@@ -61,6 +59,7 @@ class Game {
   }
   
   class func transitionTrackPhase(timer:Timer){
+    currentGame.outcomeHistory.append(Outcome.Transition)
     currentGame.streakAchieved = false
     currentGame.stagePoints = 0
     currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
@@ -146,20 +145,12 @@ class Game {
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
   var advanceRespFlag:Bool = false
-  var diffSetting = DiffSetting.Easy {
-    didSet{
-//      switch self.diffSetting {
-//        case .Normal: Game.settingsArr = Settings.normalSettings
-//        case .Hard: Game.settingsArr = Settings.hardSettings
-//        case .Easy: Game.settingsArr = Settings.easySettings
-//      }
-    }
-  }
-
+  var diffSetting = DiffSetting.Easy
   var foundTargets = 0 {
     didSet {
       if self.foundTargets == Game.currentTrackSettings.numTargets {
         currentGame.stagePoints += 1
+        currentGame.outcomeHistory.append(Outcome.Success)
       }
     }
   }
@@ -170,7 +161,32 @@ class Game {
       }
     }
   }
-  var failedAttempt = false
+  var failedAttempt = false {
+    didSet{
+      if self.failedAttempt { currentGame.outcomeHistory.append(Outcome.Failure) }
+    }
+  }
+  var outcomeHistory = [Outcome]() {
+    //implement different length histories for upregulation(3) and downregulation(2)
+    didSet{
+      if self.outcomeHistory.last != Outcome.Transition{
+        if self.outcomeHistory.count >= 2 {
+          let last2Outcomes = self.outcomeHistory[self.outcomeHistory.count - 2..<self.outcomeHistory.count]
+          if !last2Outcomes.contains(Outcome.Success) && !last2Outcomes.contains(Outcome.Transition){
+            if Settings.diffMod > 0.5 { Settings.diffMod -= 0.1 }
+            print("downregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
+          }
+        }
+        if self.outcomeHistory.count >= 3 {
+          let last3Outcomes = self.outcomeHistory[self.outcomeHistory.count - 3..<self.outcomeHistory.count]
+          if !last3Outcomes.contains(Outcome.Failure) && !last3Outcomes.contains(Outcome.Pass) && !last3Outcomes.contains(Outcome.Transition) {
+            if Settings.diffMod < 1.5 { Settings.diffMod += 0.075 }
+            print("upregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
+          }
+        }
+      }
+    }
+  }
   
   var stagePoints = 0 {
     didSet{
@@ -270,6 +286,7 @@ class Game {
   }
   
   func unpauseGame(){
+    if !self.failedAttempt && self.foundTargets < Game.currentTrackSettings.numTargets { currentGame.outcomeHistory.append(Outcome.Pass)}
     self.isPaused = false
     Ball.removeEmitters()
     Ball.unfreezeMovement()
