@@ -2,22 +2,47 @@
 
 import UIKit
 import SpriteKit
+import Firebase
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, TransitionDelegate {
+  var loginScene:LoginScene?
+  var startScene:StartGameScene?
+  var gameScene:GameScene?
+
   
   override func viewDidLoad() {
     super.viewDidLoad()
     UIApplication.shared.isIdleTimerDisabled = true
-
-    let startScene = StartGameScene(size: view.bounds.size)
-//    let scene = GameScene(size: view.bounds.size)
+    loginScene = LoginScene(size: view.bounds.size)
+    loginScene?.gameViewController = self
+    loginScene?.scaleMode = .fill
+    loginScene?.delegate = self as TransitionDelegate
+    loginScene?.anchorPoint = CGPoint.zero
     let skView = view as! SKView
     skView.showsFPS = true
     skView.showsPhysics = true
     skView.showsNodeCount = true
     skView.ignoresSiblingOrder = true
-//    scene.scaleMode = .resizeFill
-    skView.presentScene(startScene)
+    skView.presentScene(loginScene)
+    
+    var handle = Auth.auth().addStateDidChangeListener { (auth, user) in
+      // ...
+      if user != nil {
+        let skView = self.view as! SKView
+        self.startScene = StartGameScene(size: (self.view.bounds.size))
+        self.startScene?.gameViewController = self
+        skView.presentScene(self.startScene)
+        self.loginScene = nil
+      }else{
+        self.loginScene = LoginScene(size: self.view.bounds.size)
+        self.loginScene?.delegate = self as TransitionDelegate
+        self.loginScene?.anchorPoint = CGPoint.zero
+        self.loginScene?.scaleMode = .fill
+        self.loginScene?.gameViewController = self
+        skView.presentScene(self.loginScene)
+      }
+    }
+    
   }
   
   
@@ -27,6 +52,37 @@ class GameViewController: UIViewController {
   
   override var prefersStatusBarHidden: Bool {
     return true
+  }
+  
+  func showAlert(title:String,message:String) {
+      let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+      alertController.addAction(UIAlertAction(title: "Ok", style: .default) { action in
+          print("handle Ok action...")
+      })
+      alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+      self.present(alertController, animated: true)
+  }
+  func handleLoginBtn(username:String,password:String) {
+    Auth.auth().signIn(withEmail: username, password: password) { [weak self] authResult, error in
+      guard let strongSelf = self else { return }
+      if let error = error {
+        strongSelf.showAlert(title: "Login Error", message: error.localizedDescription)
+      }
+    }
+  }
+  func handleCreateBtn(username:String,password:String){
+    Auth.auth().createUser(withEmail: username, password: password) { authResult, error in
+      if let error = error {
+        self.showAlert(title: "Account Creation Error", message: error.localizedDescription)
+      }else if let authResult = authResult, let email = authResult.user.email {
+        let skView = self.view as! SKView
+        self.startScene = StartGameScene(size: self.view.bounds.size)
+        self.startScene?.gameViewController = self
+        skView.presentScene(self.startScene)
+        self.loginScene = nil
+        self.showAlert(title: "Account Creation Successful", message: "You are logged in as \(email)")
+      }
+    }
   }
   
 }

@@ -12,6 +12,7 @@ struct PhysicsCategory {
 let currentGame:Game = Game()
 
 class GameScene: SKScene {
+  weak var gameViewController:GameViewController?
   
   override func didMove(to view: SKView) {
     currentGame.gameScene = self

@@ -3,11 +3,15 @@
 import Foundation
 import SpriteKit
 import UIKit
+import Firebase
 
 class StartGameScene: SKScene {
+  weak var gameViewController:GameViewController?
   var startButton: Button! = nil
   var saveGameButton: Button! = nil
   var difficultyButton: Button! = nil
+  var loginStatusLabel:SKLabelNode = SKLabelNode()
+  var logOutLabel:SKLabelNode = SKLabelNode()
   
   
   var background = SKSpriteNode(imageNamed: "sphere-gray")
@@ -49,6 +53,26 @@ class StartGameScene: SKScene {
     self.difficultyButton.name = "diffBtn"
     self.addChild(self.difficultyButton)
     
+    if let user = Auth.auth().currentUser, let email = user.email{
+      print("printing")
+      self.loginStatusLabel.text = "You are currently logged in as \(email)"
+      self.loginStatusLabel.fontSize = 15
+      self.loginStatusLabel.fontColor = SKColor.black
+      self.loginStatusLabel.fontName = "Arial"
+      self.loginStatusLabel.position = CGPoint(x: self.frame.midX, y: self.frame.height/11)
+      self.addChild(self.loginStatusLabel)
+      
+      self.logOutLabel.text = "Log Out"
+      self.logOutLabel.name = "logOutLabel"
+      self.logOutLabel.fontSize = 15
+      self.logOutLabel.fontColor = SKColor.blue
+      self.logOutLabel.fontName = "Arial"
+      self.logOutLabel.position = CGPoint(x: self.frame.midX, y: self.frame.height/11 - 20)
+      self.addChild(self.logOutLabel)
+    }
+    
+    
+    
     //commented out for testflight
     
     
@@ -77,10 +101,11 @@ class StartGameScene: SKScene {
       SKAction.wait(forDuration: 1.0),
       SKAction.run() { [weak self] in
         // 5
-        guard let `self` = self else { return }
+        guard let `self` = self, let gameViewController = self.gameViewController else { return }
         let reveal = SKTransition.flipHorizontal(withDuration: 1.5)
-        let scene = GameScene(size: self.size)
-        self.view?.presentScene(scene, transition:reveal)
+        gameViewController.gameScene = GameScene(size: self.size)
+        self.view?.presentScene(gameViewController.gameScene!, transition:reveal)
+        self.gameViewController?.startScene = nil
       }
       ]))
   }
@@ -106,4 +131,23 @@ class StartGameScene: SKScene {
     }
   }
   
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+         let touch = touches.first
+         let positionInScene = touch!.location(in: self)
+         let touchedNode = self.atPoint(positionInScene)
+
+         if let name = touchedNode.name {
+             switch name {
+                 case "logOutLabel":
+                  let firebaseAuth = Auth.auth()
+                  do {
+                    try firebaseAuth.signOut()
+                  } catch let signOutError as NSError {
+                    print ("Error signing out: %@", signOutError)
+                  }
+                 default:break
+             }
+         }
+     }
 }
