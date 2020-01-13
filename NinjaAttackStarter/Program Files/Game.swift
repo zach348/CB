@@ -15,7 +15,7 @@ class Game {
     RespSettings(phase: 8, phaseDuration: 120, frequency: 3.5, inDuration: 5, inWait: 3, outDuration: 10, outWait: 4.5, moveToCenterDuration: 8.5, moveCenterWait: 2),
     RespSettings(phase: 9, phaseDuration: 999, frequency: 3, inDuration: 6, inWait: 4, outDuration: 12, outWait: 6, moveToCenterDuration: 10, moveCenterWait: 2)
   ]
-  static var willSaveGame:Bool = false
+  static var willSaveGame:Bool = true
   static var didSaveGame:Bool = false
   static var respActive:Bool = false
   static var initialRespTransition = true

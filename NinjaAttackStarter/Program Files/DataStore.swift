@@ -66,7 +66,7 @@ struct DataStore {
   static func saveTimePoint(tpRecord:[String:Any], gameCount:Any){
     let db = Firestore.firestore()
     let timePointCollection = db.collection("games/\(gameCount)/timepoints")
-    timePointCollection.addDocument(data: tpRecord)
+//    timePointCollection.addDocument(data: tpRecord)
   }
   
   
