@@ -54,7 +54,6 @@ class StartGameScene: SKScene {
     self.addChild(self.difficultyButton)
     
     if let user = Auth.auth().currentUser, let email = user.email{
-      print("printing")
       self.loginStatusLabel.text = "You are currently logged in as \(email)"
       self.loginStatusLabel.fontSize = 15
       self.loginStatusLabel.fontColor = SKColor.black

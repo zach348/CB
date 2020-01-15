@@ -25,15 +25,23 @@ class GameViewController: UIViewController, TransitionDelegate {
     skView.ignoresSiblingOrder = true
     skView.presentScene(loginScene)
     
-    var handle = Auth.auth().addStateDidChangeListener { (auth, user) in
+   Auth.auth().addStateDidChangeListener { (auth, user) in
       // ...
-      if user != nil {
+      if user != nil && !user!.isEmailVerified{
+        let firebaseAuth = Auth.auth()
+        do {
+          try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+          print ("Error signing out: %@", signOutError)
+        }
+      } else if user != nil && user!.isEmailVerified {
         let skView = self.view as! SKView
         self.startScene = StartGameScene(size: (self.view.bounds.size))
         self.startScene?.gameViewController = self
         skView.presentScene(self.startScene)
         self.loginScene = nil
       }else{
+        print("logged out")
         self.loginScene = LoginScene(size: self.view.bounds.size)
         self.loginScene?.delegate = self as TransitionDelegate
         self.loginScene?.anchorPoint = CGPoint.zero
@@ -68,6 +76,11 @@ class GameViewController: UIViewController, TransitionDelegate {
       if let error = error {
         strongSelf.showAlert(title: "Login Error", message: error.localizedDescription)
       }
+      if let authResult = authResult {
+        if !authResult.user.isEmailVerified {
+          strongSelf.showAlert(title: "Login Error", message: "Please verify your email before logging in")
+        }
+      }
     }
   }
   func handleCreateBtn(username:String,password:String){
@@ -80,7 +93,12 @@ class GameViewController: UIViewController, TransitionDelegate {
         self.startScene?.gameViewController = self
         skView.presentScene(self.startScene)
         self.loginScene = nil
-        self.showAlert(title: "Account Creation Successful", message: "You are logged in as \(email)")
+        self.showAlert(title: "Account Creation Successful", message: "An email verification link has been sent to \(email)")
+        authResult.user.sendEmailVerification(completion: { error in
+          if let error = error {
+            print("email verification send error: \(error.localizedDescription)")
+          }
+        })
       }
     }
   }
