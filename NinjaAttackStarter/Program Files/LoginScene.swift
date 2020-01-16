@@ -1,5 +1,6 @@
 import SpriteKit
 import UIKit
+import Firebase
 protocol TransitionDelegate: SKSceneDelegate {
     func showAlert(title:String,message:String)
     func handleLoginBtn(username:String,password:String)
@@ -11,6 +12,7 @@ class LoginScene: SKScene,UITextFieldDelegate {
     var passwordTextField:UITextField!
     var loginBtn:SKShapeNode!
     var createBtn:SKShapeNode!
+    var forgotPasswordLabel:SKLabelNode = SKLabelNode()
 
     override func didMove(to view: SKView) {
         //bg
@@ -38,7 +40,14 @@ class LoginScene: SKScene,UITextFieldDelegate {
         //buttons
         loginBtn = getButton(frame: CGRect(x:self.size.width/4,y:self.size.height/2.5,width:self.size.width/2,height:30),fillColor: SKColor.blue,title:"Login",logo:nil,name:"loginBtn")
         createBtn = getButton(frame: CGRect(x:self.size.width/4,y:self.size.height/2.5 - 40,width:self.size.width/2,height:30),fillColor: SKColor.blue,title:"Create Account",logo:nil,name:"createBtn")
+        forgotPasswordLabel.text = "Forgot Password?"
+        forgotPasswordLabel.name = "forgotPasswordLabel"
+        forgotPasswordLabel.fontSize = 15
+        forgotPasswordLabel.fontColor = SKColor.white
+        forgotPasswordLabel.fontName = "Arial"
+        forgotPasswordLabel.position = CGPoint(x: self.frame.midX, y: self.frame.height/11)
         addChild(loginBtn)
+        addChild(forgotPasswordLabel)
         addChild(createBtn)
         loginBtn.zPosition = 1
         createBtn.zPosition = 1
@@ -95,10 +104,27 @@ class LoginScene: SKScene,UITextFieldDelegate {
                         (delegate as! TransitionDelegate).handleLoginBtn(username:self.usernameTextField.text!,password: self.passwordTextField.text!)
                     })
                 case "createBtn":
-                    self.run(SKAction.wait(forDuration: 0.1),completion:{[unowned self] in
-                        guard let delegate = self.delegate else { return }
-                        (delegate as! TransitionDelegate).handleCreateBtn(username:self.usernameTextField.text!,password: self.passwordTextField.text!)
+                  self.run(SKAction.wait(forDuration: 0.1),completion:{[unowned self] in
+                      guard let delegate = self.delegate else { return }
+                      (delegate as! TransitionDelegate).handleCreateBtn(username:self.usernameTextField.text!,password: self.passwordTextField.text!)
+                  })
+                case "forgotPasswordLabel":
+                  guard let gameViewController = self.gameViewController else {break}
+                  let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+                  let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+                  let emailValid = emailTest.evaluate(with: self.usernameTextField.text)
+                  if emailValid {
+                    Auth.auth().sendPasswordReset(withEmail: self.usernameTextField.text!, completion: { error in
+                      if let error = error {
+                        gameViewController.showAlert(title: "Password Reset Error", message: error.localizedDescription)
+                      }else{
+                        gameViewController.showAlert(title: "Password Reset Sent", message: "If an account exists, a password reset link has been sent to \(self.usernameTextField.text!)")
+                      }
                     })
+                  }else{
+                    gameViewController.showAlert(title: "Invalid Email", message: "Please enter a valid email in username field and try again")
+                  }
+              
                 default:break
             }
         }
@@ -115,7 +141,7 @@ class LoginScene: SKScene,UITextFieldDelegate {
             let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
             let result = emailTest.evaluate(with: textField.text)
             let title = "Invalid Email"
-            let message = result ? "This is a correct email" : "Wrong email syntax"
+            let message = result ? "This is a correct email" : "Invalid email syntax"
             if !result {
                 self.run(SKAction.wait(forDuration: 0.01),completion:{[unowned self] in
                     guard let delegate = self.delegate else { return }
