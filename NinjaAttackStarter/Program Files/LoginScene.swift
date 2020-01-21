@@ -22,7 +22,7 @@ class LoginScene: SKScene,UITextFieldDelegate {
         addChild(background)
         //title
         let title = SKLabelNode.init(fontNamed: "AppleSDGothicNeo-Bold")
-        title.text = "Kalibrate"; title.fontSize = 25
+        title.text = "Kalibrate"; title.fontSize = 40
         title.fontColor = .cyan
         addChild(title)
         title.zPosition = 1
@@ -118,7 +118,7 @@ class LoginScene: SKScene,UITextFieldDelegate {
                       if let error = error {
                         gameViewController.showAlert(title: "Password Reset Error", message: error.localizedDescription)
                       }else{
-                        gameViewController.showAlert(title: "Password Reset Sent", message: "If an account exists, a password reset link has been sent to \(self.usernameTextField.text!)")
+                        gameViewController.showAlert(title: "Password Reset Sent", message: "A password reset link has been sent to \(self.usernameTextField.text!)")
                       }
                     })
                   }else{
