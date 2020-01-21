@@ -15,7 +15,7 @@ class Game {
     RespSettings(phase: 8, phaseDuration: 120, frequency: 3.5, inDuration: 5, inWait: 3, outDuration: 10, outWait: 4.5, moveToCenterDuration: 8.5, moveCenterWait: 2),
     RespSettings(phase: 9, phaseDuration: 999, frequency: 3, inDuration: 6, inWait: 4, outDuration: 12, outWait: 6, moveToCenterDuration: 10, moveCenterWait: 2)
   ]
-  static var willSaveGame:Bool = true
+  static var willSaveGame:Bool = false
   static var didSaveGame:Bool = false
   static var respActive:Bool = false
   static var initialRespTransition = true
@@ -179,13 +179,8 @@ class Game {
         }
         if self.outcomeHistory.count >= 3 {
           let last3Outcomes = self.outcomeHistory[self.outcomeHistory.count - 3..<self.outcomeHistory.count]
-<<<<<<< HEAD
-          if !last3Outcomes.contains(Outcome.Failure) && !last3Outcomes.contains(Outcome.Pass) && !last3Outcomes.contains(Outcome.Transition) {
-            if Settings.diffMod < 1.5 { Settings.diffMod += 0.025 }
-=======
           if !last3Outcomes.contains(Outcome.failure) && !last3Outcomes.contains(Outcome.pass) && !last3Outcomes.contains(Outcome.transition) {
-            if Settings.diffMod < 1.5 { Settings.diffMod += 0.075 }
->>>>>>> 7b706f9b7a0d153a439c8b184db69170f9ff7f28
+            if Settings.diffMod < 1.5 { Settings.diffMod += 0.025 }
             print("upregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
           }
         }
