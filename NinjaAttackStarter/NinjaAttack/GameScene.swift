@@ -12,6 +12,7 @@ struct PhysicsCategory {
 let currentGame:Game = Game()
 
 class GameScene: SKScene {
+  weak var gameViewController:GameViewController?
   
   override func didMove(to view: SKView) {
     currentGame.gameScene = self
@@ -21,9 +22,9 @@ class GameScene: SKScene {
   }
     
   override func update(_ currentTime: TimeInterval) {
-    if (Game.willSaveGame && !Game.didSaveGame && Game.respActive){
+    if (Game.willSaveGame && !Game.didSaveGame){
       guard let timer = currentGame.timer else {return}
-      if timer.elapsedTime - timer.lastPhaseShiftTime > 60 {
+      if timer.elapsedTime - timer.lastPhaseShiftTime > 60 && Game.respActive && !Game.didSaveGame {
         DataStore.saveGame()
         Game.didSaveGame = true
         print("save command executed")

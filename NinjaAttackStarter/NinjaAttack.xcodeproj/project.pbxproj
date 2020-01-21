@@ -50,6 +50,7 @@
 		D2A5F2091F4A9144005CD714 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F2071F4A9144005CD714 /* Main.storyboard */; };
 		D2A5F20B1F4A9144005CD714 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F20A1F4A9144005CD714 /* Assets.xcassets */; };
 		D2A5F2211F4A96D0005CD714 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F2201F4A96D0005CD714 /* AppDelegate.swift */; };
+		EF09503723C7AC5900AEBF81 /* LoginScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF09503623C7AC5900AEBF81 /* LoginScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -105,6 +106,7 @@
 		D2A5F20A1F4A9144005CD714 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = NinjaAttack/Assets.xcassets; sourceTree = "<group>"; };
 		D2A5F20F1F4A9144005CD714 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = NinjaAttack/Info.plist; sourceTree = "<group>"; };
 		D2A5F2201F4A96D0005CD714 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = NinjaAttack/AppDelegate.swift; sourceTree = "<group>"; };
+		EF09503623C7AC5900AEBF81 /* LoginScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 				84C153912300636700C60973 /* TIle.swift */,
 				84BD930D231C4E450068E47D /* DataStore.swift */,
 				8408B9B722D3FFF1001ACC95 /* RespSettings.swift */,
+				EF09503623C7AC5900AEBF81 /* LoginScene.swift */,
 				84CD8ED222A9685100D4B4D2 /* Timer.swift */,
 			);
 			path = "Program Files";
@@ -393,6 +396,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF09503723C7AC5900AEBF81 /* LoginScene.swift in Sources */,
 				AFD63F892036497100E08C66 /* GameScene.swift in Sources */,
 				84DF3B1222ABF97200AAAA8A /* Extensions.swift in Sources */,
 				8457116A23788908006AD51F /* Outcome.swift in Sources */,

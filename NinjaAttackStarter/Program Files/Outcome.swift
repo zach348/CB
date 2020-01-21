@@ -4,8 +4,8 @@ import Foundation
 
 
 enum Outcome {
-  case Success
-  case Failure
-  case Pass
-  case Transition
+  case success
+  case failure
+  case pass
+  case transition
 }
