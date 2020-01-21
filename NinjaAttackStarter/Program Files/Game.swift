@@ -180,7 +180,7 @@ class Game {
         if self.outcomeHistory.count >= 3 {
           let last3Outcomes = self.outcomeHistory[self.outcomeHistory.count - 3..<self.outcomeHistory.count]
           if !last3Outcomes.contains(Outcome.Failure) && !last3Outcomes.contains(Outcome.Pass) && !last3Outcomes.contains(Outcome.Transition) {
-            if Settings.diffMod < 1.5 { Settings.diffMod += 0.075 }
+            if Settings.diffMod < 1.5 { Settings.diffMod += 0.025 }
             print("upregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
           }
         }
