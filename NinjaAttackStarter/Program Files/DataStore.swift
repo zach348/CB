@@ -5,10 +5,10 @@ import SpriteKit
 import Firebase
 
 struct DataStore {
+  static var currentUser = Auth.auth().currentUser
   static var initialRequest:Bool = true
   static var db:Firestore = Firestore.firestore()
-  static var metaRef:DocumentReference = db.document("meta/games")
-  
+  static var metaRef:DocumentReference = db.document("meta/gameMetaData")
   static var records = [[String:Any]]()
   static var eventMarkers:[String:Any] = [
     "didShift": ["flag": false, "delay": -1],
@@ -21,6 +21,7 @@ struct DataStore {
       timer.stopTimer(timerID: "dataTimer")
       self.updateBallStats()
       let record:[String:Any] = [
+        "userEmail": currentUser?.email,
         "elapsedTime": currentGame.timer!.elapsedTime,
         "isResponding": currentGame.isPaused,
         "bpm": currentGame.bpm,
@@ -47,7 +48,18 @@ struct DataStore {
           "didAttempt": self.eventMarkers["didAttempt"]
         ],
         "ballInfo": self.ballInfo,
-        "outcomeHistory": currentGame.outcomeHistory
+        "outcomeHistory": currentGame.outcomeHistory.map({ (outcome) -> String in
+          switch outcome {
+          case Outcome.success:
+            return "success"
+          case Outcome.failure:
+            return "failure"
+          case Outcome.pass:
+            return "pass"
+          case Outcome.transition:
+            return "transition"
+          }
+        })
       ]
       self.records.append(record)
       self.ballInfo = [[String:Any]]()

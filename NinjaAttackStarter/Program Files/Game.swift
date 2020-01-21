@@ -15,7 +15,7 @@ class Game {
     RespSettings(phase: 8, phaseDuration: 120, frequency: 3.5, inDuration: 5, inWait: 3, outDuration: 10, outWait: 4.5, moveToCenterDuration: 8.5, moveCenterWait: 2),
     RespSettings(phase: 9, phaseDuration: 999, frequency: 3, inDuration: 6, inWait: 4, outDuration: 12, outWait: 6, moveToCenterDuration: 10, moveCenterWait: 2)
   ]
-  static var willSaveGame:Bool = false
+  static var willSaveGame:Bool = true
   static var didSaveGame:Bool = false
   static var respActive:Bool = false
   static var initialRespTransition = true
@@ -59,7 +59,7 @@ class Game {
   }
   
   class func transitionTrackPhase(timer:Timer){
-    currentGame.outcomeHistory.append(Outcome.Transition)
+    currentGame.outcomeHistory.append(Outcome.transition)
     currentGame.streakAchieved = false
     currentGame.stagePoints = 0
     currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
@@ -150,7 +150,7 @@ class Game {
     didSet {
       if self.foundTargets == Game.currentTrackSettings.numTargets {
         currentGame.stagePoints += 1
-        currentGame.outcomeHistory.append(Outcome.Success)
+        currentGame.outcomeHistory.append(Outcome.success)
       }
     }
   }
@@ -163,23 +163,23 @@ class Game {
   }
   var failedAttempt = false {
     didSet{
-      if self.failedAttempt { currentGame.outcomeHistory.append(Outcome.Failure) }
+      if self.failedAttempt { currentGame.outcomeHistory.append(Outcome.failure) }
     }
   }
   var outcomeHistory = [Outcome]() {
     //implement different length histories for upregulation(3) and downregulation(2)
     didSet{
-      if self.outcomeHistory.last != Outcome.Transition{
+      if self.outcomeHistory.last != Outcome.transition{
         if self.outcomeHistory.count >= 2 {
           let last2Outcomes = self.outcomeHistory[self.outcomeHistory.count - 2..<self.outcomeHistory.count]
-          if !last2Outcomes.contains(Outcome.Success) && !last2Outcomes.contains(Outcome.Transition){
+          if !last2Outcomes.contains(Outcome.success) && !last2Outcomes.contains(Outcome.transition){
             if Settings.diffMod > 0.5 { Settings.diffMod -= 0.1 }
             print("downregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
           }
         }
         if self.outcomeHistory.count >= 3 {
           let last3Outcomes = self.outcomeHistory[self.outcomeHistory.count - 3..<self.outcomeHistory.count]
-          if !last3Outcomes.contains(Outcome.Failure) && !last3Outcomes.contains(Outcome.Pass) && !last3Outcomes.contains(Outcome.Transition) {
+          if !last3Outcomes.contains(Outcome.failure) && !last3Outcomes.contains(Outcome.pass) && !last3Outcomes.contains(Outcome.transition) {
             if Settings.diffMod < 1.5 { Settings.diffMod += 0.075 }
             print("upregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
           }
@@ -286,7 +286,7 @@ class Game {
   }
   
   func unpauseGame(){
-    if !self.failedAttempt && self.foundTargets < Game.currentTrackSettings.numTargets { currentGame.outcomeHistory.append(Outcome.Pass)}
+    if !self.failedAttempt && self.foundTargets < Game.currentTrackSettings.numTargets { currentGame.outcomeHistory.append(Outcome.pass)}
     self.isPaused = false
     Ball.removeEmitters()
     Ball.unfreezeMovement()
