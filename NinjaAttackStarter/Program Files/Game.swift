@@ -1,6 +1,7 @@
 
 import Foundation
 import SpriteKit
+import Firebase
 
 class Game {
       
@@ -260,6 +261,49 @@ class Game {
       Sensory.applyFrequency()
       self.isRunning = true
     }
+  }
+  
+  func cleanupGame(){
+    Ball.members = [Ball]()
+    Ball.blinkFlags = [Bool]()
+    Ball.pendingPause = false
+    Ball.pendingShift = false
+    Ball.assignedBlinkAudio = false
+    Settings.diffMod = 1
+    Game.settingsArr = Settings.settings[DiffSetting.Easy]!
+    Game.willSaveGame = false
+    Game.didSaveGame = false
+    Game.respActive = false
+    Game.initialRespTransition = true
+    Game.currentRespSettings = Game.respSettingsArr[0]
+    Game.currentTrackSettings = Game.settingsArr[0]
+    Tile.members = [Tile]()
+    DataStore.currentUser = Auth.auth().currentUser
+    DataStore.initialRequest = true
+    DataStore.db = Firestore.firestore()
+    DataStore.metaRef = DataStore.db.document("meta/gameMetaData")
+    DataStore.records = [[String:Any]]()
+    DataStore.eventMarkers = [
+      "didShift": ["flag": false, "delay": -1],
+      "didAttempt": ["flag": false, "success": -1, "stagePoints": -1]
+    ]
+    DataStore.ballInfo = [[String:Any]]()
+    Sensory.audioNodes = [
+      "correct": SKAudioNode(fileNamed: "correct_sound"),
+      "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
+      "streak": SKAudioNode(fileNamed: "streak_sound"),
+      "blip": SKAudioNode(fileNamed: "radar_blip")
+    ]
+    Sensory.toneNodes = [
+      "tone1": SKAudioNode(fileNamed: "tone200hz.wav"),
+      "tone2": SKAudioNode(fileNamed: "tone185hz.wav"),
+      "tone3": SKAudioNode(fileNamed: "tone170hz.wav"),
+      "tone4": SKAudioNode(fileNamed: "tone155hz.wav"),
+      "tone5": SKAudioNode(fileNamed: "tone140hz.wav"),
+      "tone6": SKAudioNode(fileNamed: "tone140hz.wav"),
+      "tone7": SKAudioNode(fileNamed: "tone140hz.wav")
+    ]
+    Sensory.hapticEngine = nil
   }
   
   func pauseGame(){

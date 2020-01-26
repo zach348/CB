@@ -9,7 +9,7 @@ struct PhysicsCategory {
   static let ball   : UInt32 = 0b1       // 1
 }
 
-let currentGame:Game = Game()
+var currentGame:Game = Game()
 
 class GameScene: SKScene {
   weak var gameViewController:GameViewController?
@@ -29,6 +29,14 @@ class GameScene: SKScene {
         Game.didSaveGame = true
         print("save command executed")
       }
+    }
+  }
+  
+  func shake(){
+    print("did shake")
+    guard let gameviewcontroller = self.gameViewController else { print("no gvc");return}
+    if currentGame.isRunning {
+      gameviewcontroller.showAlert(title: "Quit Game", message: "Are you sure you want to quit?", params: ["quitGame": true])
     }
   }
 }

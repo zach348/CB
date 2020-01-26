@@ -35,7 +35,6 @@ class GameViewController: UIViewController, TransitionDelegate {
           print ("Error signing out: %@", signOutError)
         }
       } else if user != nil && user!.isEmailVerified {
-        let skView = self.view as! SKView
         self.startScene = StartGameScene(size: (self.view.bounds.size))
         self.startScene?.gameViewController = self
         skView.presentScene(self.startScene)
@@ -62,10 +61,32 @@ class GameViewController: UIViewController, TransitionDelegate {
     return true
   }
   
-  func showAlert(title:String,message:String) {
+  override func motionBegan(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+      if motion == .motionShake {
+          if let skView = view as? SKView, let scene = skView.scene as? GameScene {
+              scene.shake()
+          }
+      }
+  }
+  
+  func showAlert(title:String,message:String,params:[String:Bool] = [String:Bool]()) {
       let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
       alertController.addAction(UIAlertAction(title: "Ok", style: .default) { action in
-          print("handle Ok action...")
+        if let quitGame = params["quitGame"] {
+          if quitGame {
+            let skView = self.view as! SKView
+            self.startScene = StartGameScene(size: (self.view.bounds.size))
+            self.startScene?.gameViewController = self
+            skView.presentScene(self.startScene)
+            self.gameScene?.removeAllActions()
+            self.gameScene?.removeAllChildren()
+            self.gameScene = nil
+            currentGame.cleanupGame()
+            currentGame = Game()
+          }
+        } else {
+          print("handle Ok action...no quitGame param")
+        }
       })
       alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
       self.present(alertController, animated: true)

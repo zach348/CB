@@ -103,6 +103,7 @@ class StartGameScene: SKScene {
         guard let `self` = self, let gameViewController = self.gameViewController else { return }
         let reveal = SKTransition.flipHorizontal(withDuration: 1.5)
         gameViewController.gameScene = GameScene(size: self.size)
+        gameViewController.gameScene?.gameViewController = gameViewController
         self.view?.presentScene(gameViewController.gameScene!, transition:reveal)
         self.gameViewController?.startScene = nil
       }
