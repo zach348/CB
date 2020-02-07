@@ -215,11 +215,14 @@ class Game {
   }
   
   func setupGame(){
+    guard let userData = DataStore.user else {print("error declaring userData (setup game)"); return}
     self.timer = Timer()
     self.worldTimer = SKNode()
     self.spriteWorld = SKNode()
     self.hrController = HRMViewController()
     DataStore.dummyRequest()
+    Settings.diffMod = userData["diffMod"] as! CGFloat
+    print(Settings.diffMod)
     
     if let scene = self.gameScene {
       if let worldTimer = self.worldTimer, let spriteWorld = currentGame.spriteWorld {

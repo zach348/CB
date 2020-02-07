@@ -33,7 +33,6 @@ class GameScene: SKScene {
   }
   
   func shake(){
-    print("did shake")
     guard let gameviewcontroller = self.gameViewController else { print("no gvc");return}
     if currentGame.isRunning {
       gameviewcontroller.showAlert(title: "Quit Game", message: "Are you sure you want to quit?", params: ["quitGame": true])

@@ -35,6 +35,9 @@ class GameViewController: UIViewController, TransitionDelegate {
           print ("Error signing out: %@", signOutError)
         }
       } else if user != nil && user!.isEmailVerified {
+        print("logged in")
+        guard let userId = user?.email else {print("error retrieving userId"); return}
+        DataStore.getUser(userId: userId)
         self.startScene = StartGameScene(size: (self.view.bounds.size))
         self.startScene?.gameViewController = self
         skView.presentScene(self.startScene)
@@ -74,6 +77,7 @@ class GameViewController: UIViewController, TransitionDelegate {
       alertController.addAction(UIAlertAction(title: "Ok", style: .default) { action in
         if let quitGame = params["quitGame"] {
           if quitGame {
+            guard let userId = Auth.auth().currentUser?.email else { print("error getting userId to quit game"); return}
             let skView = self.view as! SKView
             self.startScene = StartGameScene(size: (self.view.bounds.size))
             self.startScene?.gameViewController = self
@@ -81,6 +85,7 @@ class GameViewController: UIViewController, TransitionDelegate {
             self.gameScene?.removeAllActions()
             self.gameScene?.removeAllChildren()
             self.gameScene = nil
+            DataStore.updateUser(userId: userId)
             currentGame.cleanupGame()
             currentGame = Game()
           }

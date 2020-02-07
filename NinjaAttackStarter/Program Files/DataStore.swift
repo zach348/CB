@@ -15,6 +15,7 @@ struct DataStore {
     "didAttempt": ["flag": false, "success": -1, "stagePoints": -1]
   ]
   static var ballInfo:[[String:Any]] = [[String:Any]]()
+  static var user:[String:Any]?
   
   static func addRecord(){
     if let timer = currentGame.timer, let scene = currentGame.gameScene {
@@ -76,8 +77,7 @@ struct DataStore {
   }
   
   static func saveTimePoint(tpRecord:[String:Any], gameCount:Any){
-    let db = Firestore.firestore()
-    let timePointCollection = db.collection("games/\(gameCount)/timepoints")
+    let timePointCollection = self.db.collection("games/\(gameCount)/timepoints")
     timePointCollection.addDocument(data: tpRecord)
   }
   
@@ -91,6 +91,30 @@ struct DataStore {
       print("gameCount, dummy request:", gameCount)
       
     })
+  }
+  
+  static func getUser(userId:String){
+    let collectionRef = db.collection("users")
+    let userDocRef = collectionRef.document(userId)
+    let metaUsersRef = db.collection("users").document("userMeta")
+    userDocRef.getDocument { (document, error) in
+        if let document = document, document.exists {
+          guard let userData = document.data() else {print("error extracting data"); return }
+          self.user = userData
+        } else {
+          collectionRef.document(userId).setData([
+            "diffMod": 1
+          ])
+          metaUsersRef.updateData(["userCount": FieldValue.increment(Int64(1))])
+        }
+    }
+  }
+  
+  static func updateUser(userId:String){
+    guard var userData = self.user else {return}
+    let userDocRef = db.collection("users").document(userId)
+    userData["diffMod"] = Settings.diffMod
+    userDocRef.setData(userData)
   }
   
   static func saveGame(){
