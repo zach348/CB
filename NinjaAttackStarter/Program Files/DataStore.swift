@@ -129,6 +129,7 @@ struct DataStore {
         self.saveTimePoint(tpRecord: tpRecord, gameCount: gameCount)
       }
     })
+    Game.didSaveGame = true
   }
   
   static func deleteDocument(path:String){

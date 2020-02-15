@@ -216,6 +216,9 @@ class Game {
   
   func setupGame(){
     guard let userData = DataStore.user else {print("error declaring userData (setup game)"); return}
+    //game cleanup
+    self.cleanupGame()
+    
     self.timer = Timer()
     self.worldTimer = SKNode()
     self.spriteWorld = SKNode()
