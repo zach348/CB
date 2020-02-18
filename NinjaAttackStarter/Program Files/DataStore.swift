@@ -22,6 +22,7 @@ struct DataStore {
       timer.stopTimer(timerID: "dataTimer")
       self.updateBallStats()
       let record:[String:Any] = [
+        "timeStamp": FieldValue.serverTimestamp(),
         "userEmail": currentUser?.email,
         "elapsedTime": currentGame.timer!.elapsedTime,
         "isResponding": currentGame.isPaused,
@@ -103,9 +104,10 @@ struct DataStore {
           self.user = userData
         } else {
           collectionRef.document(userId).setData([
-            "diffMod": 1
+            "diffMod": 1,
+            "lastUpdated": FieldValue.serverTimestamp()
           ])
-          metaUsersRef.updateData(["userCount": FieldValue.increment(Int64(1))])
+          metaUsersRef.updateData(["userCount": FieldValue.increment(Int64(1)), "lastUpdated": FieldValue.serverTimestamp()])
         }
     }
   }
@@ -113,7 +115,7 @@ struct DataStore {
   static func updateUser(userId:String){
     guard var userData = self.user else {return}
     let userDocRef = db.collection("users").document(userId)
-    userData["diffMod"] = Settings.diffMod
+    userData = ["diffMod": Settings.diffMod, "lastUpdated": FieldValue.serverTimestamp()]
     userDocRef.setData(userData)
   }
   

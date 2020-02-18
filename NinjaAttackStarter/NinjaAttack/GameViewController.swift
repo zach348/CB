@@ -82,10 +82,10 @@ class GameViewController: UIViewController, TransitionDelegate {
             self.startScene = StartGameScene(size: (self.view.bounds.size))
             self.startScene?.gameViewController = self
             skView.presentScene(self.startScene)
-            DataStore.saveGame()
             self.gameScene?.removeAllActions()
             self.gameScene?.removeAllChildren()
             self.gameScene = nil
+            DataStore.saveGame()
             DataStore.updateUser(userId: userId)
             currentGame = Game()
           }

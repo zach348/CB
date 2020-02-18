@@ -309,7 +309,6 @@ class Game {
       "tone6": SKAudioNode(fileNamed: "tone140hz.wav"),
       "tone7": SKAudioNode(fileNamed: "tone140hz.wav")
     ]
-    Sensory.hapticEngine = nil
   }
   
   func pauseGame(){

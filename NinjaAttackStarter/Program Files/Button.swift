@@ -141,7 +141,7 @@ class Button: SKSpriteNode {
     
     isSelected = false
     
- if (targetTouchUpInside != nil && targetTouchUpInside!.responds(to: actionTouchUpInside!)) {
+    if (targetTouchUpInside != nil && targetTouchUpInside!.responds(to: actionTouchUpInside!)) {
       let touch: AnyObject! = touches.first
       let touchLocation = touch.location(in: parent!)
       
