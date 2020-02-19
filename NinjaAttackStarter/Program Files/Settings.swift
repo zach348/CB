@@ -41,7 +41,7 @@ struct Settings {
   
   static var diffMod:CGFloat = 1 {
     didSet{
-      print(diffMod)
+      print("diffMod set:", diffMod)
     }
   }
 

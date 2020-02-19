@@ -23,7 +23,6 @@ struct DataStore {
       self.updateBallStats()
       let record:[String:Any] = [
         "timeStamp": FieldValue.serverTimestamp(),
-        "userEmail": currentUser?.email,
         "elapsedTime": currentGame.timer!.elapsedTime,
         "isResponding": currentGame.isPaused,
         "bpm": currentGame.bpm,
@@ -124,8 +123,19 @@ struct DataStore {
     self.metaRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
       guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
       guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
+      guard let currentUser = self.currentUser else {print("error retrieving current user from DataStore"); return}
+      self.db.collection("games").document("\(gameCount)").setData([
+        "lastUpdated": FieldValue.serverTimestamp(),
+        "userEmail": currentUser.email
+      ]) { error in
+        if let error = error {
+          print(error.localizedDescription)
+        } else {
+          print("game document written")
+        }
+      }
       
-      print("records count: \(self.records.count)")
+      print("preparing to save timepoints, records count: \(self.records.count)")
       print("gameCount:", gameCount)
       for tpRecord in self.records.shuffled() {
         self.saveTimePoint(tpRecord: tpRecord, gameCount: gameCount)

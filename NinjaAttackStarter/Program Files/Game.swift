@@ -225,7 +225,6 @@ class Game {
     self.hrController = HRMViewController()
     DataStore.dummyRequest()
     Settings.diffMod = userData["diffMod"] as! CGFloat
-    print(Settings.diffMod)
     
     if let scene = self.gameScene {
       if let worldTimer = self.worldTimer, let spriteWorld = currentGame.spriteWorld {
@@ -275,7 +274,7 @@ class Game {
     Ball.pendingPause = false
     Ball.pendingShift = false
     Ball.assignedBlinkAudio = false
-    Settings.diffMod = 1
+//    Settings.diffMod = 1
     Game.settingsArr = Settings.settings[DiffSetting.Easy]!
     Game.willSaveGame = false
     Game.didSaveGame = false
