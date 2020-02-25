@@ -146,7 +146,13 @@ class Game {
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
   var advanceRespFlag:Bool = false
-  var diffSetting = DiffSetting.Easy
+  var diffSetting = DiffSetting.Easy {
+    didSet {
+      guard let settingsArr = Settings.settings[self.diffSetting] else {print("error switching diff");return}
+      Game.settingsArr = settingsArr
+      print("switched currentGame.diffSetting")
+    }
+  }
   var foundTargets = 0 {
     didSet {
       if self.foundTargets == Game.currentTrackSettings.numTargets {
@@ -233,7 +239,7 @@ class Game {
         spriteWorld.position = CGPoint(x: scene.size.width/2, y: scene.size.height/2)
       }
       //gamescene formatting
-      scene.backgroundColor = .white
+      scene.backgroundColor = .lightGray
       scene.scaleMode = .aspectFit
       scene.physicsBody = SKPhysicsBody(edgeLoopFrom: scene.frame)
       scene.physicsWorld.gravity = .zero
@@ -274,8 +280,8 @@ class Game {
     Ball.pendingPause = false
     Ball.pendingShift = false
     Ball.assignedBlinkAudio = false
+//    leftover from nonpersistent diffMods
 //    Settings.diffMod = 1
-    Game.settingsArr = Settings.settings[DiffSetting.Easy]!
     Game.willSaveGame = false
     Game.didSaveGame = false
     Game.respActive = false
@@ -350,7 +356,8 @@ class Game {
   func incrementStatusBalls(emitter:Bool = false) {
     for ball in self.statusBalls {
       if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
-        ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
+        ball.run(SKAction.setTexture(SKTexture(imageNamed: "sp-darkYellow-gloss")))
+        print(ball.texture!.description)
         if emitter { Sensory.addParticles(sprite: ball, emitterFile: "ball_fire")}
         return
       }
@@ -360,7 +367,7 @@ class Game {
   func decrementStatusBalls(){
     if(self.stagePoints > 0){
       let streakArr = self.statusBalls.filter { statusBall in
-        statusBall.texture!.description == "<SKTexture> 'sphere-yellow' (256 x 256)"
+        statusBall.texture!.description == "<SKTexture> 'sp-darkYellow-gloss' (1500 x 1502)"
       }
       for node in streakArr.last!.children {
         if node is SKEmitterNode { node.removeFromParent() }
