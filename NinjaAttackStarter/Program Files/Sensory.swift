@@ -227,7 +227,7 @@ struct Sensory {
       let toneGroup = SKAction.group([tone,haptic])
       let wait = SKAction.wait(forDuration: 1/hz/2)
       let systemVal = UIScreen.main.brightness
-      let decrease = SKAction.run({ UIScreen.main.brightness = systemVal * 0.99 })
+      let decrease = SKAction.run({ UIScreen.main.brightness = systemVal * 0.98 })
       let increase = SKAction.run({ UIScreen.main.brightness = systemVal })
       let freqGroup = SKAction.group([increase, toneGroup])
       let sequence = SKAction.sequence([wait, decrease, wait, freqGroup])

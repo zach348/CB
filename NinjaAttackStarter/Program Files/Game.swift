@@ -146,7 +146,13 @@ class Game {
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
   var advanceRespFlag:Bool = false
-  var diffSetting = DiffSetting.Easy
+  var diffSetting = DiffSetting.Easy {
+    didSet {
+      guard let settingsArr = Settings.settings[self.diffSetting] else {print("error switching diff");return}
+      Game.settingsArr = settingsArr
+      print("switched currentGame.diffSetting")
+    }
+  }
   var foundTargets = 0 {
     didSet {
       if self.foundTargets == Game.currentTrackSettings.numTargets {
@@ -233,7 +239,7 @@ class Game {
         spriteWorld.position = CGPoint(x: scene.size.width/2, y: scene.size.height/2)
       }
       //gamescene formatting
-      scene.backgroundColor = .white
+      scene.backgroundColor = .lightGray
       scene.scaleMode = .aspectFit
       scene.physicsBody = SKPhysicsBody(edgeLoopFrom: scene.frame)
       scene.physicsWorld.gravity = .zero
@@ -274,8 +280,8 @@ class Game {
     Ball.pendingPause = false
     Ball.pendingShift = false
     Ball.assignedBlinkAudio = false
+//    leftover from nonpersistent diffMods
 //    Settings.diffMod = 1
-    Game.settingsArr = Settings.settings[DiffSetting.Easy]!
     Game.willSaveGame = false
     Game.didSaveGame = false
     Game.respActive = false

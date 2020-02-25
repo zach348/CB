@@ -22,7 +22,7 @@ class GameScene: SKScene {
   }
     
   override func update(_ currentTime: TimeInterval) {
- 
+    print(Game.currentTrackSettings.difficulty)
   }
   
   func shake(){
