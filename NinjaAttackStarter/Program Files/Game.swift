@@ -356,7 +356,8 @@ class Game {
   func incrementStatusBalls(emitter:Bool = false) {
     for ball in self.statusBalls {
       if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
-        ball.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-yellow")))
+        ball.run(SKAction.setTexture(SKTexture(imageNamed: "sp-darkYellow-gloss")))
+        print(ball.texture!.description)
         if emitter { Sensory.addParticles(sprite: ball, emitterFile: "ball_fire")}
         return
       }
@@ -366,7 +367,7 @@ class Game {
   func decrementStatusBalls(){
     if(self.stagePoints > 0){
       let streakArr = self.statusBalls.filter { statusBall in
-        statusBall.texture!.description == "<SKTexture> 'sphere-yellow' (256 x 256)"
+        statusBall.texture!.description == "<SKTexture> 'sp-darkYellow-gloss' (1500 x 1502)"
       }
       for node in streakArr.last!.children {
         if node is SKEmitterNode { node.removeFromParent() }
