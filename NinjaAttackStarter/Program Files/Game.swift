@@ -287,7 +287,7 @@ class Game {
     Game.respActive = false
     Game.initialRespTransition = true
     Game.currentRespSettings = Game.respSettingsArr[0]
-    Game.currentTrackSettings = Game.settingsArr[0]
+    Game.currentTrackSettings = Game.settingsArr[4]
     Tile.members = [Tile]()
     DataStore.currentUser = Auth.auth().currentUser
     DataStore.initialRequest = true

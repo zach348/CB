@@ -11,7 +11,8 @@ struct Sensory {
     "correct": SKAudioNode(fileNamed: "correct_sound"),
     "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
     "streak": SKAudioNode(fileNamed: "streak_sound"),
-    "blip": SKAudioNode(fileNamed: "radar_blip")
+    "blip": SKAudioNode(fileNamed: "radar_blip"),
+    "robot_blip": SKAudioNode(fileNamed: "Robot_blip")
   ]
   
   static var toneNodes: [String: SKAudioNode] = [

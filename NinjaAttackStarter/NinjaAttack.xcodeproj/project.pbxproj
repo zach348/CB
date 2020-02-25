@@ -51,6 +51,7 @@
 		D2A5F20B1F4A9144005CD714 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F20A1F4A9144005CD714 /* Assets.xcassets */; };
 		D2A5F2211F4A96D0005CD714 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F2201F4A96D0005CD714 /* AppDelegate.swift */; };
 		EF09503723C7AC5900AEBF81 /* LoginScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF09503623C7AC5900AEBF81 /* LoginScene.swift */; };
+		EF4BCBD72404D0B600BD7BE8 /* Robot_blip.wav in Resources */ = {isa = PBXBuildFile; fileRef = EF4BCBD62404D0B600BD7BE8 /* Robot_blip.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,6 +108,7 @@
 		D2A5F20F1F4A9144005CD714 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = NinjaAttack/Info.plist; sourceTree = "<group>"; };
 		D2A5F2201F4A96D0005CD714 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = NinjaAttack/AppDelegate.swift; sourceTree = "<group>"; };
 		EF09503623C7AC5900AEBF81 /* LoginScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScene.swift; sourceTree = "<group>"; };
+		EF4BCBD62404D0B600BD7BE8 /* Robot_blip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Robot_blip.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +179,7 @@
 				84C1D2BC22C82DFA008E5C7F /* tone140hz.wav */,
 				84C15395230610E800C60973 /* wrong_sound.wav */,
 				84C153992306141500C60973 /* correct_sound.wav */,
+				EF4BCBD62404D0B600BD7BE8 /* Robot_blip.wav */,
 				84C153972306116900C60973 /* input_error.wav */,
 				84BD9309231372650068E47D /* radar_blip.wav */,
 				84C1539B23061FD900C60973 /* streak_sound.wav */,
@@ -315,6 +318,7 @@
 				84C1D2C122C82DFA008E5C7F /* tone140hz.wav in Resources */,
 				84C153982306116900C60973 /* input_error.wav in Resources */,
 				84C1539A2306141500C60973 /* correct_sound.wav in Resources */,
+				EF4BCBD72404D0B600BD7BE8 /* Robot_blip.wav in Resources */,
 				84C1D2BF22C82DFA008E5C7F /* tone115hz.wav in Resources */,
 				84C1D2BE22C82DFA008E5C7F /* tone90hz.wav in Resources */,
 				84C1D2C422C83186008E5C7F /* tone170hz.wav in Resources */,
