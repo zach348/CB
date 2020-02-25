@@ -12,9 +12,9 @@ class Game {
   }
 
   static var respSettingsArr:[RespSettings] = [
-    RespSettings(phase: 7, phaseDuration: 60, frequency: 4, inDuration: 4, inWait: 2, outDuration: 8, outWait: 3, moveToCenterDuration: 8.5, moveCenterWait: 2),
-    RespSettings(phase: 8, phaseDuration: 120, frequency: 3.5, inDuration: 5, inWait: 3, outDuration: 10, outWait: 4.5, moveToCenterDuration: 8.5, moveCenterWait: 2),
-    RespSettings(phase: 9, phaseDuration: 999, frequency: 3, inDuration: 6, inWait: 4, outDuration: 12, outWait: 6, moveToCenterDuration: 10, moveCenterWait: 2)
+    RespSettings(phase: 7, phaseDuration: 60, frequency: 4, inDuration: 3, inWait: 1.5, outDuration: 6, outWait: 2, moveToCenterDuration: 8.5, moveCenterWait: 2),
+    RespSettings(phase: 8, phaseDuration: 120, frequency: 3.5, inDuration: 4, inWait: 2, outDuration: 8, outWait: 3.5, moveToCenterDuration: 8.5, moveCenterWait: 2),
+    RespSettings(phase: 9, phaseDuration: 999, frequency: 3, inDuration: 5, inWait: 2.5, outDuration: 10, outWait: 5, moveToCenterDuration: 10, moveCenterWait: 2)
   ]
   static var willSaveGame:Bool = false
   static var didSaveGame:Bool = false
