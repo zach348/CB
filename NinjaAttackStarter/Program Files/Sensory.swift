@@ -245,7 +245,9 @@ struct Sensory {
     }
     let wait = SKAction.wait(forDuration: 10)
     let addQuitLabel = SKAction.run {
-      currentGame.quitLabel.text = "(Shake device to quit)"
+      currentGame.quitLabel.text = " Shake to quit (take your time)"
+      currentGame.quitLabel.preferredMaxLayoutWidth = 175
+      currentGame.quitLabel.numberOfLines = 2
       currentGame.quitLabel.fontSize = 25
       currentGame.quitLabel.fontColor = .lightGray
       currentGame.quitLabel.position = CGPoint(x: gameScene.frame.width/2, y: gameScene.frame.height/2)
@@ -270,10 +272,10 @@ struct Sensory {
     }
     let removeSprites = SKAction.run {
       for ball in Ball.members {
-        ball.removeFromParent()
+        ball.isHidden = true
       }
       for tile in Tile.members {
-        tile.removeFromParent()
+        tile.isHidden = true
       }
     }
     gameScene.run(SKAction.sequence([SKAction.group([fadeOut,colorizeScene]),wait,removeSprites,changeBackground,addQuitLabel,fadeIn]))

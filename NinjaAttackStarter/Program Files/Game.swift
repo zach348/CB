@@ -358,7 +358,6 @@ class Game {
     for ball in self.statusBalls {
       if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
         ball.run(SKAction.setTexture(SKTexture(imageNamed: "sp-darkYellow-gloss")))
-        print(ball.texture!.description)
         if emitter { Sensory.addParticles(sprite: ball, emitterFile: "ball_fire")}
         return
       }
