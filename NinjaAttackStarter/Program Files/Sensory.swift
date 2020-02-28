@@ -243,8 +243,40 @@ struct Sensory {
     for ball in Ball.members {
       ball.physicsBody = nil
     }
-    gameScene.run(SKAction.colorize(with: SKColor.black, colorBlendFactor: 1, duration: 10))
-    gameScene.run(SKAction.fadeOut(withDuration: 10))
+    let wait = SKAction.wait(forDuration: 10)
+    let addQuitLabel = SKAction.run {
+      currentGame.quitLabel.text = "(Shake device to quit)"
+      currentGame.quitLabel.fontSize = 25
+      currentGame.quitLabel.fontColor = .lightGray
+      currentGame.quitLabel.position = CGPoint(x: gameScene.frame.width/2, y: gameScene.frame.height/2)
+      currentGame.quitLabel.zPosition = 3
+      gameScene.addChild(currentGame.quitLabel)
+    }
+    let colorizeScene = SKAction.run {
+      gameScene.run(SKAction.colorize(with: SKColor.black, colorBlendFactor: 1, duration: 10))
+
+    }
+    let changeBackground = SKAction.run {
+      gameScene.backgroundColor = SKColor.black
+    }
+    let fadeOut = SKAction.run {
+      gameScene.run(SKAction.fadeOut(withDuration: 10))
+    }
+    let fadeIn = SKAction.run {
+      gameScene.run(SKAction.fadeIn(withDuration: 2))
+    }
+    let addLabel = SKAction.run {
+      gameScene.run(SKAction.sequence([addQuitLabel]))
+    }
+    let removeSprites = SKAction.run {
+      for ball in Ball.members {
+        ball.removeFromParent()
+      }
+      for tile in Tile.members {
+        tile.removeFromParent()
+      }
+    }
+    gameScene.run(SKAction.sequence([SKAction.group([fadeOut,colorizeScene]),wait,removeSprites,changeBackground,addQuitLabel,fadeIn]))
   }
   
   static func createHapticEvent(isContinuous:Bool = false, intensity:Double, sharpness:Double, relativeTime:Double, duration:Double) -> CHHapticEvent {

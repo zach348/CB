@@ -145,6 +145,7 @@ class Game {
   var statusBalls = [SKSpriteNode]()
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
+  var quitLabel = SKLabelNode()
   var advanceRespFlag:Bool = false
   var diffSetting = DiffSetting.Easy {
     didSet {
@@ -180,7 +181,7 @@ class Game {
         if self.outcomeHistory.count >= 2 {
           let last2Outcomes = self.outcomeHistory[self.outcomeHistory.count - 2..<self.outcomeHistory.count]
           if !last2Outcomes.contains(Outcome.success) && !last2Outcomes.contains(Outcome.transition){
-            if Settings.diffMod > 0.5 { Settings.diffMod -= 0.075 }
+            if Settings.diffMod > 0.5 { Settings.diffMod -= 0.1 }
             print("downregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
           }
         }
@@ -287,7 +288,7 @@ class Game {
     Game.respActive = false
     Game.initialRespTransition = true
     Game.currentRespSettings = Game.respSettingsArr[0]
-    Game.currentTrackSettings = Game.settingsArr[4]
+    Game.currentTrackSettings = Game.settingsArr[0]
     Tile.members = [Tile]()
     DataStore.currentUser = Auth.auth().currentUser
     DataStore.initialRequest = true

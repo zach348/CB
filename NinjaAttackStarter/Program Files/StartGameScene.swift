@@ -51,7 +51,9 @@ class StartGameScene: SKScene {
     }
     self.difficultyButton.zPosition = 1
     self.difficultyButton.name = "diffBtn"
-    self.addChild(self.difficultyButton)
+    
+//    REMOVED DIFF BUTTON FOR TESTING
+//    self.addChild(self.difficultyButton)
     
     if let user = Auth.auth().currentUser, let email = user.email{
       self.loginStatusLabel.text = "You are currently logged in as \(email)"
