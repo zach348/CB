@@ -276,6 +276,7 @@ class Game {
   }
   
   func cleanupGame(){
+    Sensory.createHapticEngine()
     Ball.members = [Ball]()
     Ball.blinkFlags = [Bool]()
     Ball.pendingPause = false

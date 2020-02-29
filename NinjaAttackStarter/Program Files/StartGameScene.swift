@@ -90,7 +90,7 @@ class StartGameScene: SKScene {
 //    self.addChild(self.saveGameButton)
   
     //Haptics
-    Sensory.createHapticEngine()
+//    Sensory.createHapticEngine()
     //DataStore
     
     //Testing
