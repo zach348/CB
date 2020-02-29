@@ -222,7 +222,7 @@ class Game {
   }
   
   func setupGame(){
-    guard let userData = DataStore.user else {print("error declaring userData (setup game)"); return}
+    let userData = DataStore.user
     //game cleanup
     self.cleanupGame()
     

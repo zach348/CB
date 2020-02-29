@@ -15,7 +15,10 @@ struct DataStore {
     "didAttempt": ["flag": false, "success": -1, "stagePoints": -1]
   ]
   static var ballInfo:[[String:Any]] = [[String:Any]]()
-  static var user:[String:Any]?
+  static var user:[String:Any] = [
+    "diffMod": 1,
+    "lastUpdated": FieldValue.serverTimestamp()
+  ]
   
   static func addRecord(){
     if let timer = currentGame.timer, let scene = currentGame.gameScene {
@@ -112,7 +115,7 @@ struct DataStore {
   }
   
   static func updateUser(userId:String){
-    guard var userData = self.user else {return}
+    var userData = self.user
     let userDocRef = db.collection("users").document(userId)
     userData = ["diffMod": Settings.diffMod, "lastUpdated": FieldValue.serverTimestamp()]
     userDocRef.setData(userData)
