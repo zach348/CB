@@ -12,7 +12,8 @@ struct Sensory {
     "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
     "streak": SKAudioNode(fileNamed: "streak_sound"),
     "blip": SKAudioNode(fileNamed: "radar_blip"),
-    "robot_blip": SKAudioNode(fileNamed: "Robot_blip")
+    "robot_blip": SKAudioNode(fileNamed: "Robot_blip"),
+    "test": SKAudioNode(fileNamed: "Untitled")
   ]
   
   static var toneNodes: [String: SKAudioNode] = [
@@ -195,7 +196,7 @@ struct Sensory {
   static func playRadarBlip(count:Int){
     if let gameScene = currentGame.gameScene {
       let playSound = SKAction.run({
-        self.audioNodes["blip"]?.run(SKAction.play())
+        self.audioNodes["robot_blip"]?.run(SKAction.play())
       })
       gameScene.run(SKAction.repeat(playSound, count: count))
     }

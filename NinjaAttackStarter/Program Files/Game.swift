@@ -305,7 +305,9 @@ class Game {
       "correct": SKAudioNode(fileNamed: "correct_sound"),
       "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
       "streak": SKAudioNode(fileNamed: "streak_sound"),
-      "blip": SKAudioNode(fileNamed: "radar_blip")
+      "blip": SKAudioNode(fileNamed: "radar_blip"),
+      "robot_blip": SKAudioNode(fileNamed: "Robot_blip"),
+      "test": SKAudioNode(fileNamed: "Untitled")
     ]
     Sensory.toneNodes = [
       "tone1": SKAudioNode(fileNamed: "tone200hz.wav"),
