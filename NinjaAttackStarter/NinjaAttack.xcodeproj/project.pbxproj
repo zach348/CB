@@ -52,7 +52,6 @@
 		D2A5F2211F4A96D0005CD714 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F2201F4A96D0005CD714 /* AppDelegate.swift */; };
 		EF09503723C7AC5900AEBF81 /* LoginScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF09503623C7AC5900AEBF81 /* LoginScene.swift */; };
 		EF4BCBD72404D0B600BD7BE8 /* Robot_blip.wav in Resources */ = {isa = PBXBuildFile; fileRef = EF4BCBD62404D0B600BD7BE8 /* Robot_blip.wav */; };
-		EFB83908240AADA000BACC4E /* breathingVoiceOver.wav in Resources */ = {isa = PBXBuildFile; fileRef = EFB83907240AADA000BACC4E /* breathingVoiceOver.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -110,7 +109,6 @@
 		D2A5F2201F4A96D0005CD714 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = NinjaAttack/AppDelegate.swift; sourceTree = "<group>"; };
 		EF09503623C7AC5900AEBF81 /* LoginScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScene.swift; sourceTree = "<group>"; };
 		EF4BCBD62404D0B600BD7BE8 /* Robot_blip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Robot_blip.wav; sourceTree = "<group>"; };
-		EFB83907240AADA000BACC4E /* breathingVoiceOver.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = breathingVoiceOver.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,7 +179,6 @@
 				84C1D2BC22C82DFA008E5C7F /* tone140hz.wav */,
 				84C15395230610E800C60973 /* wrong_sound.wav */,
 				84C153992306141500C60973 /* correct_sound.wav */,
-				EFB83907240AADA000BACC4E /* breathingVoiceOver.wav */,
 				EF4BCBD62404D0B600BD7BE8 /* Robot_blip.wav */,
 				84C153972306116900C60973 /* input_error.wav */,
 				84BD9309231372650068E47D /* radar_blip.wav */,
@@ -309,7 +306,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EFB83908240AADA000BACC4E /* breathingVoiceOver.wav in Resources */,
 				AFD63F8F203649F800E08C66 /* background-music-aac.caf in Resources */,
 				D2A5F20B1F4A9144005CD714 /* Assets.xcassets in Resources */,
 				842E25552321F96500151D44 /* GoogleService-Info.plist in Resources */,
