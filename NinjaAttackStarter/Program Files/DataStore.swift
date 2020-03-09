@@ -79,9 +79,9 @@ struct DataStore {
     }
   }
   
-  static func saveTimePoint(tpRecord:[String:Any], gameCount:Any){
+  static func saveTimePoint(tpRecord:[String:Any], gameCount:Any, tpCount:Int){
     let timePointCollection = self.db.collection("games/\(gameCount)/timepoints")
-    timePointCollection.addDocument(data: tpRecord)
+    timePointCollection.document("\(tpCount)").setData(tpRecord)
   }
   
   
@@ -140,8 +140,10 @@ struct DataStore {
       
       print("preparing to save timepoints, records count: \(self.records.count)")
       print("gameCount:", gameCount)
-      for tpRecord in self.records.shuffled() {
-        self.saveTimePoint(tpRecord: tpRecord, gameCount: gameCount)
+      var tpCount = 1
+      for tpRecord in self.records {
+        self.saveTimePoint(tpRecord: tpRecord, gameCount: gameCount, tpCount: tpCount)
+        tpCount += 1
       }
     })
     Game.didSaveGame = true
