@@ -256,9 +256,21 @@ class Timer {
     }
   }
   
+  func saveTimer(){
+    if let scene = currentGame.gameScene {
+      self.stopTimer(timerID: "saveTimer")
+      let wait = SKAction.wait(forDuration: 1)
+      let saveRecords = SKAction.run {
+        DataStore.saveRecords()
+      }
+      self.members.append("saveTimer")
+      scene.run(SKAction.sequence([wait,saveRecords]), withKey: "saveTimer")
+    }
+  }
+  
   func stopTimer(timerID:String) {
     if let worldTimer = currentGame.worldTimer, let scene = currentGame.gameScene  {
-      if timerID == "gameTimer" || timerID == "frequencyLoopTimer" || timerID == "pauseTimer" || timerID == "dataTimer" {
+      if timerID == "gameTimer" || timerID == "frequencyLoopTimer" || timerID == "pauseTimer" || timerID == "dataTimer" || timerID == "saveTimer" {
         self.members = self.members.filter { $0 != timerID }
         scene.removeAction(forKey: timerID)
       }else if timerID == "breathLoop" {
@@ -278,5 +290,6 @@ class Timer {
     self.targetTimer()
     self.pauseTimer()
     self.dataTimer()
+    self.saveTimer()
   }
 }

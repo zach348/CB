@@ -266,6 +266,8 @@ class Game {
   
   func startGame(){
     if let masterTimer = currentGame.timer {
+      DataStore.initiateGame()
+
       masterTimer.startGameTimer()
       Ball.startMovement()
       self.timer?.startTimerActions()
@@ -300,6 +302,8 @@ class Game {
       "didAttempt": ["flag": false, "success": -1, "stagePoints": -1]
     ]
     DataStore.ballInfo = [[String:Any]]()
+    DataStore.gameCount = 0
+    DataStore.tpCount = 1
     Sensory.audioNodes = [
       "correct": SKAudioNode(fileNamed: "correct_sound"),
       "incorrect": SKAudioNode(fileNamed: "wrong_sound"),

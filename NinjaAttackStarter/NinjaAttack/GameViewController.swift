@@ -75,7 +75,7 @@ class GameViewController: UIViewController, TransitionDelegate {
   func showAlert(title:String,message:String,params:[String:Bool] = [String:Bool]()) {
       let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
       alertController.addAction(UIAlertAction(title: "Ok", style: .default) { action in
-        if let quitGame = params["quitGame"] {
+        if let quitGame = params["quitGame"], let timer = currentGame.timer {
           if quitGame {
             guard let userId = Auth.auth().currentUser?.email else { print("error getting userId to quit game"); return}
             let skView = self.view as! SKView
@@ -85,7 +85,8 @@ class GameViewController: UIViewController, TransitionDelegate {
             self.gameScene?.removeAllActions()
             self.gameScene?.removeAllChildren()
             self.gameScene = nil
-            DataStore.saveGame()
+//            DataStore.saveGame()
+            timer.stopTimer(timerID: "saveTimer")
             DataStore.updateUser(userId: userId)
             currentGame = Game()
           }
