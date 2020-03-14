@@ -31,7 +31,6 @@ class Game {
       //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
       if self.currentTrackSettings.phase == 6 {
         self.respActive = true
-        print("printing", Game.respActive)
       }
       if let timer = currentGame.timer, let worldTimer = currentGame.worldTimer {
         if self.respActive {

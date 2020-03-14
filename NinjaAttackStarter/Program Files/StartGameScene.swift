@@ -30,10 +30,15 @@ class StartGameScene: SKScene {
     self.startButton.setButtonLabel(title: "Start Game", font: "Arial", fontSize: 20)
     if self.view!.frame.width < 670 {
       self.startButton.size = CGSize(width: 150, height: 30)
-      self.startButton.position = CGPoint(x: self.frame.width/2, y: self.frame.midY + 25)
+//      setting with diff button
+//      self.startButton.position = CGPoint(x: self.frame.width/2, y: self.frame.midY  + 25)
+      self.startButton.position = CGPoint(x: self.frame.width/2, y: self.frame.midY)
+
     }else{
       self.startButton.size = CGSize(width: 250, height: 50)
-      self.startButton.position = CGPoint(x: self.frame.width/2, y: self.frame.midY + 50)
+//      setting with diff button
+//      self.startButton.position = CGPoint(x: self.frame.width/2, y: self.frame.midY + 50)
+      self.startButton.position = CGPoint(x: self.frame.width/2, y: self.frame.midY)
     }
     self.startButton.zPosition = 1
     self.startButton.name = "button"
@@ -89,9 +94,6 @@ class StartGameScene: SKScene {
     //commented out for testflight
 //    self.addChild(self.saveGameButton)
   
-    //Haptics
-//    Sensory.createHapticEngine()
-    //DataStore
     
     //Testing
   }
