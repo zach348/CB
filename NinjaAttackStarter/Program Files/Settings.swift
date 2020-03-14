@@ -1,5 +1,6 @@
 import Foundation
 import SpriteKit
+import Firebase
 
 struct Settings {
   static let settings:[DiffSetting:[Settings]] = [
@@ -40,7 +41,8 @@ struct Settings {
   
   static var diffMod:CGFloat = 1 {
     didSet{
-      print("diffMod set:", diffMod)
+      guard let userId = Auth.auth().currentUser?.email else { print("error updating user triggered by diffMod update"); return }
+      DataStore.updateUser(userId: userId)
     }
   }
 

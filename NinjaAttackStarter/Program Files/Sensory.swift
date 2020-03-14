@@ -12,7 +12,8 @@ struct Sensory {
     "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
     "streak": SKAudioNode(fileNamed: "streak_sound"),
     "blip": SKAudioNode(fileNamed: "radar_blip"),
-    "robot_blip": SKAudioNode(fileNamed: "Robot_blip")
+    "robot_blip": SKAudioNode(fileNamed: "Robot_blip"),
+    "test": SKAudioNode(fileNamed: "Untitled")
   ]
   
   static var toneNodes: [String: SKAudioNode] = [
@@ -195,7 +196,7 @@ struct Sensory {
   static func playRadarBlip(count:Int){
     if let gameScene = currentGame.gameScene {
       let playSound = SKAction.run({
-        self.audioNodes["blip"]?.run(SKAction.play())
+        self.audioNodes["robot_blip"]?.run(SKAction.play())
       })
       gameScene.run(SKAction.repeat(playSound, count: count))
     }
@@ -243,8 +244,42 @@ struct Sensory {
     for ball in Ball.members {
       ball.physicsBody = nil
     }
-    gameScene.run(SKAction.colorize(with: SKColor.black, colorBlendFactor: 1, duration: 10))
-    gameScene.run(SKAction.fadeOut(withDuration: 10))
+    let wait = SKAction.wait(forDuration: 10)
+    let addQuitLabel = SKAction.run {
+      currentGame.quitLabel.text = " Shake to quit (take your time)"
+      currentGame.quitLabel.preferredMaxLayoutWidth = 175
+      currentGame.quitLabel.numberOfLines = 2
+      currentGame.quitLabel.fontSize = 25
+      currentGame.quitLabel.fontColor = .lightGray
+      currentGame.quitLabel.position = CGPoint(x: gameScene.frame.width/2, y: gameScene.frame.height/2)
+      currentGame.quitLabel.zPosition = 3
+      gameScene.addChild(currentGame.quitLabel)
+    }
+    let colorizeScene = SKAction.run {
+      gameScene.run(SKAction.colorize(with: SKColor.black, colorBlendFactor: 1, duration: 10))
+
+    }
+    let changeBackground = SKAction.run {
+      gameScene.backgroundColor = SKColor.black
+    }
+    let fadeOut = SKAction.run {
+      gameScene.run(SKAction.fadeOut(withDuration: 10))
+    }
+    let fadeIn = SKAction.run {
+      gameScene.run(SKAction.fadeIn(withDuration: 2))
+    }
+    let addLabel = SKAction.run {
+      gameScene.run(SKAction.sequence([addQuitLabel]))
+    }
+    let removeSprites = SKAction.run {
+      for ball in Ball.members {
+        ball.isHidden = true
+      }
+      for tile in Tile.members {
+        tile.isHidden = true
+      }
+    }
+    gameScene.run(SKAction.sequence([SKAction.group([fadeOut,colorizeScene]),wait,removeSprites,changeBackground,addQuitLabel,fadeIn]))
   }
   
   static func createHapticEvent(isContinuous:Bool = false, intensity:Double, sharpness:Double, relativeTime:Double, duration:Double) -> CHHapticEvent {

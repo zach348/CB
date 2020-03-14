@@ -14,10 +14,58 @@
             filePath = "Program Files/DataStore.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
             landmarkName = "DataStore"
             landmarkType = "14">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CA22885D-C395-466C-BFCA-7028201313AD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Program Files/Game.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "14"
+            endingLineNumber = "14"
+            landmarkName = "respSettingsArr"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "CA22885D-C395-466C-BFCA-7028201313AD - a419ed892768f323"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "globalinit_33_E104E14C99BA11B41954424FD55A5658_func1"
+                  moduleName = "Kalibrate"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/zacharycutler/dev/CB/NinjaAttackStarter/Program%20Files/Game.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "364">
+               </Location>
+               <Location
+                  uuid = "CA22885D-C395-466C-BFCA-7028201313AD - 35a2712c9fdfab03"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Kalibrate.Game.respSettingsArr.unsafeMutableAddressor : Swift.Array&lt;Kalibrate.RespSettings&gt;"
+                  moduleName = "Kalibrate"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/zacharycutler/dev/CB/NinjaAttackStarter/Program%20Files/Game.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

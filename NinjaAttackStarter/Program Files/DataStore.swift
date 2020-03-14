@@ -15,7 +15,10 @@ struct DataStore {
     "didAttempt": ["flag": false, "success": -1, "stagePoints": -1]
   ]
   static var ballInfo:[[String:Any]] = [[String:Any]]()
-  static var user:[String:Any]?
+  static var user:[String:Any] = [
+    "diffMod": 1,
+    "lastUpdated": FieldValue.serverTimestamp()
+  ]
   
   static func addRecord(){
     if let timer = currentGame.timer, let scene = currentGame.gameScene {
@@ -34,7 +37,7 @@ struct DataStore {
         "pauseDelay": Game.currentTrackSettings.pauseDelay,
         "pauseError": Game.currentTrackSettings.pauseError,
         "pauseDuration": Game.currentTrackSettings.pauseDuration,
-        "frequency": Game.currentTrackSettings.frequency,
+        "frequency": Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency,
         "toneFile": Game.currentTrackSettings.toneFile,
         "targetMeanSpeedæ": Game.currentTrackSettings.targetMeanSpeed,
         "targetSpeedSD": Game.currentTrackSettings.targetSpeedSD,
@@ -42,6 +45,11 @@ struct DataStore {
         "shiftError": Game.currentTrackSettings.shiftError,
         "numTargets": Game.currentTrackSettings.numTargets,
         "ballCount": Ball.members.count,
+        "respActive": Game.respActive,
+        "inhaleDuration": Game.currentRespSettings.inDuration,
+        "inhaleHoldDuration": Game.currentRespSettings.inWait,
+        "exhaleDuration": Game.currentRespSettings.outDuration,
+        "exhaleHoldDuration": Game.currentRespSettings.outWait,
         "targetTexture": Game.currentTrackSettings.targetTexture.description,
         "distractorTexture": Game.currentTrackSettings.distractorTexture.description,
         "eventMarkers": [
@@ -76,9 +84,9 @@ struct DataStore {
     }
   }
   
-  static func saveTimePoint(tpRecord:[String:Any], gameCount:Any){
+  static func saveTimePoint(tpRecord:[String:Any], gameCount:Any, tpCount:Int){
     let timePointCollection = self.db.collection("games/\(gameCount)/timepoints")
-    timePointCollection.addDocument(data: tpRecord)
+    timePointCollection.document("\(tpCount)").setData(tpRecord)
   }
   
   
@@ -112,7 +120,7 @@ struct DataStore {
   }
   
   static func updateUser(userId:String){
-    guard var userData = self.user else {return}
+    var userData = self.user
     let userDocRef = db.collection("users").document(userId)
     userData = ["diffMod": Settings.diffMod, "lastUpdated": FieldValue.serverTimestamp()]
     userDocRef.setData(userData)
@@ -137,8 +145,10 @@ struct DataStore {
       
       print("preparing to save timepoints, records count: \(self.records.count)")
       print("gameCount:", gameCount)
-      for tpRecord in self.records.shuffled() {
-        self.saveTimePoint(tpRecord: tpRecord, gameCount: gameCount)
+      var tpCount = 1
+      for tpRecord in self.records {
+        self.saveTimePoint(tpRecord: tpRecord, gameCount: gameCount, tpCount: tpCount)
+        tpCount += 1
       }
     })
     Game.didSaveGame = true

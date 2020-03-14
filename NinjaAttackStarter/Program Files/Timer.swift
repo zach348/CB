@@ -149,8 +149,10 @@ class Timer {
         }
       }
       let moveToCenter = SKAction.move(to: trajectory.first!, duration: Game.currentRespSettings.moveToCenterDuration)
+      let breathingVoiceOver = SKAction.playSoundFileNamed("breathingVoiceOver", waitForCompletion: false)
+      let moveToCenterGroup = SKAction.group([moveToCenter])
       let moveToCenterWait = SKAction.wait(forDuration: Game.currentRespSettings.moveCenterWait)
-      let centerSequence = SKAction.sequence([moveToCenter,moveToCenterWait])
+      let centerSequence = SKAction.sequence([moveToCenterGroup,moveToCenterWait])
       let finalSequence = SKAction.repeatForever(SKAction.sequence([breathInGroup,breathInWaitGroup,breathOutGroup,breathOutWaitGroup,checkForPhaseAdv]))
       self.members.append("breathLoop")
       

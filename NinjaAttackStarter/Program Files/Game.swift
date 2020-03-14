@@ -31,7 +31,6 @@ class Game {
       //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
       if self.currentTrackSettings.phase == 6 {
         self.respActive = true
-        print("printing", Game.respActive)
       }
       if let timer = currentGame.timer, let worldTimer = currentGame.worldTimer {
         if self.respActive {
@@ -145,6 +144,7 @@ class Game {
   var statusBalls = [SKSpriteNode]()
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed
+  var quitLabel = SKLabelNode()
   var advanceRespFlag:Bool = false
   var diffSetting = DiffSetting.Easy {
     didSet {
@@ -180,7 +180,7 @@ class Game {
         if self.outcomeHistory.count >= 2 {
           let last2Outcomes = self.outcomeHistory[self.outcomeHistory.count - 2..<self.outcomeHistory.count]
           if !last2Outcomes.contains(Outcome.success) && !last2Outcomes.contains(Outcome.transition){
-            if Settings.diffMod > 0.5 { Settings.diffMod -= 0.075 }
+            if Settings.diffMod > 0.5 { Settings.diffMod -= 0.1 }
             print("downregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
           }
         }
@@ -221,7 +221,7 @@ class Game {
   }
   
   func setupGame(){
-    guard let userData = DataStore.user else {print("error declaring userData (setup game)"); return}
+    let userData = DataStore.user
     //game cleanup
     self.cleanupGame()
     
@@ -275,6 +275,7 @@ class Game {
   }
   
   func cleanupGame(){
+    Sensory.createHapticEngine()
     Ball.members = [Ball]()
     Ball.blinkFlags = [Bool]()
     Ball.pendingPause = false
@@ -287,7 +288,7 @@ class Game {
     Game.respActive = false
     Game.initialRespTransition = true
     Game.currentRespSettings = Game.respSettingsArr[0]
-    Game.currentTrackSettings = Game.settingsArr[4]
+    Game.currentTrackSettings = Game.settingsArr[0]
     Tile.members = [Tile]()
     DataStore.currentUser = Auth.auth().currentUser
     DataStore.initialRequest = true
@@ -303,7 +304,9 @@ class Game {
       "correct": SKAudioNode(fileNamed: "correct_sound"),
       "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
       "streak": SKAudioNode(fileNamed: "streak_sound"),
-      "blip": SKAudioNode(fileNamed: "radar_blip")
+      "blip": SKAudioNode(fileNamed: "radar_blip"),
+      "robot_blip": SKAudioNode(fileNamed: "Robot_blip"),
+      "test": SKAudioNode(fileNamed: "Untitled")
     ]
     Sensory.toneNodes = [
       "tone1": SKAudioNode(fileNamed: "tone200hz.wav"),
@@ -357,7 +360,6 @@ class Game {
     for ball in self.statusBalls {
       if ball.texture!.description == "<SKTexture> 'sphere-black' (256 x 256)" {
         ball.run(SKAction.setTexture(SKTexture(imageNamed: "sp-darkYellow-gloss")))
-        print(ball.texture!.description)
         if emitter { Sensory.addParticles(sprite: ball, emitterFile: "ball_fire")}
         return
       }
