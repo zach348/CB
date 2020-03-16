@@ -261,7 +261,9 @@ class Timer {
       self.stopTimer(timerID: "saveTimer")
       let wait = SKAction.wait(forDuration: 1)
       let saveRecords = SKAction.run {
-        DataStore.saveRecords()
+        DispatchQueue.global(qos: .background).async {
+          DataStore.saveRecords()
+        }
       }
       self.members.append("saveTimer")
       scene.run(SKAction.sequence([wait,saveRecords]), withKey: "saveTimer")
