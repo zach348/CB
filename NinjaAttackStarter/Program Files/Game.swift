@@ -104,6 +104,7 @@ class Game {
       })
       for ball in Ball.getTargets(){
         Sensory.flickerOffTexture(sprite: ball, onTexture: Game.currentTrackSettings.targetTexture, offTexture: Game.currentTrackSettings.distractorTexture)
+        ball.isTarget = false
       }
       
       for statusBall in currentGame.statusBalls {

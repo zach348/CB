@@ -22,7 +22,6 @@ class GameScene: SKScene {
   }
     
   override func update(_ currentTime: TimeInterval) {
-    print(Game.respActive)
 //    FOR EXTRACTING DESCRIPTION WHEN CHANGING TEXTURE FOR STATUS BALLS (DESCRIPTION IS USED IN DECREMENT OF STATUSBALLS)
 //    for node in currentGame.statusBalls {
 //      guard let texture = node.texture else {print("no texture"); return}

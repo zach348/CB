@@ -21,8 +21,6 @@ class Timer {
         }
         //demo mode
 //      if (!currentGame.isPaused && self.elapsedTime - self.lastPhaseShiftTime > 45) { Game.advancePhase()}
-   
-
       }
     }
   }
