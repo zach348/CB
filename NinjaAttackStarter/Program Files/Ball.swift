@@ -292,8 +292,9 @@ class Ball: SKSpriteNode {
   
   
   func currentSpeed() -> CGFloat {
-    let aSq = pow(self.physicsBody!.velocity.dx,2.0)
-    let bSq = pow(self.physicsBody!.velocity.dy,2.0)
+    guard let physicsBody = self.physicsBody else { return -1 }
+    let aSq = pow(physicsBody.velocity.dx,2.0)
+    let bSq = pow(physicsBody.velocity.dy,2.0)
     let cSq = aSq + bSq
     return sqrt(CGFloat(cSq))
   }

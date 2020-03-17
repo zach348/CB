@@ -125,8 +125,8 @@ struct DataStore {
   }
   
   static func saveTimePoint(tpRecord:[String:Any], gameCount:Any, tpCount:Int){
+    let timePointCollection = self.db.collection("games/\(gameCount)/timepoints")
     DispatchQueue.global(qos: .utility).async {
-      let timePointCollection = self.db.collection("games/\(gameCount)/timepoints")
       timePointCollection.document("\(tpCount)").setData(tpRecord)
     }
   }
