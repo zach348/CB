@@ -100,7 +100,7 @@ class Game {
     if self.initialRespTransition {
       //Cleanup
       timer.members.forEach({ loop in
-        if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" {timer.stopTimer(timerID: loop)}
+        if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" && loop != "saveTimer" && loop != "dataTimer" {timer.stopTimer(timerID: loop)}
       })
       for ball in Ball.getTargets(){
         Sensory.flickerOffTexture(sprite: ball, onTexture: Game.currentTrackSettings.targetTexture, offTexture: Game.currentTrackSettings.distractorTexture)

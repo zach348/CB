@@ -21,9 +21,11 @@ struct DataStore {
     "lastUpdated": FieldValue.serverTimestamp()
   ]
   static var tpCount = 1
+  static var recordCount = 0
   
   static func addRecord(){
     if let timer = currentGame.timer, let scene = currentGame.gameScene {
+      self.recordCount += 1
       timer.stopTimer(timerID: "dataTimer")
       self.updateBallStats()
       let record:[String:Any] = [
@@ -123,8 +125,10 @@ struct DataStore {
   }
   
   static func saveTimePoint(tpRecord:[String:Any], gameCount:Any, tpCount:Int){
-    let timePointCollection = self.db.collection("games/\(gameCount)/timepoints")
-    timePointCollection.document("\(tpCount)").setData(tpRecord)
+    DispatchQueue.global(qos: .utility).async {
+      let timePointCollection = self.db.collection("games/\(gameCount)/timepoints")
+      timePointCollection.document("\(tpCount)").setData(tpRecord)
+    }
   }
   
   static func saveRecords(){
