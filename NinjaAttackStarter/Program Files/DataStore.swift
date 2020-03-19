@@ -17,9 +17,14 @@ struct DataStore {
   ]
   static var ballInfo:[[String:Any]] = [[String:Any]]()
   static var user:[String:Any] = [
-    "diffMod": 1,
+    "diffMod": 1.0,
     "lastUpdated": FieldValue.serverTimestamp()
-  ]
+    ] {
+    didSet {
+      Settings.diffMod = user["diffMod"] as! CGFloat
+    }
+  }
+  
   static var tpCount = 1
   static var recordCount = 0
   
@@ -110,19 +115,22 @@ struct DataStore {
           self.user = userData
         } else {
           collectionRef.document(userId).setData([
-            "diffMod": 1,
+            "diffMod": 0.85,
             "lastUpdated": FieldValue.serverTimestamp()
           ])
           print("no user found, incrementing...")
           metaUsersRef.updateData(["userCount": FieldValue.increment(Int64(1)), "lastUpdated": FieldValue.serverTimestamp()])
+          guard let userId = Auth.auth().currentUser?.email else { return }
+          self.getUser(userId: userId)
         }
     }
   }
   
   static func updateUser(userId:String){
+    var userData = self.user
     let userDocRef = db.collection("users").document(userId)
-    self.user = ["diffMod": Settings.diffMod, "lastUpdated": FieldValue.serverTimestamp()]
-    userDocRef.setData(self.user)
+    userData = ["diffMod": Settings.diffMod, "lastUpdated": FieldValue.serverTimestamp()]
+    userDocRef.setData(userData)
   }
   
   static func saveTimePoint(tpRecord:[String:Any], gameCount:Any, tpCount:Int){

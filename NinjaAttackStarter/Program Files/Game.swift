@@ -222,7 +222,8 @@ class Game {
   }
   
   func setupGame(){
-    let userData = DataStore.user
+//    guard let user = Auth.auth().currentUser, let email = user.email else { return }
+//    DataStore.getUser(userId: email)
     //game cleanup
     self.cleanupGame()
     
@@ -231,7 +232,6 @@ class Game {
     self.spriteWorld = SKNode()
     self.hrController = HRMViewController()
     DataStore.dummyRequest()
-    Settings.diffMod = userData["diffMod"] as! CGFloat
     
     if let scene = self.gameScene {
       if let worldTimer = self.worldTimer, let spriteWorld = currentGame.spriteWorld {
