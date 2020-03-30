@@ -41,6 +41,7 @@ struct DataStore {
         "meanSpeed": Ball.mean(),
         "speedSD": Ball.standardDev(),
         "phase": Game.currentTrackSettings.phase,
+        "diffMod": Settings.diffMod,
         "requiredStreak": Game.currentTrackSettings.requiredStreak,
         "stagePoints": currentGame.stagePoints,
         "pauseDelay": Game.currentTrackSettings.pauseDelay,
@@ -110,7 +111,7 @@ struct DataStore {
     let metaUsersRef = db.collection("meta").document("userMeta")
     userDocRef.getDocument { (document, error) in
         if let document = document, document.exists {
-          print("found document")
+          print("found user document")
           guard let userData = document.data() else {print("error extracting data"); return }
           self.user = userData
         } else {
@@ -120,16 +121,14 @@ struct DataStore {
           ])
           print("no user found, incrementing...")
           metaUsersRef.updateData(["userCount": FieldValue.increment(Int64(1)), "lastUpdated": FieldValue.serverTimestamp()])
-          guard let userId = Auth.auth().currentUser?.email else { return }
           self.getUser(userId: userId)
         }
     }
   }
   
   static func updateUser(userId:String){
-    var userData = self.user
     let userDocRef = db.collection("users").document(userId)
-    userData = ["diffMod": Settings.diffMod, "lastUpdated": FieldValue.serverTimestamp()]
+    let userData:[String:Any] = ["diffMod": Settings.diffMod, "lastUpdated": FieldValue.serverTimestamp()]
     userDocRef.setData(userData)
   }
   

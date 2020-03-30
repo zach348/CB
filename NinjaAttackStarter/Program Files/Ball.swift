@@ -347,11 +347,9 @@ class Ball: SKSpriteNode {
         DataStore.eventMarkers["didAttempt"] = ["flag": true, "success": false]
         //irrelevant for now
         currentGame.missesRemaining -= 1
-        print("miss!")
       }
     }else{
       Sensory.missedTargetFeedback()
-      print("failed attempt")
     }
   }
 }
