@@ -100,10 +100,11 @@ class Game {
     if self.initialRespTransition {
       //Cleanup
       timer.members.forEach({ loop in
-        if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" {timer.stopTimer(timerID: loop)}
+        if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" && loop != "saveTimer" && loop != "dataTimer" {timer.stopTimer(timerID: loop)}
       })
       for ball in Ball.getTargets(){
         Sensory.flickerOffTexture(sprite: ball, onTexture: Game.currentTrackSettings.targetTexture, offTexture: Game.currentTrackSettings.distractorTexture)
+        ball.isTarget = false
       }
       
       for statusBall in currentGame.statusBalls {
@@ -187,7 +188,7 @@ class Game {
         if self.outcomeHistory.count >= 3 {
           let last3Outcomes = self.outcomeHistory[self.outcomeHistory.count - 3..<self.outcomeHistory.count]
           if !last3Outcomes.contains(Outcome.failure) && !last3Outcomes.contains(Outcome.pass) && !last3Outcomes.contains(Outcome.transition) {
-            if Settings.diffMod < 1.5 { Settings.diffMod += 0.03 }
+            if Settings.diffMod < 1.5 { Settings.diffMod += 0.04 }
             print("upregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
           }
         }
@@ -221,7 +222,8 @@ class Game {
   }
   
   func setupGame(){
-    let userData = DataStore.user
+//    guard let user = Auth.auth().currentUser, let email = user.email else { return }
+//    DataStore.getUser(userId: email)
     //game cleanup
     self.cleanupGame()
     
@@ -230,7 +232,6 @@ class Game {
     self.spriteWorld = SKNode()
     self.hrController = HRMViewController()
     DataStore.dummyRequest()
-    Settings.diffMod = userData["diffMod"] as! CGFloat
     
     if let scene = self.gameScene {
       if let worldTimer = self.worldTimer, let spriteWorld = currentGame.spriteWorld {
@@ -266,6 +267,8 @@ class Game {
   
   func startGame(){
     if let masterTimer = currentGame.timer {
+      DataStore.initiateGame()
+
       masterTimer.startGameTimer()
       Ball.startMovement()
       self.timer?.startTimerActions()
@@ -300,6 +303,8 @@ class Game {
       "didAttempt": ["flag": false, "success": -1, "stagePoints": -1]
     ]
     DataStore.ballInfo = [[String:Any]]()
+    DataStore.gameCount = 0
+    DataStore.tpCount = 1
     Sensory.audioNodes = [
       "correct": SKAudioNode(fileNamed: "correct_sound"),
       "incorrect": SKAudioNode(fileNamed: "wrong_sound"),
