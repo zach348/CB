@@ -9,6 +9,7 @@ struct DataStore {
   static var initialRequest:Bool = true
   static var db:Firestore = Firestore.firestore()
   static var metaRef:DocumentReference = db.document("meta/gameMetaData")
+  static var gameCount = 0
   static var records = [[String:Any]]()
   static var eventMarkers:[String:Any] = [
     "didShift": ["flag": false, "delay": -1],
@@ -16,12 +17,20 @@ struct DataStore {
   ]
   static var ballInfo:[[String:Any]] = [[String:Any]]()
   static var user:[String:Any] = [
-    "diffMod": 1,
+    "diffMod": 1.0,
     "lastUpdated": FieldValue.serverTimestamp()
-  ]
+    ] {
+    didSet {
+      Settings.diffMod = user["diffMod"] as! CGFloat
+    }
+  }
+  
+  static var tpCount = 1
+  static var recordCount = 0
   
   static func addRecord(){
     if let timer = currentGame.timer, let scene = currentGame.gameScene {
+      self.recordCount += 1
       timer.stopTimer(timerID: "dataTimer")
       self.updateBallStats()
       let record:[String:Any] = [
@@ -32,6 +41,7 @@ struct DataStore {
         "meanSpeed": Ball.mean(),
         "speedSD": Ball.standardDev(),
         "phase": Game.currentTrackSettings.phase,
+        "diffMod": Settings.diffMod,
         "requiredStreak": Game.currentTrackSettings.requiredStreak,
         "stagePoints": currentGame.stagePoints,
         "pauseDelay": Game.currentTrackSettings.pauseDelay,
@@ -84,12 +94,6 @@ struct DataStore {
     }
   }
   
-  static func saveTimePoint(tpRecord:[String:Any], gameCount:Any, tpCount:Int){
-    let timePointCollection = self.db.collection("games/\(gameCount)/timepoints")
-    timePointCollection.document("\(tpCount)").setData(tpRecord)
-  }
-  
-  
   static func dummyRequest(){
     if !self.initialRequest { return } else { self.initialRequest = false }
     self.metaRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
@@ -104,34 +108,63 @@ struct DataStore {
   static func getUser(userId:String){
     let collectionRef = db.collection("users")
     let userDocRef = collectionRef.document(userId)
-    let metaUsersRef = db.collection("users").document("userMeta")
+    let metaUsersRef = db.collection("meta").document("userMeta")
     userDocRef.getDocument { (document, error) in
         if let document = document, document.exists {
+          print("found user document")
           guard let userData = document.data() else {print("error extracting data"); return }
           self.user = userData
         } else {
           collectionRef.document(userId).setData([
-            "diffMod": 1,
+            "diffMod": 0.85,
             "lastUpdated": FieldValue.serverTimestamp()
           ])
+          print("no user found, incrementing...")
           metaUsersRef.updateData(["userCount": FieldValue.increment(Int64(1)), "lastUpdated": FieldValue.serverTimestamp()])
+          self.getUser(userId: userId)
         }
     }
   }
   
   static func updateUser(userId:String){
-    var userData = self.user
     let userDocRef = db.collection("users").document(userId)
-    userData = ["diffMod": Settings.diffMod, "lastUpdated": FieldValue.serverTimestamp()]
+    let userData:[String:Any] = ["diffMod": Settings.diffMod, "lastUpdated": FieldValue.serverTimestamp()]
     userDocRef.setData(userData)
   }
   
-  static func saveGame(){
+  static func saveTimePoint(tpRecord:[String:Any], gameCount:Any, tpCount:Int){
+    let timePointCollection = self.db.collection("games/\(gameCount)/timepoints")
+    DispatchQueue.global(qos: .utility).async {
+      timePointCollection.document("\(tpCount)").setData(tpRecord)
+    }
+  }
+  
+  static func saveRecords(){
+    if let timer = currentGame.timer, let scene = currentGame.gameScene {
+      timer.stopTimer(timerID: "saveTimer")
+      
+      for tpRecord in self.records {
+        self.saveTimePoint(tpRecord: tpRecord, gameCount: self.gameCount, tpCount: self.tpCount)
+        self.records.removeFirst()
+        print("saved timepoint: \(self.tpCount)")
+        self.tpCount += 1
+
+      }
+      
+      let saveTimer = SKAction.run {
+        timer.saveTimer()
+      }
+      scene.run(saveTimer)
+    }
+  }
+  
+  static func initiateGame(){
     self.metaRef.updateData(["count": FieldValue.increment(Int64(1))])
     self.metaRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
       guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
       guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
       guard let currentUser = self.currentUser else {print("error retrieving current user from DataStore"); return}
+      self.gameCount = gameCount as! Int
       self.db.collection("games").document("\(gameCount)").setData([
         "lastUpdated": FieldValue.serverTimestamp(),
         "userEmail": currentUser.email
@@ -141,14 +174,6 @@ struct DataStore {
         } else {
           print("game document written")
         }
-      }
-      
-      print("preparing to save timepoints, records count: \(self.records.count)")
-      print("gameCount:", gameCount)
-      var tpCount = 1
-      for tpRecord in self.records {
-        self.saveTimePoint(tpRecord: tpRecord, gameCount: gameCount, tpCount: tpCount)
-        tpCount += 1
       }
     })
     Game.didSaveGame = true
