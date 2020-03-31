@@ -142,6 +142,7 @@ class Game {
   var worldTimer:SKNode?
   var spriteWorld:SKNode?
   var hrController:HRMViewController?
+  var pauseCountdownTimerLabel = SKLabelNode()
   var statusBalls = [SKSpriteNode]()
   //currently unused setting variable
   var missesRemaining = Game.currentTrackSettings.missesAllowed

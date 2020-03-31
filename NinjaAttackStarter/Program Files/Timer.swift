@@ -167,8 +167,7 @@ class Timer {
   
   func pauseTimer(){
     if let gameScene = currentGame.gameScene {
-      gameScene.removeAction(forKey: "pauseTimer")
-      self.members = self.members.filter({ $0 != "pauseTimer"})
+      self.stopTimer(timerID: "pauseTimer")
       let error = Game.currentTrackSettings.pauseError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentTrackSettings.pauseDelay - error, max: Game.currentTrackSettings.pauseDelay + error)))
       let pause = SKAction.run { currentGame.pauseGame()}
@@ -181,8 +180,7 @@ class Timer {
   
   func pauseCountdown(){
     if let gameScene = currentGame.gameScene {
-      gameScene.removeAction(forKey: "unpauseTimer")
-      self.members = self.members.filter({ $0 != "unpauseTimer"})
+      self.stopTimer(timerID: "unpauseTimer")
       let unpauseWait = SKAction.wait(forDuration: Game.currentTrackSettings.pauseDuration)
       let unpause = SKAction.run { currentGame.unpauseGame()}
       let recursiveCall = SKAction.run {
@@ -203,23 +201,24 @@ class Timer {
     if let gameScene = currentGame.gameScene {
       var timerNode: Double = pauseDuration
       let timerLabel = SKLabelNode()
-      timerLabel.text = "\(String(format: "%.3f", timerNode))"
-      timerLabel.fontColor = SKColor.black
-      timerLabel.fontSize = 40
-      timerLabel.fontName = "AvenirNext-Bold"
-      timerLabel.position.x = gameScene.size.width / 2
-      timerLabel.position.y = gameScene.size.height / 8.5
-      timerLabel.zPosition = -0.50
-      gameScene.addChild(timerLabel)
+      currentGame.pauseCountdownTimerLabel.text = "\(String(format: "%.3f", timerNode))"
+      currentGame.pauseCountdownTimerLabel.fontColor = SKColor.black
+      currentGame.pauseCountdownTimerLabel.fontSize = 40
+      currentGame.pauseCountdownTimerLabel.fontName = "AvenirNext-Bold"
+      currentGame.pauseCountdownTimerLabel.position.x = gameScene.size.width / 2
+      currentGame.pauseCountdownTimerLabel.position.y = gameScene.size.height / 8.5
+      currentGame.pauseCountdownTimerLabel.zPosition = -0.50
+      gameScene.addChild(currentGame.pauseCountdownTimerLabel)
       
       let loop = SKAction.repeatForever(SKAction.sequence([SKAction.run {
         timerNode -= 0.1
-        timerLabel.text = "\(String(format: "%.1f", timerNode))"
+        currentGame.pauseCountdownTimerLabel.text = "\(String(format: "%.1f", timerNode))"
         if timerNode <= 0 {
-          timerLabel.removeFromParent()
-          gameScene.removeAction(forKey: "pauseDurationTimer")
+          currentGame.pauseCountdownTimerLabel.removeFromParent()
+          self.stopTimer(timerID: "pauseDurationTimer")
         }
         },SKAction.wait(forDuration: 0.1)]))
+      self.members.append("pauseDurationTimer")
       gameScene.run(loop, withKey: "pauseDurationTimer")
     }
   }
@@ -268,7 +267,7 @@ class Timer {
   
   func stopTimer(timerID:String) {
     if let worldTimer = currentGame.worldTimer, let scene = currentGame.gameScene  {
-      if timerID == "gameTimer" || timerID == "frequencyLoopTimer" || timerID == "pauseTimer" || timerID == "dataTimer" || timerID == "saveTimer" {
+      if timerID == "gameTimer" || timerID == "frequencyLoopTimer" || timerID == "pauseTimer" || timerID == "dataTimer" || timerID == "saveTimer" || timerID == "pauseTimer" || timerID == "unpauseTimer" || timerID == "pauseDurationTimer" {
         self.members = self.members.filter { $0 != timerID }
         scene.removeAction(forKey: timerID)
       }else if timerID == "breathLoop" {
