@@ -87,7 +87,7 @@ class GameViewController: UIViewController, TransitionDelegate {
             self.gameScene?.removeAllChildren()
             self.gameScene = nil
 //            DataStore.saveGame()
-            timer.stopTimer(timerID: "saveTimer")
+            timer.stopTimers(timerArray: ["saveTimer"])
             DataStore.updateUser(userId: userId)
             currentGame = Game()
           }

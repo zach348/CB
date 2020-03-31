@@ -246,9 +246,9 @@ struct Sensory {
     }
     let wait = SKAction.wait(forDuration: 10)
     let addQuitLabel = SKAction.run {
-      currentGame.quitLabel.text = " Shake to quit (take your time)"
+      currentGame.quitLabel.text = "Keep Breathing.   Take your time.   (shake to quit)"
       currentGame.quitLabel.preferredMaxLayoutWidth = 175
-      currentGame.quitLabel.numberOfLines = 2
+      currentGame.quitLabel.numberOfLines = 3
       currentGame.quitLabel.fontSize = 25
       currentGame.quitLabel.fontColor = .lightGray
       currentGame.quitLabel.position = CGPoint(x: gameScene.frame.width/2, y: gameScene.frame.height/2)

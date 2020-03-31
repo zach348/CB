@@ -31,7 +31,7 @@ struct DataStore {
   static func addRecord(){
     if let timer = currentGame.timer, let scene = currentGame.gameScene {
       self.recordCount += 1
-      timer.stopTimer(timerID: "dataTimer")
+      timer.stopTimers(timerArray: ["dataTimer"])
       self.updateBallStats()
       let record:[String:Any] = [
         "timeStamp": FieldValue.serverTimestamp(),
@@ -141,7 +141,7 @@ struct DataStore {
   
   static func saveRecords(){
     if let timer = currentGame.timer, let scene = currentGame.gameScene {
-      timer.stopTimer(timerID: "saveTimer")
+      timer.stopTimers(timerArray: ["saveTimer"])
       
       for tpRecord in self.records {
         self.saveTimePoint(tpRecord: tpRecord, gameCount: self.gameCount, tpCount: self.tpCount)

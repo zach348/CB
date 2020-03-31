@@ -27,6 +27,7 @@ class Game {
     }
   }
   static var currentTrackSettings:Settings = settingsArr[0] {
+    
     didSet {
       //detection of final dummy phase (i.e,. phase '7') trips flag to begin transition into resp
       if self.currentTrackSettings.phase == 6 {
@@ -59,7 +60,7 @@ class Game {
   }
   
   class func transitionTrackPhase(timer:Timer){
-    currentGame.outcomeHistory.append(Outcome.transition)
+    currentGame.appendTransition()
     currentGame.streakAchieved = false
     currentGame.stagePoints = 0
     currentGame.createStatusBalls(num: Game.currentTrackSettings.requiredStreak)
@@ -71,7 +72,7 @@ class Game {
     if(Game.currentTrackSettings.phase < 5){
       timer.targetTimer()
     }else{
-      timer.stopTimer(timerID: "targetTimer")
+      timer.stopTimers(timerArray: ["targetTimer"])
     }
     if Ball.getTargets().count < Game.currentTrackSettings.numTargets && self.currentTrackSettings.phase < 6 {
       let numTargets = Game.currentTrackSettings.numTargets - Ball.getTargets().count
@@ -100,7 +101,7 @@ class Game {
     if self.initialRespTransition {
       //Cleanup
       timer.members.forEach({ loop in
-        if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" && loop != "saveTimer" && loop != "dataTimer" {timer.stopTimer(timerID: loop)}
+        if loop != "frequencyLoopTimer" && loop != "gameTimer"  && loop != "movementTimer" && loop != "saveTimer" && loop != "dataTimer" {timer.stopTimers(timerArray: [loop])}
       })
       for ball in Ball.getTargets(){
         Sensory.flickerOffTexture(sprite: ball, onTexture: Game.currentTrackSettings.targetTexture, offTexture: Game.currentTrackSettings.distractorTexture)
@@ -126,7 +127,7 @@ class Game {
         timer.bleedSpeedTimer()
       }
       let wait = SKAction.wait(forDuration: 5)
-      let stopMovementTimer = SKAction.run({ timer.stopTimer(timerID: "movementTimer")})
+      let stopMovementTimer = SKAction.run({ timer.stopTimers(timerArray: ["movementTimer"])})
       self.initialRespTransition = false
       worldTimer.run(SKAction.sequence([bleedSpeed,wait,stopMovementTimer,wait,circleAction]))
     }else{
@@ -159,7 +160,7 @@ class Game {
     didSet {
       if self.foundTargets == Game.currentTrackSettings.numTargets {
         currentGame.stagePoints += 1
-        currentGame.outcomeHistory.append(Outcome.success)
+        currentGame.appendSuccess()
       }
     }
   }
@@ -234,6 +235,7 @@ class Game {
     self.hrController = HRMViewController()
     DataStore.dummyRequest()
     
+    
     if let scene = self.gameScene {
       if let worldTimer = self.worldTimer, let spriteWorld = currentGame.spriteWorld {
         scene.addChild(worldTimer)
@@ -275,6 +277,8 @@ class Game {
       self.timer?.startTimerActions()
       Sensory.applyFrequency()
       self.isRunning = true
+      
+      print(Game.currentTrackSettings.phase)
     }
   }
   
@@ -349,7 +353,7 @@ class Game {
   }
   
   func unpauseGame(){
-    if !self.failedAttempt && self.foundTargets < Game.currentTrackSettings.numTargets { currentGame.outcomeHistory.append(Outcome.pass)}
+    if !self.failedAttempt && self.foundTargets < Game.currentTrackSettings.numTargets { currentGame.appendPass()}
     self.isPaused = false
     Ball.removeEmitters()
     Ball.unfreezeMovement()
@@ -382,6 +386,23 @@ class Game {
       }
       streakArr.last!.run(SKAction.setTexture(SKTexture(imageNamed: "sphere-black")))
     }
+  }
+  
+  func appendPass(){
+    
+    self.outcomeHistory.append(Outcome.pass)
+  }
+  
+  func appendSuccess(){
+    self.outcomeHistory.append(Outcome.success)
+  }
+  
+  func appendFailure(){
+    self.outcomeHistory.append(Outcome.failure)
+  }
+  
+  func appendTransition(){
+    self.outcomeHistory.append(Outcome.transition)
   }
   
   private
