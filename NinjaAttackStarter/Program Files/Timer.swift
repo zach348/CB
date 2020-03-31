@@ -213,16 +213,16 @@ class Timer {
       let loop = SKAction.repeatForever(SKAction.sequence([SKAction.run {
         timerNode -= 0.1
         currentGame.pauseCountdownTimerLabel.text = "\(String(format: "%.1f", timerNode))"
-        if timerNode <= 0 || currentGame.foundTargets == Game.currentTrackSettings.numTargets {
+        if timerNode <= 0 || currentGame.foundTargets == Game.currentTrackSettings.numTargets || currentGame.failedAttempt {
           currentGame.pauseCountdownTimerLabel.removeFromParent()
         }
-        if currentGame.foundTargets == Game.currentTrackSettings.numTargets && !unpauseFlag {
+        if (currentGame.foundTargets == Game.currentTrackSettings.numTargets || currentGame.failedAttempt) && !unpauseFlag {
           let unpause = SKAction.run { currentGame.unpauseGame()}
           let pauseTimerCall = SKAction.run { self.pauseTimer()}
           let stopTimers = SKAction.run { self.stopTimers(timerArray: ["pauseDurationTimer", "unpauseTimer"])}
           let wait = SKAction.wait(forDuration: 0.5)
-          let group = SKAction.sequence([wait,stopTimers,unpause,pauseTimerCall])
-          gameScene.run(group)
+          let sequence = SKAction.sequence([wait,stopTimers,unpause,pauseTimerCall])
+          gameScene.run(sequence)
           unpauseFlag = true
         }
       },SKAction.wait(forDuration: 0.1)]))
