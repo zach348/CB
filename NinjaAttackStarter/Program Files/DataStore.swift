@@ -146,7 +146,6 @@ struct DataStore {
       for tpRecord in self.records {
         self.saveTimePoint(tpRecord: tpRecord, gameCount: self.gameCount, tpCount: self.tpCount)
         self.records.removeFirst()
-        print("saved timepoint: \(self.tpCount)")
         self.tpCount += 1
 
       }

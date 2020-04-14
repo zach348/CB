@@ -8,7 +8,7 @@ class Ball: SKSpriteNode {
   static var blinkFlags = [Bool]() {
     didSet {
       if self.pendingPause && self.blinkFlags.isEmpty {
-        currentGame.pauseGame()
+        currentGame.beginAttempt()
         self.pendingPause = false
       }
       if self.pendingShift && self.blinkFlags.isEmpty {

@@ -2,6 +2,7 @@
 import Foundation
 import SpriteKit
 import Firebase
+import AVFoundation
 
 class Game {
       
@@ -283,6 +284,8 @@ class Game {
   }
   
   func cleanupGame(){
+    self.setupNotifications()
+        
     Sensory.createHapticEngine()
     Ball.members = [Ball]()
     Ball.blinkFlags = [Bool]()
@@ -330,16 +333,24 @@ class Game {
   }
   
   func pauseGame(){
+    self.isPaused = true
+    Ball.freezeMovement()
     
-    
+  }
+  
+  func unpauseGame(){
+    self.isPaused = false
+    Ball.unfreezeMovement()
+  }
+  
+  func beginAttempt(){
     //implementation
     if !Ball.blinkFlags.isEmpty {
       Ball.pendingPause = true
       return
     }
     if let timer = self.timer {
-      self.isPaused = true
-      Ball.freezeMovement()
+      self.pauseGame()
       Ball.maskTargets()
       Ball.resetFoundTargets()
       currentGame.foundTargets = 0
@@ -352,14 +363,13 @@ class Game {
     }
   }
   
-  func unpauseGame(){
+  func endAttempt(){
     if !self.failedAttempt && self.foundTargets < Game.currentTrackSettings.numTargets { currentGame.appendPass()}
-    self.isPaused = false
     Ball.removeEmitters()
-    Ball.unfreezeMovement()
     Ball.unmaskTargets()
     Ball.hideBorders()
     Ball.resetTextures()
+    self.unpauseGame()
   }
   
   func resetStatusBalls(){
@@ -433,5 +443,22 @@ class Game {
       }
     }
   }
+  
+  func setupNotifications() {
+      // Get the default notification center instance.
+      let nc = NotificationCenter.default
+      nc.addObserver(self,
+                     selector: #selector(handleInterruption),
+                     name: AVAudioSession.interruptionNotification,
+                     object: nil)
+  }
+
+  @objc func handleInterruption(notification: Notification) {
+      // To be implemented.
+//    Sensory.hapticsRunning = false
+    print("interruption!!!")
+    print("-----------")
+  }
+    
 }
 

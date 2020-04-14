@@ -98,26 +98,32 @@ class Timer {
       
       let breathInBlock = SKAction.run {
         self.breathLabel.text = "Inhale"
-        do {
-          try Sensory.hapticPlayers["testIn\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
-        }catch{
-          print("failed to play haptic pattern: \(error.localizedDescription)")
+        if Sensory.hapticsRunning {
+          do {
+            try Sensory.hapticPlayers["testIn\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
+          }catch{
+            print("failed to play haptic pattern: \(error.localizedDescription)")
+          }
         }
       }
       let breathInHoldBlock = SKAction.run {
         self.breathLabel.text = "Hold"
-        do {
-          try Sensory.hapticPlayers["testHold\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
-        }catch{
-          print("failed to play haptic pattern: \(error.localizedDescription)")
+        if Sensory.hapticsRunning {
+          do {
+            try Sensory.hapticPlayers["testHold\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
+          }catch{
+            print("failed to play haptic pattern: \(error.localizedDescription)")
+          }
         }
       }
       let breathOutBlock = SKAction.run {
         self.breathLabel.text = "Exhale"
-        do {
-          try Sensory.hapticPlayers["testOut\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
-        }catch{
-          print("failed to play haptic pattern: \(error.localizedDescription)")
+        if Sensory.hapticsRunning {
+          do {
+            try Sensory.hapticPlayers["testOut\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
+          }catch{
+            print("failed to play haptic pattern: \(error.localizedDescription)")
+          }
         }
       }
       
@@ -170,7 +176,7 @@ class Timer {
       self.stopTimers(timerArray: ["pauseTimer"])
       let error = Game.currentTrackSettings.pauseError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentTrackSettings.pauseDelay - error, max: Game.currentTrackSettings.pauseDelay + error)))
-      let pause = SKAction.run { currentGame.pauseGame()}
+      let pause = SKAction.run { currentGame.beginAttempt()}
       let sequence = SKAction.sequence([wait, pause])
       
       self.members.append("pauseTimer")
@@ -182,7 +188,7 @@ class Timer {
     if let gameScene = currentGame.gameScene {
       self.stopTimers(timerArray: ["unpauseTimer"])
       let unpauseWait = SKAction.wait(forDuration: Game.currentTrackSettings.pauseDuration)
-      let unpause = SKAction.run { currentGame.unpauseGame()}
+      let unpause = SKAction.run { currentGame.endAttempt()}
       let recursiveCall = SKAction.run {
         self.pauseTimer()
       }
@@ -217,7 +223,7 @@ class Timer {
           currentGame.pauseCountdownTimerLabel.removeFromParent()
         }
         if (currentGame.foundTargets == Game.currentTrackSettings.numTargets || currentGame.failedAttempt) && !unpauseFlag {
-          let unpause = SKAction.run { currentGame.unpauseGame()}
+          let unpause = SKAction.run { currentGame.endAttempt()}
           let pauseTimerCall = SKAction.run { self.pauseTimer()}
           let stopTimers = SKAction.run { self.stopTimers(timerArray: ["pauseDurationTimer", "unpauseTimer"])}
           let wait = SKAction.wait(forDuration: 0.5)

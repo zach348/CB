@@ -28,6 +28,7 @@ struct Sensory {
   ]
   
   static var hapticEngine: CHHapticEngine?
+  static var hapticsRunning:Bool = false
   
   static var hapticPlayers: [String: CHHapticPatternPlayer] = [String: CHHapticPatternPlayer]()
   
@@ -37,11 +38,14 @@ struct Sensory {
       self.hapticEngine = try CHHapticEngine()
       self.hapticEngine?.playsHapticsOnly = true
       try self.hapticEngine?.start()
+      self.hapticsRunning = true
     } catch {
+      self.hapticsRunning = false
       print("Error with creating haptic engine: \(error.localizedDescription)")
     }
     
     self.hapticEngine?.stoppedHandler = { reason in
+      self.hapticsRunning = false
       print("The engine stopped: \(reason)")
     }
     
@@ -49,7 +53,9 @@ struct Sensory {
       print("The engine reset")
       do {
         try self.hapticEngine?.start()
+        self.hapticsRunning = true
       } catch {
+        self.hapticsRunning = false
         print("failed to restart the engine: \(error.localizedDescription)")
       }
     }
@@ -206,13 +212,14 @@ struct Sensory {
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
     let event = self.createHapticEvent(intensity: 0.5, sharpness: 1, relativeTime: 0, duration: 0)
-
+    
      do{
       let pattern = try CHHapticPattern(events: [event], parameters: [])
       self.hapticPlayers["frequency"] = try self.hapticEngine?.makePlayer(with: pattern)
      }catch{
       print("Problem creating haptic pattern or player: \(error.localizedDescription)")
      }
+    
     if let gameScene = currentGame.gameScene {
       let tone = SKAction.run {
         self.toneNodes["tone\(Game.currentTrackSettings.phase)"]!.run(SKAction.play())
@@ -220,10 +227,12 @@ struct Sensory {
       let toneWait = SKAction.wait(forDuration: 0.033)
       let audioGroup = SKAction.group([tone,toneWait])
       let haptic = SKAction.run {
-        do {
-          try self.hapticPlayers["frequency"]?.start(atTime: 0)
-        }catch{
-          print("Failed to play pattern: \(error.localizedDescription)")
+        if self.hapticsRunning {
+          do {
+            try self.hapticPlayers["frequency"]?.start(atTime: 0)
+          }catch{
+            print("Failed to play pattern: \(error.localizedDescription)")
+          }
         }
       }
       let toneGroup = SKAction.group([tone,haptic])
