@@ -458,6 +458,9 @@ class Game {
 //    Sensory.hapticsRunning = false
     print("interruption!!!")
     print("-----------")
+    for (name, node) in Sensory.audioNodes {
+      node.run(SKAction.stop())
+    }
   }
     
 }

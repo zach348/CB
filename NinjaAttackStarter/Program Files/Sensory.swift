@@ -221,9 +221,14 @@ struct Sensory {
      }
     
     if let gameScene = currentGame.gameScene {
-      let tone = SKAction.run {
-        self.toneNodes["tone\(Game.currentTrackSettings.phase)"]!.run(SKAction.play())
-      }
+//      let tone = SKAction.run {
+//        self.toneNodes["tone\(Game.currentTrackSettings.phase)"]!.run(SKAction.play())
+//      }
+      let tone = SKAction.playSoundFileNamed(Game.currentTrackSettings.toneFile, waitForCompletion: false)
+      
+      
+      
+      
       let toneWait = SKAction.wait(forDuration: 0.033)
       let audioGroup = SKAction.group([tone,toneWait])
       let haptic = SKAction.run {

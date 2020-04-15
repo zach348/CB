@@ -21,14 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
   
  func applicationDidBecomeActive(_ application: UIApplication) {
-   do {
-     try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, options: AVAudioSession.CategoryOptions.mixWithOthers)
-       print("Playback OK")
-       try AVAudioSession.sharedInstance().setActive(true)
-       print("Session is Active")
-   } catch {
-       print(error)
-   }
+
    Sensory.createHapticEngine()
    if currentGame.isRunning{
      do {
