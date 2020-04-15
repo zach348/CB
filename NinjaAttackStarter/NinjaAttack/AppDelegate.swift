@@ -13,34 +13,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     FirebaseApp.configure()
     
-    do {
-      try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, options: AVAudioSession.CategoryOptions.mixWithOthers)
-        print("Playback OK")
-        try AVAudioSession.sharedInstance().setActive(true)
-        print("Session is Active")
-    } catch {
-        print(error)
-    }
     return true
   }
   
   func applicationWillResignActive(_ application: UIApplication) {
-    currentGame.pauseGame()
+    if currentGame.isRunning { currentGame.pauseGame()}
   }
   
  func applicationDidBecomeActive(_ application: UIApplication) {
-  currentGame.unpauseGame()
-  Sensory.createHapticEngine()
+   do {
+     try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, options: AVAudioSession.CategoryOptions.mixWithOthers)
+       print("Playback OK")
+       try AVAudioSession.sharedInstance().setActive(true)
+       print("Session is Active")
+   } catch {
+       print(error)
+   }
+   Sensory.createHapticEngine()
    if currentGame.isRunning{
      do {
       print("restarting engine")
       try Sensory.hapticEngine?.start()
-      try AVAudioSession.sharedInstance().setActive(true)
      }catch{
-       print(error.localizedDescription)
+      print(error.localizedDescription)
      }
      Sensory.applyFrequency()
-   }
+     currentGame.unpauseGame()
+    }
   }
   
   func applicationWillEnterForeground(_ application: UIApplication) {
