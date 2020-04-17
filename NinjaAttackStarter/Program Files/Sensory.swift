@@ -73,7 +73,7 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(strongPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        self.audioNodes["correct"]?.run(SKAction.play())
+        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
         Ball.disableInteraction()
         currentGame.incrementStatusBalls(emitter: true)
       }
@@ -82,7 +82,7 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        self.audioNodes["correct"]?.run(SKAction.play())
+        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
         Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
@@ -90,7 +90,7 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        self.audioNodes["correct"]?.run(SKAction.play())
+        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
         Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
@@ -98,7 +98,7 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        self.audioNodes["correct"]?.run(SKAction.play())
+        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
         Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
@@ -112,10 +112,10 @@ struct Sensory {
     let vibration = SystemSoundID(kSystemSoundID_Vibrate)
     switch Game.currentTrackSettings.phase {
     case 1,2:
-      self.audioNodes["incorrect"]!.run(SKAction.play())
+      currentGame.gameScene?.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))
       AudioServicesPlaySystemSound(vibration)
     case 3,4,5:
-      self.audioNodes["incorrect"]!.run(SKAction.play())
+      currentGame.gameScene?.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))
       AudioServicesPlaySystemSound(cancelled)
     default:
       break
@@ -125,7 +125,7 @@ struct Sensory {
   static func streakAchievedFeedback(){
     switch Game.currentTrackSettings.phase {
     case 1,2,3,4,5:
-      self.audioNodes["streak"]?.run(SKAction.play())
+      currentGame.gameScene?.run(SKAction.playSoundFileNamed("streak_sound", waitForCompletion: false))
     default:
       break
     }
@@ -202,7 +202,7 @@ struct Sensory {
   static func playRadarBlip(count:Int){
     if let gameScene = currentGame.gameScene {
       let playSound = SKAction.run({
-        self.audioNodes["robot_blip"]?.run(SKAction.play())
+        currentGame.gameScene?.run(SKAction.playSoundFileNamed("Robot_blip", waitForCompletion: false))
       })
       gameScene.run(SKAction.repeat(playSound, count: count))
     }
