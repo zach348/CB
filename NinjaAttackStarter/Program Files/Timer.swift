@@ -64,7 +64,7 @@ class Timer {
         for ball in Ball.members {
           ball.modifySpeed(factor: CGFloat.random(min: factor-0.02, max: factor))
         }
-        if Ball.mean() < 30 { timer.stopTimer(timerID: "movementTimer")}
+        if Ball.mean() < 30 { timer.stopTimers(timerArray: ["movementTimer"])}
       }
       self.members.append("movementTimer")
       worldTimer.run(SKAction.repeatForever(SKAction.sequence([wait,correctMovement])), withKey: "movementTimer")
@@ -98,26 +98,32 @@ class Timer {
       
       let breathInBlock = SKAction.run {
         self.breathLabel.text = "Inhale"
-        do {
-          try Sensory.hapticPlayers["testIn\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
-        }catch{
-          print("failed to play haptic pattern: \(error.localizedDescription)")
+        if Sensory.hapticsRunning {
+          do {
+            try Sensory.hapticPlayers["testIn\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
+          }catch{
+            print("failed to play haptic pattern: \(error.localizedDescription)")
+          }
         }
       }
       let breathInHoldBlock = SKAction.run {
         self.breathLabel.text = "Hold"
-        do {
-          try Sensory.hapticPlayers["testHold\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
-        }catch{
-          print("failed to play haptic pattern: \(error.localizedDescription)")
+        if Sensory.hapticsRunning {
+          do {
+            try Sensory.hapticPlayers["testHold\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
+          }catch{
+            print("failed to play haptic pattern: \(error.localizedDescription)")
+          }
         }
       }
       let breathOutBlock = SKAction.run {
         self.breathLabel.text = "Exhale"
-        do {
-          try Sensory.hapticPlayers["testOut\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
-        }catch{
-          print("failed to play haptic pattern: \(error.localizedDescription)")
+        if Sensory.hapticsRunning {
+          do {
+            try Sensory.hapticPlayers["testOut\(Game.currentRespSettings.phase)"]?.start(atTime: 0)
+          }catch{
+            print("failed to play haptic pattern: \(error.localizedDescription)")
+          }
         }
       }
       
@@ -135,7 +141,7 @@ class Timer {
       let breathOutWaitGroup = SKAction.group([breathOutWait,breathOutHoldBlock])
       let checkForPhaseAdv = SKAction.run {
         if currentGame.advanceRespFlag {
-          self.stopTimer(timerID: "breathLoop")
+          self.stopTimers(timerArray: ["breathLoop"])
           for (key, player) in Sensory.hapticPlayers {
             do {
               try player.stop(atTime: 0)
@@ -167,10 +173,10 @@ class Timer {
   
   func pauseTimer(){
     if let gameScene = currentGame.gameScene {
-      self.stopTimer(timerID: "pauseTimer")
+      self.stopTimers(timerArray: ["pauseTimer"])
       let error = Game.currentTrackSettings.pauseError
       let wait = SKAction.wait(forDuration: (Double.random(min: Game.currentTrackSettings.pauseDelay - error, max: Game.currentTrackSettings.pauseDelay + error)))
-      let pause = SKAction.run { currentGame.pauseGame()}
+      let pause = SKAction.run { currentGame.beginAttempt()}
       let sequence = SKAction.sequence([wait, pause])
       
       self.members.append("pauseTimer")
@@ -180,9 +186,9 @@ class Timer {
   
   func pauseCountdown(){
     if let gameScene = currentGame.gameScene {
-      self.stopTimer(timerID: "unpauseTimer")
+      self.stopTimers(timerArray: ["unpauseTimer"])
       let unpauseWait = SKAction.wait(forDuration: Game.currentTrackSettings.pauseDuration)
-      let unpause = SKAction.run { currentGame.unpauseGame()}
+      let unpause = SKAction.run { currentGame.endAttempt()}
       let recursiveCall = SKAction.run {
         self.pauseTimer()
       }
@@ -200,7 +206,6 @@ class Timer {
   func pauseCountdownTimer(pauseDuration:Double){
     if let gameScene = currentGame.gameScene {
       var timerNode: Double = pauseDuration
-      let timerLabel = SKLabelNode()
       currentGame.pauseCountdownTimerLabel.text = "\(String(format: "%.3f", timerNode))"
       currentGame.pauseCountdownTimerLabel.fontColor = SKColor.black
       currentGame.pauseCountdownTimerLabel.fontSize = 40
@@ -210,14 +215,23 @@ class Timer {
       currentGame.pauseCountdownTimerLabel.zPosition = -0.50
       gameScene.addChild(currentGame.pauseCountdownTimerLabel)
       
+      var unpauseFlag = false
       let loop = SKAction.repeatForever(SKAction.sequence([SKAction.run {
         timerNode -= 0.1
         currentGame.pauseCountdownTimerLabel.text = "\(String(format: "%.1f", timerNode))"
-        if timerNode <= 0 {
+        if timerNode <= 0 || currentGame.foundTargets == Game.currentTrackSettings.numTargets || currentGame.failedAttempt {
           currentGame.pauseCountdownTimerLabel.removeFromParent()
-          self.stopTimer(timerID: "pauseDurationTimer")
         }
-        },SKAction.wait(forDuration: 0.1)]))
+        if (currentGame.foundTargets == Game.currentTrackSettings.numTargets || currentGame.failedAttempt) && !unpauseFlag {
+          let unpause = SKAction.run { currentGame.endAttempt()}
+          let pauseTimerCall = SKAction.run { self.pauseTimer()}
+          let stopTimers = SKAction.run { self.stopTimers(timerArray: ["pauseDurationTimer", "unpauseTimer"])}
+          let wait = SKAction.wait(forDuration: 0.5)
+          let sequence = SKAction.sequence([wait,stopTimers,unpause,pauseTimerCall])
+          gameScene.run(sequence)
+          unpauseFlag = true
+        }
+      },SKAction.wait(forDuration: 0.1)]))
       self.members.append("pauseDurationTimer")
       gameScene.run(loop, withKey: "pauseDurationTimer")
     }
@@ -225,7 +239,7 @@ class Timer {
   
   func targetTimer(){
     if let worldTimer = currentGame.worldTimer {
-      self.stopTimer(timerID: "targetTimer")
+      self.stopTimers(timerArray: ["targetTimer"])
       let error = Game.currentTrackSettings.shiftError
       let duration = (Double.random(min: Game.currentTrackSettings.shiftDelay - error, max: Game.currentTrackSettings.shiftDelay + error))
       let wait = SKAction.wait(forDuration: duration )
@@ -243,7 +257,7 @@ class Timer {
   
   func dataTimer(){
     if let scene = currentGame.gameScene {
-      self.stopTimer(timerID: "dataTimer")
+      self.stopTimers(timerArray: ["dataTimer"])
       let wait = SKAction.wait(forDuration: 0.5)
       let addRecord = SKAction.run {
         DataStore.addRecord()
@@ -255,7 +269,7 @@ class Timer {
   
   func saveTimer(){
     if let scene = currentGame.gameScene {
-      self.stopTimer(timerID: "saveTimer")
+      self.stopTimers(timerArray: ["saveTimer"])
       let wait = SKAction.wait(forDuration: 1)
       let saveRecords = SKAction.run {
         DataStore.saveRecords()
@@ -265,18 +279,20 @@ class Timer {
     }
   }
   
-  func stopTimer(timerID:String) {
-    if let worldTimer = currentGame.worldTimer, let scene = currentGame.gameScene  {
-      if timerID == "gameTimer" || timerID == "frequencyLoopTimer" || timerID == "pauseTimer" || timerID == "dataTimer" || timerID == "saveTimer" || timerID == "pauseTimer" || timerID == "unpauseTimer" || timerID == "pauseDurationTimer" {
-        self.members = self.members.filter { $0 != timerID }
-        scene.removeAction(forKey: timerID)
-      }else if timerID == "breathLoop" {
-        Ball.members.forEach { ball in
-          ball.removeAction(forKey: "breathLoop")
+  func stopTimers(timerArray:[String]) {
+    for timerID in timerArray {
+      if let worldTimer = currentGame.worldTimer, let scene = currentGame.gameScene  {
+        if timerID == "gameTimer" || timerID == "frequencyLoopTimer" || timerID == "pauseTimer" || timerID == "dataTimer" || timerID == "saveTimer" || timerID == "pauseTimer" || timerID == "unpauseTimer" || timerID == "pauseDurationTimer" {
+          self.members = self.members.filter { $0 != timerID }
+          scene.removeAction(forKey: timerID)
+        }else if timerID == "breathLoop" {
+          Ball.members.forEach { ball in
+            ball.removeAction(forKey: "breathLoop")
+          }
+        }else{
+          worldTimer.removeAction(forKey: timerID)
+          self.members = self.members.filter { $0 != timerID }
         }
-      }else{
-        worldTimer.removeAction(forKey: timerID)
-        self.members = self.members.filter { $0 != timerID }
       }
     }
   }

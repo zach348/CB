@@ -37,7 +37,7 @@ class GameViewController: UIViewController, TransitionDelegate {
       } else if user != nil && user!.isEmailVerified {
         print("logged in")
         guard let userId = user?.email else {print("error retrieving userId"); return}
-        print("getting user... present sceneXFget")
+        print("getting user... ")
         DataStore.getUser(userId: userId)
         self.startScene = StartGameScene(size: (self.view.bounds.size))
         self.startScene?.gameViewController = self
@@ -87,7 +87,7 @@ class GameViewController: UIViewController, TransitionDelegate {
             self.gameScene?.removeAllChildren()
             self.gameScene = nil
 //            DataStore.saveGame()
-            timer.stopTimer(timerID: "saveTimer")
+            timer.stopTimers(timerArray: ["saveTimer"])
             DataStore.updateUser(userId: userId)
             currentGame = Game()
           }

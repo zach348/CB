@@ -8,7 +8,7 @@ class Ball: SKSpriteNode {
   static var blinkFlags = [Bool]() {
     didSet {
       if self.pendingPause && self.blinkFlags.isEmpty {
-        currentGame.pauseGame()
+        currentGame.beginAttempt()
         self.pendingPause = false
       }
       if self.pendingShift && self.blinkFlags.isEmpty {
@@ -76,7 +76,7 @@ class Ball: SKSpriteNode {
       print("pending shift")
       return
     }else if let worldTimer = currentGame.worldTimer, let timer = currentGame.timer {
-      timer.stopTimer(timerID: "targetTimer")
+      timer.stopTimers(timerArray: ["targetTimer"])
       Ball.clearTargets()
       Ball.assignRandomTargets().forEach { ball in
         ball.removeAction(forKey: "blinkBall")

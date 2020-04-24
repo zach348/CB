@@ -2,6 +2,7 @@
 
 import UIKit
 import Firebase
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -11,12 +12,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    didFinishLaunchingWithOptions launchOptions:
     [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     FirebaseApp.configure()
+    
     return true
   }
   
+  func applicationWillResignActive(_ application: UIApplication) {
+    if currentGame.isRunning { currentGame.pauseGame()}
+  }
+  
+ func applicationDidBecomeActive(_ application: UIApplication) {
+
+   Sensory.createHapticEngine()
+   if currentGame.isRunning{
+     do {
+      print("restarting engine")
+      try Sensory.hapticEngine?.start()
+     }catch{
+      print(error.localizedDescription)
+     }
+     Sensory.applyFrequency()
+     currentGame.unpauseGame()
+    }
+  }
+  
   func applicationWillEnterForeground(_ application: UIApplication) {
+    Sensory.createHapticEngine()
     if currentGame.isRunning{
       do {
+        print("restarting engine")
         try Sensory.hapticEngine?.start()
       }catch{
         print(error.localizedDescription)
@@ -24,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       Sensory.applyFrequency()
     }
   }
-    
+  
+
 }
 
