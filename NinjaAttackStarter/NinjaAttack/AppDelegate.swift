@@ -20,18 +20,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     if currentGame.isRunning { currentGame.pauseGame()}
   }
   
- func applicationDidBecomeActive(_ application: UIApplication) {
+  func applicationDidBecomeActive(_ application: UIApplication) {
 
-   Sensory.createHapticEngine()
-   if currentGame.isRunning{
-     do {
-      print("restarting engine")
-      try Sensory.hapticEngine?.start()
-     }catch{
-      print(error.localizedDescription)
-     }
-     Sensory.applyFrequency()
-     currentGame.unpauseGame()
+    Sensory.createHapticEngine()
+    if currentGame.isRunning{
+      do {
+        print("restarting engine")
+        try Sensory.hapticEngine?.start()
+      }catch{
+        print(error.localizedDescription)
+      }
+      Sensory.applyFrequency()
+      currentGame.unpauseGame()
     }
   }
   

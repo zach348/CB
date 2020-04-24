@@ -27,6 +27,9 @@ struct Sensory {
 
   ]
   
+  static var soundResources:[String:CHHapticAudioResourceID] = [String:CHHapticAudioResourceID]()
+  static var soundResourcesRegistered:Bool = false
+  
   static var hapticEngine: CHHapticEngine?
   static var hapticsRunning:Bool = false
   
@@ -363,25 +366,37 @@ struct Sensory {
     return event
   }
   
+  static func registerAudioResources(){
+    do {
+      self.soundResources["robot_blip"] = try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "Robot_blip", withExtension: "wav")!)
+      self.soundResources["correct_sound"] = try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "correct_sound", withExtension: "wav")!)
+      self.soundResources["wrong_sound"] = try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "wrong_sound", withExtension: "wav")!)
+      self.soundResources["streak_sound"] =  try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "streak_sound", withExtension: "wav")!)
+    }catch{
+      print("error registering audio resources:", error.localizedDescription)
+    }
+  }
   
   static func prepareAudioHaptics(volume:Float = 0.5){
+    if !soundResourcesRegistered{
+      self.registerAudioResources()
+      self.soundResourcesRegistered = true
+    }
     do {
-      if let robotToneID = try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "Robot_blip", withExtension: "wav")!), let correctToneID = try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "correct_sound", withExtension: "wav")!), let incorrectToneID = try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "wrong_sound", withExtension: "wav")!), let streakToneID = try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "streak_sound", withExtension: "wav")!) {
-        let robotEvent = CHHapticEvent(audioResourceID: robotToneID, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
-        let robotPattern = try CHHapticPattern(events: [robotEvent], parameterCurves: [])
-        self.hapticPlayers["robot_blip"] = try self.hapticEngine?.makePlayer(with: robotPattern)
-        let correctEvent = CHHapticEvent(audioResourceID: correctToneID, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
-        let correctPattern = try CHHapticPattern(events: [correctEvent], parameterCurves: [])
-        self.hapticPlayers["correct_sound"] = try self.hapticEngine?.makePlayer(with: correctPattern)
-        let incorrectEvent = CHHapticEvent(audioResourceID: incorrectToneID, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
-        let incorrectPattern = try CHHapticPattern(events: [incorrectEvent], parameterCurves: [])
-        self.hapticPlayers["wrong_sound"] = try self.hapticEngine?.makePlayer(with: incorrectPattern)
-        let streakEvent = CHHapticEvent(audioResourceID: streakToneID, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
-        let streakPattern = try CHHapticPattern(events: [streakEvent], parameterCurves: [])
-        self.hapticPlayers["streak_sound"] = try self.hapticEngine?.makePlayer(with: streakPattern)
-      }
+      let robotEvent = CHHapticEvent(audioResourceID: self.soundResources["robot_blip"]!, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
+      let robotPattern = try CHHapticPattern(events: [robotEvent], parameterCurves: [])
+      self.hapticPlayers["robot_blip"] = try self.hapticEngine?.makePlayer(with: robotPattern)
+      let correctEvent = CHHapticEvent(audioResourceID: self.soundResources["correct_sound"]!, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
+      let correctPattern = try CHHapticPattern(events: [correctEvent], parameterCurves: [])
+      self.hapticPlayers["correct_sound"] = try self.hapticEngine?.makePlayer(with: correctPattern)
+      let incorrectEvent = CHHapticEvent(audioResourceID: self.soundResources["wrong_sound"]!, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
+      let incorrectPattern = try CHHapticPattern(events: [incorrectEvent], parameterCurves: [])
+      self.hapticPlayers["wrong_sound"] = try self.hapticEngine?.makePlayer(with: incorrectPattern)
+      let streakEvent = CHHapticEvent(audioResourceID: self.soundResources["streak_sound"]!, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
+      let streakPattern = try CHHapticPattern(events: [streakEvent], parameterCurves: [])
+      self.hapticPlayers["streak_sound"] = try self.hapticEngine?.makePlayer(with: streakPattern)
     }catch{
-      print("error making audio haptic players: ",error.localizedDescription)
+      print("error making audio haptic players:",error.localizedDescription)
     }
   }
   
