@@ -36,7 +36,7 @@ struct Sensory {
     guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { print("no haptic support"); return }
     do {
       self.hapticEngine = try CHHapticEngine()
-      self.hapticEngine?.playsHapticsOnly = true
+//      self.hapticEngine?.playsHapticsOnly = true
       try self.hapticEngine?.start()
       self.hapticsRunning = true
     } catch {
@@ -73,7 +73,12 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(strongPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
+//        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
+        do{
+          try self.hapticPlayers["correct_sound"]?.start(atTime: 0)
+        }catch{
+          print("error playing correct sound: \(error.localizedDescription)")
+        }
         Ball.disableInteraction()
         currentGame.incrementStatusBalls(emitter: true)
       }
@@ -82,7 +87,12 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
+//        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
+        do{
+          try self.hapticPlayers["correct_sound"]?.start(atTime: 0)
+        }catch{
+          print("error playing correct sound: \(error.localizedDescription)")
+        }
         Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
@@ -90,7 +100,12 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
+//        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
+        do{
+          try self.hapticPlayers["correct_sound"]?.start(atTime: 0)
+        }catch{
+          print("error playing correct sound: \(error.localizedDescription)")
+        }
         Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
@@ -98,7 +113,12 @@ struct Sensory {
       foundTarget.texture = Game.currentTrackSettings.targetTexture
       AudioServicesPlaySystemSound(weakPop)
       if currentGame.foundTargets == Game.currentTrackSettings.numTargets {
-        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
+//        currentGame.gameScene?.run(SKAction.playSoundFileNamed("correct_sound", waitForCompletion: false))
+        do{
+          try self.hapticPlayers["correct_sound"]?.start(atTime: 0)
+        }catch{
+          print("error playing correct sound: \(error.localizedDescription)")
+        }
         Ball.disableInteraction()
         currentGame.incrementStatusBalls()
       }
@@ -112,10 +132,20 @@ struct Sensory {
     let vibration = SystemSoundID(kSystemSoundID_Vibrate)
     switch Game.currentTrackSettings.phase {
     case 1,2:
-      currentGame.gameScene?.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))
+//      currentGame.gameScene?.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))
+      do{
+        try self.hapticPlayers["wrong_sound"]?.start(atTime: 0)
+      }catch{
+        print("error playing wrong sound: \(error.localizedDescription)")
+      }
       AudioServicesPlaySystemSound(vibration)
     case 3,4,5:
-      currentGame.gameScene?.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))
+//      currentGame.gameScene?.run(SKAction.playSoundFileNamed("wrong_sound", waitForCompletion: false))
+      do{
+        try self.hapticPlayers["wrong_sound"]?.start(atTime: 0)
+      }catch{
+        print("error playing wrong sound: \(error.localizedDescription)")
+      }
       AudioServicesPlaySystemSound(cancelled)
     default:
       break
@@ -125,7 +155,12 @@ struct Sensory {
   static func streakAchievedFeedback(){
     switch Game.currentTrackSettings.phase {
     case 1,2,3,4,5:
-      currentGame.gameScene?.run(SKAction.playSoundFileNamed("streak_sound", waitForCompletion: false))
+//      currentGame.gameScene?.run(SKAction.playSoundFileNamed("streak_sound", waitForCompletion: false))
+      do{
+        try self.hapticPlayers["streak_sound"]?.start(atTime: 0)
+      }catch{
+        print("error playing streak sound: \(error.localizedDescription)")
+      }
     default:
       break
     }
@@ -202,13 +237,33 @@ struct Sensory {
   static func playRadarBlip(count:Int){
     if let gameScene = currentGame.gameScene {
       let playSound = SKAction.run({
-        currentGame.gameScene?.run(SKAction.playSoundFileNamed("Robot_blip", waitForCompletion: false))
+//        currentGame.gameScene?.run(SKAction.playSoundFileNamed("Robot_blip", waitForCompletion: false))]
+        do{
+          try self.hapticPlayers["robot_blip"]?.start(atTime: 0)
+        }catch{
+          print("error playing robot blip: \(error.localizedDescription)")
+        }
       })
       gameScene.run(SKAction.repeat(playSound, count: count))
     }
   }
   
   static func applyFrequency() {
+    switch Game.currentTrackSettings.phase {
+    case 1:
+      self.prepareAudioHaptics(volume: 1.0)
+    case 2:
+      self.prepareAudioHaptics(volume: 0.8)
+    case 3:
+      self.prepareAudioHaptics(volume: 0.6)
+    case 4:
+      self.prepareAudioHaptics(volume: 0.4)
+    case 5:
+      self.prepareAudioHaptics(volume: 0.2)
+    default:
+      self.prepareAudioHaptics(volume: 0.2)
+    }
+
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
     let event = self.createHapticEvent(intensity: 0.5, sharpness: 1, relativeTime: 0, duration: 0)
@@ -306,6 +361,28 @@ struct Sensory {
       event = CHHapticEvent(eventType: .hapticTransient, parameters: [intensity,sharpness], relativeTime: relativeTime, duration: duration)
     }
     return event
+  }
+  
+  
+  static func prepareAudioHaptics(volume:Float = 0.5){
+    do {
+      if let robotToneID = try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "Robot_blip", withExtension: "wav")!), let correctToneID = try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "correct_sound", withExtension: "wav")!), let incorrectToneID = try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "wrong_sound", withExtension: "wav")!), let streakToneID = try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "streak_sound", withExtension: "wav")!) {
+        let robotEvent = CHHapticEvent(audioResourceID: robotToneID, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
+        let robotPattern = try CHHapticPattern(events: [robotEvent], parameterCurves: [])
+        self.hapticPlayers["robot_blip"] = try self.hapticEngine?.makePlayer(with: robotPattern)
+        let correctEvent = CHHapticEvent(audioResourceID: correctToneID, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
+        let correctPattern = try CHHapticPattern(events: [correctEvent], parameterCurves: [])
+        self.hapticPlayers["correct_sound"] = try self.hapticEngine?.makePlayer(with: correctPattern)
+        let incorrectEvent = CHHapticEvent(audioResourceID: incorrectToneID, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
+        let incorrectPattern = try CHHapticPattern(events: [incorrectEvent], parameterCurves: [])
+        self.hapticPlayers["wrong_sound"] = try self.hapticEngine?.makePlayer(with: incorrectPattern)
+        let streakEvent = CHHapticEvent(audioResourceID: streakToneID, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
+        let streakPattern = try CHHapticPattern(events: [streakEvent], parameterCurves: [])
+        self.hapticPlayers["streak_sound"] = try self.hapticEngine?.makePlayer(with: streakPattern)
+      }
+    }catch{
+      print("error making audio haptic players: ",error.localizedDescription)
+    }
   }
   
   static func prepareHaptics(){
