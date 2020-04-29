@@ -285,8 +285,9 @@ class Game {
   
   func cleanupGame(){
     self.setupNotifications()
-        
-    Sensory.createHapticEngine()
+    
+
+
     Ball.members = [Ball]()
     Ball.blinkFlags = [Bool]()
     Ball.pendingPause = false
@@ -330,6 +331,12 @@ class Game {
       "tone6": SKAudioNode(fileNamed: "tone140hz.wav"),
       "tone7": SKAudioNode(fileNamed: "tone140hz.wav")
     ]
+    
+    
+    Sensory.unregisterAudioResources()
+    Sensory.soundResourcesRegistered = false
+    Sensory.createHapticEngine()
+    Sensory.prepareAudioHaptics(volume: Game.currentTrackSettings.sfxVolume)
   }
   
   func pauseGame(){

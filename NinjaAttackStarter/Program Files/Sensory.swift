@@ -244,7 +244,8 @@ struct Sensory {
         do{
           try self.hapticPlayers["robot_blip"]?.start(atTime: 0)
         }catch{
-          print("error playing robot blip: \(error.localizedDescription)")
+          print("error playing robot blip: \(error) -------- \(error.localizedDescription)")
+          Sensory.prepareAudioHaptics()
         }
       })
       gameScene.run(SKAction.repeat(playSound, count: count))
@@ -252,20 +253,7 @@ struct Sensory {
   }
   
   static func applyFrequency() {
-    switch Game.currentTrackSettings.phase {
-    case 1:
-      self.prepareAudioHaptics(volume: 1.0)
-    case 2:
-      self.prepareAudioHaptics(volume: 0.8)
-    case 3:
-      self.prepareAudioHaptics(volume: 0.6)
-    case 4:
-      self.prepareAudioHaptics(volume: 0.4)
-    case 5:
-      self.prepareAudioHaptics(volume: 0.2)
-    default:
-      self.prepareAudioHaptics(volume: 0.2)
-    }
+    self.prepareAudioHaptics(volume: Game.currentTrackSettings.sfxVolume)
 
     let hz = Game.respActive ? Game.currentRespSettings.frequency : Game.currentTrackSettings.frequency
     //below will need a ternary querying transition into resp phase and that responds with a tonefile reference on respsettings
@@ -374,6 +362,16 @@ struct Sensory {
       self.soundResources["streak_sound"] =  try self.hapticEngine?.registerAudioResource(Bundle.main.url(forResource: "streak_sound", withExtension: "wav")!)
     }catch{
       print("error registering audio resources:", error.localizedDescription)
+    }
+  }
+  
+  static func unregisterAudioResources(){
+    for (key, resourceID) in self.soundResources {
+      do{
+        try self.hapticEngine?.unregisterAudioResource(resourceID)
+      }catch{
+        print("error unregistering audio resource: \(key) --------- \(error.localizedDescription)")
+      }
     }
   }
   
