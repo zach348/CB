@@ -17,7 +17,7 @@ struct DataStore {
   ]
   static var ballInfo:[[String:Any]] = [[String:Any]]()
   static var user:[String:Any] = [
-    "diffMod": 1.0,
+    "diffMod": 0.7,
     "lastUpdated": FieldValue.serverTimestamp()
     ] {
     didSet {
@@ -116,7 +116,7 @@ struct DataStore {
           self.user = userData
         } else {
           collectionRef.document(userId).setData([
-            "diffMod": 0.85,
+            "diffMod": 0.70,
             "lastUpdated": FieldValue.serverTimestamp()
           ])
           print("no user found, incrementing...")
