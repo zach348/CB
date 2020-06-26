@@ -1,0 +1,21 @@
+dependencies: \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/GDTCORFlatFileStorage.m \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/DerivedData/NinjaAttack/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/GoogleDataTransport.build/module.modulemap \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Private/GDTCORFlatFileStorage.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCORLifecycle.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCORPlatform.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCORStorageProtocol.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCORTargets.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCORAssert.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCORConsoleLogger.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCOREvent.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCOREventDataObject.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCORPrioritizer.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCORUploadPackage.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Private/GDTCOREvent_Private.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCORClock.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Private/GDTCORRegistrar_Private.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCORRegistrar.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GDTCORUploader.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Private/GDTCORUploadCoordinator.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Private/GDTCORUploadPackage_Private.h

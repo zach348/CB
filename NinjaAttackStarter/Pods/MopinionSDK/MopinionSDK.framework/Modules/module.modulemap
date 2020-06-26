@@ -1,0 +1,11 @@
+framework module MopinionSDK {
+  umbrella header "MopinionSDK.h"
+
+  export *
+  module * { export * }
+}
+
+module MopinionSDK.Swift {
+    header "MopinionSDK-Swift.h"
+    requires objc
+}

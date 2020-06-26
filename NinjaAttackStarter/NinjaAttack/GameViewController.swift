@@ -3,6 +3,7 @@
 import UIKit
 import SpriteKit
 import Firebase
+import MopinionSDK
 
 class GameViewController: UIViewController, TransitionDelegate {
   var loginScene:LoginScene?
@@ -43,6 +44,13 @@ class GameViewController: UIViewController, TransitionDelegate {
         self.startScene = StartGameScene(size: (self.view.bounds.size))
         self.startScene?.gameViewController = self
         skView.presentScene(self.startScene)
+        
+        //mopinion
+        MopinionSDK.removeData()
+        MopinionSDK.data("timepoint", "pre")
+        if let user = DataStore.currentUser?.email { MopinionSDK.data("user", user)}
+        MopinionSDK.
+        //clear scene
         self.loginScene = nil
       }else{
         print("logged out")
@@ -91,6 +99,9 @@ class GameViewController: UIViewController, TransitionDelegate {
             timer.stopTimers(timerArray: ["saveTimer"])
             DataStore.updateUser(userId: userId)
             currentGame = Game()
+            
+            //mopinion
+            if Game.respActive { MopinionSDK.event(self, "_stai") }
           }
         } else {
           print("handle Ok action...no quitGame param")

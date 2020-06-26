@@ -1,0 +1,22 @@
+{
+  "name": "Folly",
+  "version": "0.1.0",
+  "summary": "Mopinion iOS SDK React Native",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "description": "Mopinion mobile SDK for iOS React Native library",
+  "homepage": "https://facebook.github.io/react-native/",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": "Facebook",
+  "source": {
+    "git": "https://github.com/mopinion/mopinion-sdk-ios.git",
+    "tag": "0.1.0"
+  },
+  "ios": {
+    "vendored_frameworks": "folly.framework"
+  }
+}

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>10</integer>
+	<key>logs</key>
+	<dict>
+		<key>3770C331-FB10-4F42-9DA5-91AE564718B2</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>3770C331-FB10-4F42-9DA5-91AE564718B2.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>NinjaAttack project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>NinjaAttack</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Build NinjaAttack</string>
+			<key>timeStartedRecording</key>
+			<real>614194788.31667697</real>
+			<key>timeStoppedRecording</key>
+			<real>614194887.59604895</real>
+			<key>title</key>
+			<string>Build NinjaAttack</string>
+			<key>uniqueIdentifier</key>
+			<string>3770C331-FB10-4F42-9DA5-91AE564718B2</string>
+		</dict>
+		<key>3826F26E-FEF1-47ED-A0F0-66AD0D1DD896</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>3826F26E-FEF1-47ED-A0F0-66AD0D1DD896.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>E</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>NinjaAttack project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>NinjaAttack</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Build NinjaAttack</string>
+			<key>timeStartedRecording</key>
+			<real>614793099.43397403</real>
+			<key>timeStoppedRecording</key>
+			<real>614793105.93628895</real>
+			<key>title</key>
+			<string>Build NinjaAttack</string>
+			<key>uniqueIdentifier</key>
+			<string>3826F26E-FEF1-47ED-A0F0-66AD0D1DD896</string>
+		</dict>
+		<key>3E5260CF-9532-4385-B3B4-01F9CDEE1441</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>3E5260CF-9532-4385-B3B4-01F9CDEE1441.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>E</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>NinjaAttack project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>NinjaAttack</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Build NinjaAttack</string>
+			<key>timeStartedRecording</key>
+			<real>614793075.25544798</real>
+			<key>timeStoppedRecording</key>
+			<real>614793081.11213303</real>
+			<key>title</key>
+			<string>Build NinjaAttack</string>
+			<key>uniqueIdentifier</key>
+			<string>3E5260CF-9532-4385-B3B4-01F9CDEE1441</string>
+		</dict>
+		<key>604AADB0-A68B-4B1E-91AD-38ADB2CBC1B6</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>604AADB0-A68B-4B1E-91AD-38ADB2CBC1B6.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>E</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>NinjaAttack project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>NinjaAttack</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Build NinjaAttack</string>
+			<key>timeStartedRecording</key>
+			<real>614792661.06503105</real>
+			<key>timeStoppedRecording</key>
+			<real>614792661.87318397</real>
+			<key>title</key>
+			<string>Build NinjaAttack</string>
+			<key>uniqueIdentifier</key>
+			<string>604AADB0-A68B-4B1E-91AD-38ADB2CBC1B6</string>
+		</dict>
+		<key>A358654A-36E5-40BC-8B9E-F5DB406AF208</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>A358654A-36E5-40BC-8B9E-F5DB406AF208.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>E</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>NinjaAttack project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>NinjaAttack</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Build NinjaAttack</string>
+			<key>timeStartedRecording</key>
+			<real>614792961.36333895</real>
+			<key>timeStoppedRecording</key>
+			<real>614792964.74410903</real>
+			<key>title</key>
+			<string>Build NinjaAttack</string>
+			<key>uniqueIdentifier</key>
+			<string>A358654A-36E5-40BC-8B9E-F5DB406AF208</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

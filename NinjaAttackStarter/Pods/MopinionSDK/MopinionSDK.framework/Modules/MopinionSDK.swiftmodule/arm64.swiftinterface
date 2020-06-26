@@ -1,0 +1,55 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.2.2 (swiftlang-1103.0.32.6 clang-1103.0.32.51)
+// swift-module-flags: -target arm64-apple-ios9.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name MopinionSDK
+import Foundation
+@_exported import MopinionSDK
+import React
+import SafariServices
+import Swift
+import UIKit
+import WebKit
+extension UIFont {
+  public static func registerFontWithFilenameString(filenameString: Swift.String, bundle: Foundation.Bundle)
+}
+public var addMopinionView: React.RCTRootView!
+public var MopinionSDK: MopinionSDK.Mopinion
+@objc @_inheritsConvenienceInitializers public class Mopinion : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  public var bridge: React.RCTBridge?
+  public var globalParentView: UIKit.UIViewController?
+  public func createBridgeIfNeeded() -> React.RCTBridge
+  public func viewForModule(_ moduleName: Swift.String, initialProperties: [Swift.String : Any]?) -> React.RCTRootView
+  public func load(_ mopinionKey: Foundation.NSString)
+  public func load(_ mopinionKey: Foundation.NSString, _ log: Swift.Bool)
+  public func event(_ parentView: UIKit.UIViewController, _ event: Swift.String)
+  public func data(_ k: Swift.String, _ v: Swift.String)
+  public func removeData(forKey k: Swift.String)
+  public func removeData()
+  public func mopinionEvent(_ event: Swift.String)
+  public func emptyCache()
+  public func deploymentProps()
+  public func openMopinion()
+  public func closeMopinion()
+  public func close()
+  public func cleanCache()
+  public func setLog(_ on: Swift.Bool = false)
+  @objc deinit
+}
+extension Mopinion : React.RCTBridgeDelegate {
+  @objc dynamic public func sourceURL(for bridge: React.RCTBridge!) -> Foundation.URL!
+}
+extension Mopinion : UIKit.UINavigationBarDelegate {
+  @objc dynamic public func position(for bar: UIKit.UIBarPositioning) -> UIKit.UIBarPosition
+}
+extension Mopinion : UIKit.UIAdaptivePresentationControllerDelegate {
+  @objc dynamic public func presentationControllerDidDismiss(_ presentationController: UIKit.UIPresentationController)
+}
+extension Mopinion {
+  public func customPresentationControllerDidDismiss(_ presentationController: UIKit.UIPresentationController)
+}
+extension Mopinion : WebKit.WKScriptMessageHandler {
+  @objc dynamic public func userContentController(_ userContentController: WebKit.WKUserContentController, didReceive message: WebKit.WKScriptMessage)
+}
+extension Mopinion : WebKit.WKNavigationDelegate {
+  @objc dynamic public func webView(_ webView: WebKit.WKWebView, decidePolicyFor navigationAction: WebKit.WKNavigationAction, decisionHandler: (WebKit.WKNavigationActionPolicy) -> Swift.Void)
+}

@@ -1,0 +1,22 @@
+{
+  "name": "react-native-webview",
+  "version": "0.1.0",
+  "summary": "Mopinion iOS SDK React Native",
+  "platforms": {
+    "ios": "9.0"
+  },
+  "description": "Mopinion mobile SDK for iOS React Native library",
+  "homepage": "https://github.com/react-native-community/react-native-webview#readme",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": "Jamon Holmgren",
+  "source": {
+    "git": "https://github.com/mopinion/mopinion-sdk-ios.git",
+    "tag": "0.1.0"
+  },
+  "ios": {
+    "vendored_frameworks": "react_native_webview.framework"
+  }
+}

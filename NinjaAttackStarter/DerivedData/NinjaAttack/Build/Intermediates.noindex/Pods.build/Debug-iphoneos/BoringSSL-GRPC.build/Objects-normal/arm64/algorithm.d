@@ -1,0 +1,39 @@
+dependencies: \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/crypto/x509/algorithm.c \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/Target\ Support\ Files/BoringSSL-GRPC/BoringSSL-GRPC-prefix.pch \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/x509.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/base.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/is_boringssl.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/opensslconf.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/asn1.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/bio.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/buffer.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/buf.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/err.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/ex_data.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/stack.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/type_check.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/thread.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/bn.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/cipher.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/dh.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/dsa.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/engine.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/ecdh.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/ec_key.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/ec.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/ecdsa.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/evp.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/aead.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/base64.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/digest.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/nid.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/obj.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/bytestring.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/span.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/pkcs7.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/pool.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/rsa.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/sha.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/include/openssl/x509_vfy.h \
+  /Users/zacharycutler/dev/CB/NinjaAttackStarter/Pods/BoringSSL-GRPC/crypto/x509/internal.h

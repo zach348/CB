@@ -10,6 +10,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.3):
     - BoringSSL-GRPC/Interface (= 0.0.3)
   - BoringSSL-GRPC/Interface (0.0.3)
+  - DoubleConversion (0.1.0)
   - FBSDKCoreKit (5.8.0):
     - FBSDKCoreKit/Basics (= 5.8.0)
     - FBSDKCoreKit/Core (= 5.8.0)
@@ -127,6 +128,8 @@ PODS:
   - FirebaseUI/Storage (8.3.1):
     - Firebase/Storage (~> 6.0)
     - SDWebImage (~> 5.0)
+  - Folly (0.1.0)
+  - GLog (0.1.0)
   - GoogleAppMeasurement (6.1.3):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -184,22 +187,33 @@ PODS:
   - GTMSessionFetcher/Full (1.3.0):
     - GTMSessionFetcher/Core (= 1.3.0)
   - leveldb-library (1.22)
+  - MopinionSDK (0.4.4)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
   - Protobuf (3.10.0)
+  - React (0.1.0)
+  - react-native-webview (0.1.0)
   - SDWebImage (5.2.5):
     - SDWebImage/Core (= 5.2.5)
   - SDWebImage/Core (5.2.5)
+  - yoga (0.1.0)
 
 DEPENDENCIES:
+  - DoubleConversion (from `https://github.com/mopinion/mopinion-sdk-ios.git`, tag `0.4.4`)
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
   - Firebase/Firestore
   - FirebaseUI
+  - Folly (from `https://github.com/mopinion/mopinion-sdk-ios.git`, tag `0.4.4`)
+  - GLog (from `https://github.com/mopinion/mopinion-sdk-ios.git`, tag `0.4.4`)
+  - MopinionSDK (~> 0.4.4)
+  - React (from `https://github.com/mopinion/mopinion-sdk-ios.git`, tag `0.4.4`)
+  - react-native-webview (from `https://github.com/mopinion/mopinion-sdk-ios.git`, tag `0.4.4`)
+  - yoga (from `https://github.com/mopinion/mopinion-sdk-ios.git`, tag `0.4.4`)
 
 SPEC REPOS:
   trunk:
@@ -229,13 +243,55 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - leveldb-library
+    - MopinionSDK
     - nanopb
     - Protobuf
     - SDWebImage
 
+EXTERNAL SOURCES:
+  DoubleConversion:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+  Folly:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+  GLog:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+  React:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+  react-native-webview:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+  yoga:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+
+CHECKOUT OPTIONS:
+  DoubleConversion:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+  Folly:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+  GLog:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+  React:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+  react-native-webview:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+  yoga:
+    :git: https://github.com/mopinion/mopinion-sdk-ios.git
+    :tag: 0.4.4
+
 SPEC CHECKSUMS:
   AppAuth: bce82c76043657c99d91e7882e8a9e1a93650cd4
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
+  DoubleConversion: dd1f0c5f6abbd25d2137dec8cb1c6ec26872cce3
   FBSDKCoreKit: e7dcac0aabcfb09d0166998edd95fe3b05a0ce5d
   FBSDKLoginKit: 1b0cf04df0370b37404213157b060d6666ede814
   Firebase: bc9cfc7a96c73268656d5aaab453ff1b4b530e0e
@@ -250,6 +306,8 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: d0eafcd8bdbd3447cd694594734078c3e3e77d8b
   FirebaseStorage: b7c6d00997bc21d4465453bdcc5cc65513110fed
   FirebaseUI: 826359d83af7cd76bfe0d43a8aab11eabac65558
+  Folly: 850d4a6df1fd7afd0eb5e583791e7243e53ec2b2
+  GLog: 9e2d9a8a9379cc950fc381a94b25a7893b6ff553
   GoogleAppMeasurement: 434cc7be25e71dc04b8d0e3079125127b330e84a
   GoogleDataTransport: 166f9b9f82cbf60a204e8fe2daa9db3e3ec1fb15
   GoogleDataTransportCCTSupport: f6ab1962e9dc05ab1fb938b795e5b310209edeec
@@ -260,10 +318,14 @@ SPEC CHECKSUMS:
   GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
   GTMSessionFetcher: 43b8b64263023d4f32caa0b40f4c8bfa3c5f36d8
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
+  MopinionSDK: 6032bc69e8c2a07ce3d3ae2659225212b52f0cae
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
+  React: c43a995db9220bf6d0ff42a45234d5059cac258a
+  react-native-webview: daa60aced348633dfdb1fac2a23285d8de749db6
   SDWebImage: 4eabf2fa6695c95c47724214417a9c036c965e4a
+  yoga: a508b2b6c7b4eeb78e0ac53302639a8421eaa251
 
-PODFILE CHECKSUM: ead2beacebbd72c78d2b4aded3e5c65af9292eb5
+PODFILE CHECKSUM: 1917a8739dbd08f5bdbdd0fee258989dab288f43
 
 COCOAPODS: 1.8.4

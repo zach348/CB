@@ -11,4 +11,13 @@ target 'Kalibrate' do
   pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
   pod 'FirebaseUI'
+  
+  #mopinion pods
+  pod 'MopinionSDK',  '~> 0.4.4'
+  pod 'React', :git => 'https://github.com/mopinion/mopinion-sdk-ios.git', :tag => '0.4.4'
+  pod 'react-native-webview', :git => 'https://github.com/mopinion/mopinion-sdk-ios.git', :tag => '0.4.4'
+  pod 'yoga', :git => 'https://github.com/mopinion/mopinion-sdk-ios.git', :tag => '0.4.4'
+  pod 'DoubleConversion', :git => 'https://github.com/mopinion/mopinion-sdk-ios.git', :tag => '0.4.4'
+  pod 'GLog', :git => 'https://github.com/mopinion/mopinion-sdk-ios.git', :tag => '0.4.4'
+  pod 'Folly', :git => 'https://github.com/mopinion/mopinion-sdk-ios.git', :tag => '0.4.4'
 end

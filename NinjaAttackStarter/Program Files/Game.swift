@@ -3,6 +3,7 @@ import Foundation
 import SpriteKit
 import Firebase
 import AVFoundation
+import MopinionSDK
 
 class Game {
       
@@ -272,7 +273,7 @@ class Game {
   func startGame(){
     if let masterTimer = currentGame.timer {
       DataStore.initiateGame()
-
+      MopinionSDK.event(self.gameScene!.gameViewController!, "_stai")
       masterTimer.startGameTimer()
       Ball.startMovement()
       self.timer?.startTimerActions()

@@ -3,7 +3,8 @@
 import Foundation
 import SpriteKit
 import Firebase
-
+import MopinionSDK
+ 
 struct DataStore {
   static var currentUser = Auth.auth().currentUser
   static var initialRequest:Bool = true
@@ -164,6 +165,7 @@ struct DataStore {
       guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
       guard let currentUser = self.currentUser else {print("error retrieving current user from DataStore"); return}
       self.gameCount = gameCount as! Int
+      MopinionSDK.data("gameID", String(DataStore.gameCount))
       self.db.collection("games").document("\(gameCount)").setData([
         "lastUpdated": FieldValue.serverTimestamp(),
         "userEmail": currentUser.email

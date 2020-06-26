@@ -3,6 +3,7 @@
 import UIKit
 import Firebase
 import AVFoundation
+import MopinionSDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -12,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    didFinishLaunchingWithOptions launchOptions:
     [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     FirebaseApp.configure()
+    MopinionSDK.load("0ahuhmywb3yfzd8kjhli9pf1zg389btomnk", true)
     
     return true
   }

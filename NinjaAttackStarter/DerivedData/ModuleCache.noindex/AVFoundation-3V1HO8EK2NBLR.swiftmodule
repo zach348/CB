@@ -1,0 +1,64 @@
+---
+path:            '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/AVFoundation.swiftmodule/arm64.swiftmodule'
+dependencies:
+  - mtime:           1588474303000000000
+    path:            '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/AVFoundation.swiftmodule/arm64.swiftmodule'
+    size:            36968
+  - mtime:           1570642472000000000
+    path:            'usr/include/Darwin.apinotes'
+    size:            1133
+    sdk_relative:    true
+  - mtime:           1570640302000000000
+    path:            'usr/include/objc/ObjectiveC.apinotes'
+    size:            11147
+    sdk_relative:    true
+  - mtime:           1570768784000000000
+    path:            'System/Library/Frameworks/Security.framework/Headers/Security.apinotes'
+    size:            162
+    sdk_relative:    true
+  - mtime:           1570656828000000000
+    path:            'System/Library/Frameworks/Foundation.framework/Headers/Foundation.apinotes'
+    size:            80492
+    sdk_relative:    true
+  - mtime:           1570641258000000000
+    path:            'System/Library/Frameworks/CoreGraphics.framework/Headers/CoreGraphics.apinotes'
+    size:            29817
+    sdk_relative:    true
+  - mtime:           1570653098000000000
+    path:            'System/Library/Frameworks/CoreAudioTypes.framework/Headers/CoreAudioTypes.apinotes'
+    size:            1519
+    sdk_relative:    true
+  - mtime:           1570653817000000000
+    path:            'System/Library/Frameworks/OpenGLES.framework/Headers/OpenGLES.apinotes'
+    size:            1192
+    sdk_relative:    true
+  - mtime:           1570653893000000000
+    path:            'System/Library/Frameworks/Metal.framework/Headers/Metal.apinotes'
+    size:            53572
+    sdk_relative:    true
+  - mtime:           1571024654000000000
+    path:            'System/Library/Frameworks/CoreMedia.framework/Headers/CoreMedia.apinotes'
+    size:            64843
+    sdk_relative:    true
+  - mtime:           1570655649000000000
+    path:            'System/Library/Frameworks/AudioToolbox.framework/Headers/AudioToolbox.apinotes'
+    size:            114
+    sdk_relative:    true
+  - mtime:           1571023174000000000
+    path:            'System/Library/Frameworks/MediaToolbox.framework/Headers/MediaToolbox.apinotes'
+    size:            215
+    sdk_relative:    true
+  - mtime:           1570653198000000000
+    path:            'System/Library/Frameworks/QuartzCore.framework/Headers/QuartzCore.apinotes'
+    size:            7428
+    sdk_relative:    true
+  - mtime:           1570649232000000000
+    path:            'System/Library/Frameworks/AVFoundation.framework/Headers/AVFoundation.apinotes'
+    size:            92443
+    sdk_relative:    true
+  - mtime:           1587529404000000000
+    path:            'usr/lib/swift/AVFoundation.swiftmodule/arm64.swiftinterface'
+    size:            6225
+    sdk_relative:    true
+version:         1
+...

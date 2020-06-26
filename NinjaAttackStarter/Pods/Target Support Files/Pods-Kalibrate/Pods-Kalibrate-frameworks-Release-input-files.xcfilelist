@@ -1,14 +1,21 @@
 ${PODS_ROOT}/Target Support Files/Pods-Kalibrate/Pods-Kalibrate-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework
 ${BUILT_PRODUCTS_DIR}/BoringSSL-GRPC/openssl_grpc.framework
+${PODS_ROOT}/DoubleConversion/DoubleConversion.framework
 ${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework
 ${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework
+${PODS_ROOT}/Folly/folly.framework
+${PODS_ROOT}/GLog/glog.framework
 ${BUILT_PRODUCTS_DIR}/GTMAppAuth/GTMAppAuth.framework
 ${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework
 ${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework
+${PODS_ROOT}/MopinionSDK/MopinionSDK.framework
 ${BUILT_PRODUCTS_DIR}/Protobuf/protobuf.framework
+${PODS_ROOT}/React/React.framework
 ${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework
 ${BUILT_PRODUCTS_DIR}/gRPC-C++/grpcpp.framework
 ${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework
 ${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework
 ${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework
+${PODS_ROOT}/react-native-webview/react_native_webview.framework
+${PODS_ROOT}/yoga/yoga.framework
