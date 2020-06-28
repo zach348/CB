@@ -4,14 +4,25 @@ import UIKit
 import SpriteKit
 import Firebase
 
-class GameViewController: UIViewController, TransitionDelegate {
+class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelegate {
+  func respondentDidEndSurvey(_ respondent: SMRespondent!, error: Error!) {
+    print("respondent did end survey");
+  }
+  
   var loginScene:LoginScene?
   var startScene:StartGameScene?
   var gameScene:GameScene?
+  var feedBackController:SMFeedbackViewController?
 
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    //survey monkey testing
+    self.feedBackController = SMFeedbackViewController.init(survey: "HDF6PB9")
+    self.feedBackController!.delegate = self
+    
+    
     UIApplication.shared.isIdleTimerDisabled = true
     loginScene = LoginScene(size: view.bounds.size)
     loginScene?.gameViewController = self

@@ -270,6 +270,9 @@ class Game {
   }
   
   func startGame(){
+    if let gvc =  self.gameScene?.gameViewController, let feedbackController = gvc.feedBackController {
+      feedbackController.present(from: gvc, animated: true, completion: nil)
+    }
     if let masterTimer = currentGame.timer {
       DataStore.initiateGame()
 
