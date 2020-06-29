@@ -54,7 +54,17 @@ class Game {
         guard let respIndex = self.respSettingsArr.firstIndex(where: { respSetting in respSetting.phase == self.currentRespSettings.phase + 1 }) else { return }
         self.currentRespSettings = self.respSettingsArr[respIndex]
         timer.lastPhaseShiftTime = timer.elapsedTime
-        if Game.currentRespSettings.phase == 8 { Sensory.fadeScreen() }
+        if Game.currentRespSettings.phase == 8 {
+          Sensory.fadeScreen()
+          let wait = SKAction.wait(forDuration: 20)
+          let deployPostSurvey = SKAction.run {
+            if let gvc =  currentGame.gameScene?.gameViewController, let feedbackController = gvc.feedBackController {
+               feedbackController.present(from: gvc, animated: true, completion: nil)
+             }
+          }
+          let sequence = SKAction.sequence([wait,deployPostSurvey])
+          if let gameScene = currentGame.gameScene { gameScene.run(sequence)}
+        }
         print("Advanced resp phase")
       }
     
@@ -270,9 +280,6 @@ class Game {
   }
   
   func startGame(){
-    if let gvc =  self.gameScene?.gameViewController, let feedbackController = gvc.feedBackController {
-      feedbackController.present(from: gvc, animated: true, completion: nil)
-    }
     if let masterTimer = currentGame.timer {
       DataStore.initiateGame()
 

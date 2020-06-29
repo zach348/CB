@@ -26,7 +26,7 @@ class StartGameScene: SKScene {
     let buttonTextureSelected:SKTexture! = SKTexture(imageNamed: "buttonSelected.png")
     
     self.startButton = Button(normalTexture: buttonTexture, selectedTexture: buttonTextureSelected, disabledTexture: buttonTexture)
-    self.startButton.setButtonAction(target: self, triggerEvent: .TouchUpInside, action: #selector(StartGameScene.startGame))
+    self.startButton.setButtonAction(target: self, triggerEvent: .TouchUpInside, action: #selector(StartGameScene.handleStartButton))
     self.startButton.setButtonLabel(title: "Start Game", font: "Arial", fontSize: 20)
     if self.view!.frame.width < 670 {
       self.startButton.size = CGSize(width: 150, height: 30)
@@ -112,6 +112,12 @@ class StartGameScene: SKScene {
         self.gameViewController?.startScene = nil
       }
       ]))
+  }
+  
+  @objc func handleStartButton(){
+    if let gvc =  self.gameViewController, let feedbackController = gvc.feedBackController {
+       feedbackController.present(from: gvc, animated: true, completion: nil)
+     }
   }
   
   @objc func changeDifficulty(){

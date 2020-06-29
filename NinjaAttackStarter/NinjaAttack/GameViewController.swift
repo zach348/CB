@@ -5,23 +5,16 @@ import SpriteKit
 import Firebase
 
 class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelegate {
-  func respondentDidEndSurvey(_ respondent: SMRespondent!, error: Error!) {
-    print("respondent did end survey");
-  }
   
   var loginScene:LoginScene?
   var startScene:StartGameScene?
   var gameScene:GameScene?
   var feedBackController:SMFeedbackViewController?
+  var feedbackState:String?
 
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    //survey monkey testing
-    self.feedBackController = SMFeedbackViewController.init(survey: "HDF6PB9")
-    self.feedBackController!.delegate = self
-    
     
     UIApplication.shared.isIdleTimerDisabled = true
     loginScene = LoginScene(size: view.bounds.size)
@@ -51,8 +44,16 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         DataStore.dummyRequest()
         print("getting user... ")
         DataStore.getUser(userId: userId)
+        
+        //Prepare start screen
         self.startScene = StartGameScene(size: (self.view.bounds.size))
         self.startScene?.gameViewController = self
+        
+        //set flag for survey feedback and load T1 Survey
+        self.feedbackState = "pre"
+        self.prepareSurvey(surveyHash: "8HP6Q9B")
+        
+        //present start scene and cleanup loginScene
         skView.presentScene(self.startScene)
         self.loginScene = nil
       }else{
@@ -139,6 +140,41 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
             print("email verification send error: \(error.localizedDescription)")
           }
         })
+      }
+    }
+  }
+  
+  //survey monkey
+  
+  func prepareSurvey(surveyHash:String){
+    self.feedBackController = SMFeedbackViewController.init(survey: surveyHash)
+    self.feedBackController!.delegate = self
+  }
+  
+  func respondentDidEndSurvey(_ respondent: SMRespondent!, error: Error!) {
+    print("respondent did end survey");
+    if let error = error {
+      print("Survey error:",error,error.localizedDescription)
+      
+      //API always returning errors until account is upgraded
+      if self.feedbackState == "pre", let startScene = self.startScene {
+        print("T1 survey completed")
+        
+        startScene.startGame()
+        self.prepareSurvey(surveyHash: "8ZGY88Q")
+        self.feedbackState = "post"
+      }else if self.feedbackState == "post"{
+        print("T2 survey completed")
+      }
+    } else if respondent != nil {
+      if self.feedbackState == "pre", let startScene = self.startScene {
+        print("T1 survey completed")
+        
+        startScene.startGame()
+        self.prepareSurvey(surveyHash: "8ZGY88Q")
+        self.feedbackState = "post"
+      }else if self.feedbackState == "post"{
+        print("T2 survey completed")
       }
     }
   }
