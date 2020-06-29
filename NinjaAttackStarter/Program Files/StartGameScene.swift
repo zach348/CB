@@ -101,7 +101,7 @@ class StartGameScene: SKScene {
 
   @objc func startGame(){
     run(SKAction.sequence([
-      SKAction.wait(forDuration: 1.0),
+      SKAction.wait(forDuration: 0.25),
       SKAction.run() { [weak self] in
         // 5
         guard let `self` = self, let gameViewController = self.gameViewController else { return }

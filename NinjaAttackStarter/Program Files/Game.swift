@@ -62,7 +62,12 @@ class Game {
                feedbackController.present(from: gvc, animated: true, completion: nil)
              }
           }
-          let sequence = SKAction.sequence([wait,deployPostSurvey])
+          let stopAction = SKAction.run {
+             timer.stopTimers(timerArray: ["breathLoop", "frequencyLoopTimer"])
+             Sensory.hapticEngine = nil
+          }
+         
+          let sequence = SKAction.sequence([wait,stopAction,deployPostSurvey])
           if let gameScene = currentGame.gameScene { gameScene.run(sequence)}
         }
         print("Advanced resp phase")

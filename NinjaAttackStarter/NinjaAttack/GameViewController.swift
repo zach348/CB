@@ -89,10 +89,13 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
   func showAlert(title:String,message:String,params:[String:Bool] = [String:Bool]()) {
       let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
       alertController.addAction(UIAlertAction(title: "Ok", style: .default) { action in
+        //handle quit param and game cleanup
         if let quitGame = params["quitGame"], let timer = currentGame.timer {
           if quitGame {
             guard let userId = Auth.auth().currentUser?.email else { print("error getting userId to quit game"); return}
             let skView = self.view as! SKView
+            self.feedbackState = "pre"
+            self.prepareSurvey(surveyHash: "8HP6Q9B")
             self.startScene = StartGameScene(size: (self.view.bounds.size))
             self.startScene?.gameViewController = self
             skView.presentScene(self.startScene)
@@ -165,6 +168,11 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         self.feedbackState = "post"
       }else if self.feedbackState == "post"{
         print("T2 survey completed")
+        guard let timer = currentGame.timer, let worldTimer = currentGame.worldTimer else { return }
+        Sensory.createHapticEngine()
+        Sensory.prepareHaptics()
+        Sensory.applyFrequency()
+        Game.transitionRespPhase(timer: timer, worldTimer: worldTimer)
       }
     } else if respondent != nil {
       if self.feedbackState == "pre", let startScene = self.startScene {
@@ -175,6 +183,11 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         self.feedbackState = "post"
       }else if self.feedbackState == "post"{
         print("T2 survey completed")
+        guard let timer = currentGame.timer, let worldTimer = currentGame.worldTimer else { return }
+        Sensory.createHapticEngine()
+        Sensory.prepareHaptics()
+        Sensory.applyFrequency()
+        Game.transitionRespPhase(timer: timer, worldTimer: worldTimer)
       }
     }
   }
