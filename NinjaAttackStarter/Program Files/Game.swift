@@ -308,8 +308,6 @@ class Game {
     Ball.pendingPause = false
     Ball.pendingShift = false
     Ball.assignedBlinkAudio = false
-//    leftover from nonpersistent diffMods
-//    Settings.diffMod = 1
     Game.willSaveGame = false
     Game.didSaveGame = false
     Game.respActive = false

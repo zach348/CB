@@ -15,7 +15,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+    DataStore.gameViewController = self
     UIApplication.shared.isIdleTimerDisabled = true
     loginScene = LoginScene(size: view.bounds.size)
     loginScene?.gameViewController = self
@@ -49,9 +49,6 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         self.startScene = StartGameScene(size: (self.view.bounds.size))
         self.startScene?.gameViewController = self
         
-        //set flag for survey feedback and load T1 Survey
-        self.feedbackState = "pre"
-        self.prepareSurvey(surveyHash: "8HP6Q9B")
         
         //present start scene and cleanup loginScene
         skView.presentScene(self.startScene)
@@ -94,8 +91,12 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
           if quitGame {
             guard let userId = Auth.auth().currentUser?.email else { print("error getting userId to quit game"); return}
             let skView = self.view as! SKView
+            
             self.feedbackState = "pre"
-            self.prepareSurvey(surveyHash: "8HP6Q9B")
+            if let preHash = DataStore.surveys["activePre"], let preHashString = preHash as? String {
+              self.prepareSurvey(surveyHash: preHashString)
+            }
+            
             self.startScene = StartGameScene(size: (self.view.bounds.size))
             self.startScene?.gameViewController = self
             skView.presentScene(self.startScene)
@@ -164,8 +165,11 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         print("T1 survey completed")
         
         startScene.startGame()
-        self.prepareSurvey(surveyHash: "8ZGY88Q")
         self.feedbackState = "post"
+        if let postHash = DataStore.surveys["activePost"], let postHashString = postHash as? String {
+          self.prepareSurvey(surveyHash: postHashString)
+        }
+        
       }else if self.feedbackState == "post"{
         print("T2 survey completed")
         guard let timer = currentGame.timer, let worldTimer = currentGame.worldTimer else { return }
@@ -179,8 +183,10 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         print("T1 survey completed")
         
         startScene.startGame()
-        self.prepareSurvey(surveyHash: "8ZGY88Q")
         self.feedbackState = "post"
+        if let postHash = DataStore.surveys["activePost"], let postHashString = postHash as? String {
+          self.prepareSurvey(surveyHash: postHashString)
+        }
       }else if self.feedbackState == "post"{
         print("T2 survey completed")
         guard let timer = currentGame.timer, let worldTimer = currentGame.worldTimer else { return }

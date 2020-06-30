@@ -5,8 +5,10 @@ import SpriteKit
 import Firebase
 
 struct DataStore {
+  static var gameViewController:GameViewController?
   static var currentUser = Auth.auth().currentUser
   static var initialRequest:Bool = true
+  static var surveys:[String:Any] = ["pre": "null", "post": "null"]
   static var db:Firestore = Firestore.firestore()
   static var metaRef:DocumentReference = db.document("meta/gameMetaData")
   static var gameCount = 0
@@ -105,24 +107,48 @@ struct DataStore {
     })
   }
   
+  static func getSurveys(){
+    let collectionRef = db.collection("params")
+    let surveyDocRef = collectionRef.document("surveys")
+    surveyDocRef.getDocument { (document, error) in
+      if let error = error { print("error getting survey document:", error, error.localizedDescription)}
+      if let document = document, document.exists {
+        print("found survey document")
+        guard let surveyData = document.data() else { print("error extracting survey data"); return }
+        self.surveys = surveyData
+        print(self.surveys)
+        //set flag for survey feedback and load T1 Survey
+        if let preHash = DataStore.surveys["activePre"], let preHashString = preHash as? String, let gvc = DataStore.gameViewController{
+          print("preparing survey")
+          gvc.feedbackState = "pre"
+          gvc.prepareSurvey(surveyHash: preHashString)
+        }
+
+      } else {
+        print("no survey document found")
+      }
+    }
+  }
+  
   static func getUser(userId:String){
     let collectionRef = db.collection("users")
     let userDocRef = collectionRef.document(userId)
     let metaUsersRef = db.collection("meta").document("userMeta")
     userDocRef.getDocument { (document, error) in
-        if let document = document, document.exists {
-          print("found user document")
-          guard let userData = document.data() else {print("error extracting data"); return }
-          self.user = userData
-        } else {
-          collectionRef.document(userId).setData([
-            "diffMod": 0.70,
-            "lastUpdated": FieldValue.serverTimestamp()
-          ])
-          print("no user found, incrementing...")
-          metaUsersRef.updateData(["userCount": FieldValue.increment(Int64(1)), "lastUpdated": FieldValue.serverTimestamp()])
-          self.getUser(userId: userId)
-        }
+      if let error = error { print("error getting user document:", error, error.localizedDescription)}
+      if let document = document, document.exists {
+        print("found user document")
+        guard let userData = document.data() else { print("error extracting user data"); return }
+        self.user = userData
+      } else {
+        collectionRef.document(userId).setData([
+          "diffMod": 0.70,
+          "lastUpdated": FieldValue.serverTimestamp()
+        ])
+        print("no user found, incrementing...")
+        metaUsersRef.updateData(["userCount": FieldValue.increment(Int64(1)), "lastUpdated": FieldValue.serverTimestamp()])
+        self.getUser(userId: userId)
+      }
     }
   }
   
@@ -166,7 +192,7 @@ struct DataStore {
       self.gameCount = gameCount as! Int
       self.db.collection("games").document("\(gameCount)").setData([
         "lastUpdated": FieldValue.serverTimestamp(),
-        "userEmail": currentUser.email
+        "userEmail": currentUser.email as Any
       ]) { error in
         if let error = error {
           print(error.localizedDescription)

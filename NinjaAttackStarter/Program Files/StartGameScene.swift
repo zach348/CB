@@ -79,7 +79,6 @@ class StartGameScene: SKScene {
     
     
     
-    //commented out for testflight
     
     
     
@@ -116,8 +115,11 @@ class StartGameScene: SKScene {
   
   @objc func handleStartButton(){
     if let gvc =  self.gameViewController, let feedbackController = gvc.feedBackController {
-       feedbackController.present(from: gvc, animated: true, completion: nil)
-     }
+      print("presenting survey...")
+      feedbackController.present(from: gvc, animated: true, completion: nil)
+    }else{
+      print("error assigning gvc or feedback controller")
+    }
   }
   
   @objc func changeDifficulty(){
