@@ -19,7 +19,14 @@ class Game {
   ]
   static var willSaveGame:Bool = false
   static var didSaveGame:Bool = false
-  static var respActive:Bool = false
+  static var respActive:Bool = false {
+    didSet {
+      if respActive {
+        guard let currentUser = DataStore.currentUser, let userId = currentUser.email else { print("error getting current user (respActive observer)"); return }
+        DataStore.incrementUserCompletedGamesCount(userId: userId)
+      }
+    }
+  }
   static var initialRespTransition = true
   ///STARTING POINTS
   static var currentRespSettings:RespSettings = respSettingsArr[0] {
@@ -318,7 +325,7 @@ class Game {
     DataStore.currentUser = Auth.auth().currentUser
     DataStore.initialRequest = true
     DataStore.db = Firestore.firestore()
-    DataStore.metaRef = DataStore.db.document("meta/gameMetaData")
+    DataStore.metaGameRef = DataStore.db.document("meta/gameMetaData")
     DataStore.records = [[String:Any]]()
     DataStore.eventMarkers = [
       "didShift": ["flag": false, "delay": -1],

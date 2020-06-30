@@ -10,7 +10,7 @@ struct DataStore {
   static var initialRequest:Bool = true
   static var surveys:[String:Any] = ["pre": "null", "post": "null"]
   static var db:Firestore = Firestore.firestore()
-  static var metaRef:DocumentReference = db.document("meta/gameMetaData")
+  static var metaGameRef:DocumentReference = db.document("meta/gameMetaData")
   static var gameCount = 0
   static var records = [[String:Any]]()
   static var eventMarkers:[String:Any] = [
@@ -20,6 +20,8 @@ struct DataStore {
   static var ballInfo:[[String:Any]] = [[String:Any]]()
   static var user:[String:Any] = [
     "diffMod": 0.7,
+    "gamesPlayedCount": 0,
+    "completedGamesCount": 0,
     "lastUpdated": FieldValue.serverTimestamp()
     ] {
     didSet {
@@ -98,7 +100,7 @@ struct DataStore {
   
   static func dummyRequest(){
     if !self.initialRequest { return } else { self.initialRequest = false }
-    self.metaRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
+    self.metaGameRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
       guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
       guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
       
@@ -143,19 +145,34 @@ struct DataStore {
       } else {
         collectionRef.document(userId).setData([
           "diffMod": 0.70,
+          "gamesPlayedCount": 0,
+          "completedGamesCount":0,
           "lastUpdated": FieldValue.serverTimestamp()
         ])
-        print("no user found, incrementing...")
+        print("no user found, writing user doc and incrementing...")
         metaUsersRef.updateData(["userCount": FieldValue.increment(Int64(1)), "lastUpdated": FieldValue.serverTimestamp()])
         self.getUser(userId: userId)
       }
     }
   }
   
+  static func incrementUserGameCount(userId:String){
+    self.db.collection("users").document(userId).updateData(["gamesPlayedCount": FieldValue.increment(Int64(1))])
+  }
+  
+  static func incrementUserCompletedGamesCount(userId:String){
+    self.db.collection("users").document(userId).updateData(["completedGamesCount": FieldValue.increment(Int64(1))])
+  }
+  
+  static func incrementGlobalGameCount(){
+    self.metaGameRef.updateData(["count": FieldValue.increment(Int64(1))])
+  }
+  
   static func updateUser(userId:String){
+    print("updating user")
     let userDocRef = db.collection("users").document(userId)
     let userData:[String:Any] = ["diffMod": Settings.diffMod, "lastUpdated": FieldValue.serverTimestamp()]
-    userDocRef.setData(userData)
+    userDocRef.updateData(userData)
   }
   
   static func saveTimePoint(tpRecord:[String:Any], gameCount:Any, tpCount:Int){
@@ -184,18 +201,19 @@ struct DataStore {
   }
   
   static func initiateGame(){
-    self.metaRef.updateData(["count": FieldValue.increment(Int64(1))])
-    self.metaRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
+    guard let currentUser = self.currentUser, let userId = currentUser.email else { print("error retrieving current user from DataStore"); return}
+    self.incrementGlobalGameCount()
+    self.incrementUserGameCount(userId: userId)
+    self.metaGameRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
       guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
       guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
-      guard let currentUser = self.currentUser else {print("error retrieving current user from DataStore"); return}
       self.gameCount = gameCount as! Int
       self.db.collection("games").document("\(gameCount)").setData([
         "lastUpdated": FieldValue.serverTimestamp(),
-        "userEmail": currentUser.email as Any
+        "userEmail": userId
       ]) { error in
         if let error = error {
-          print(error.localizedDescription)
+          print("error writing game document:", error, error.localizedDescription)
         } else {
           print("game document written")
         }
