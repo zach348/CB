@@ -63,19 +63,20 @@ class Game {
         timer.lastPhaseShiftTime = timer.elapsedTime
         if Game.currentRespSettings.phase == 8 {
           Sensory.fadeScreen()
-          let wait = SKAction.wait(forDuration: 20)
-          let deployPostSurvey = SKAction.run {
-            if let gvc =  currentGame.gameScene?.gameViewController, let feedbackController = gvc.feedBackController {
-               feedbackController.present(from: gvc, animated: true, completion: nil)
+          if DataStore.willDeploySurvey {
+            let wait = SKAction.wait(forDuration: 20)
+            let deployPostSurvey = SKAction.run {
+               if let gvc =  currentGame.gameScene?.gameViewController, let feedbackController = gvc.feedBackController {
+                  feedbackController.present(from: gvc, animated: true, completion: nil)
+                }
              }
+            let stopAction = SKAction.run {
+                timer.stopTimers(timerArray: ["breathLoop", "frequencyLoopTimer"])
+                Sensory.hapticEngine = nil
+            }
+            let sequence = SKAction.sequence([wait,stopAction,deployPostSurvey])
+            if let gameScene = currentGame.gameScene { gameScene.run(sequence)}
           }
-          let stopAction = SKAction.run {
-             timer.stopTimers(timerArray: ["breathLoop", "frequencyLoopTimer"])
-             Sensory.hapticEngine = nil
-          }
-         
-          let sequence = SKAction.sequence([wait,stopAction,deployPostSurvey])
-          if let gameScene = currentGame.gameScene { gameScene.run(sequence)}
         }
         print("Advanced resp phase")
       }

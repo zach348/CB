@@ -31,6 +31,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
     
    Auth.auth().addStateDidChangeListener { (auth, user) in
       // ...
+    DataStore.willDeploySurvey = false
       if user != nil && !user!.isEmailVerified{
         let firebaseAuth = Auth.auth()
         do {
@@ -164,7 +165,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
       if self.feedbackState == "pre", let startScene = self.startScene {
         print("T1 survey completed")
         
-        startScene.startGame()
+        startScene.presentGameScene()
         self.feedbackState = "post"
         if let postHash = DataStore.surveys["activePost"], let postHashString = postHash as? String {
           self.prepareSurvey(surveyHash: postHashString)
@@ -182,7 +183,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
       if self.feedbackState == "pre", let startScene = self.startScene {
         print("T1 survey completed")
         
-        startScene.startGame()
+        startScene.presentGameScene()
         self.feedbackState = "post"
         if let postHash = DataStore.surveys["activePost"], let postHashString = postHash as? String {
           self.prepareSurvey(surveyHash: postHashString)

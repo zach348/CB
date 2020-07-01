@@ -9,6 +9,7 @@ struct DataStore {
   static var currentUser = Auth.auth().currentUser
   static var initialRequest:Bool = true
   static var surveys:[String:Any] = ["pre": "null", "post": "null"]
+  static var willDeploySurvey:Bool = false
   static var db:Firestore = Firestore.firestore()
   static var metaGameRef:DocumentReference = db.document("meta/gameMetaData")
   static var gameCount = 0
@@ -25,7 +26,9 @@ struct DataStore {
     "lastUpdated": FieldValue.serverTimestamp()
     ] {
     didSet {
-      Settings.diffMod = user["diffMod"] as! CGFloat
+      if let diffMod = user["diffMod"] as? CGFloat {
+        Settings.diffMod = diffMod
+      }
     }
   }
   
@@ -142,6 +145,7 @@ struct DataStore {
         print("found user document")
         guard let userData = document.data() else { print("error extracting user data"); return }
         self.user = userData
+        self.updateSurveyStatus()
       } else {
         collectionRef.document(userId).setData([
           "diffMod": 0.70,
@@ -153,6 +157,12 @@ struct DataStore {
         metaUsersRef.updateData(["userCount": FieldValue.increment(Int64(1)), "lastUpdated": FieldValue.serverTimestamp()])
         self.getUser(userId: userId)
       }
+    }
+  }
+  
+  static func updateSurveyStatus(){
+    if let userGames = self.user["gamesPlayedCount"] as? Int, let completedGames = self.user["completedGamesCount"] as? Int {
+      if userGames >= 3 && completedGames >= 1 { self.willDeploySurvey = true }
     }
   }
   

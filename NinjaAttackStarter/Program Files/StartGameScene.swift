@@ -98,7 +98,7 @@ class StartGameScene: SKScene {
   }
   
 
-  @objc func startGame(){
+  @objc func presentGameScene(){
     run(SKAction.sequence([
       SKAction.wait(forDuration: 0.25),
       SKAction.run() { [weak self] in
@@ -114,11 +114,15 @@ class StartGameScene: SKScene {
   }
   
   @objc func handleStartButton(){
-    if let gvc =  self.gameViewController, let feedbackController = gvc.feedBackController {
-      print("presenting survey...")
-      feedbackController.present(from: gvc, animated: true, completion: nil)
-    }else{
-      print("error assigning gvc or feedback controller")
+    if DataStore.willDeploySurvey {
+      if let gvc =  self.gameViewController, let feedbackController = gvc.feedBackController {
+        print("presenting survey...")
+        feedbackController.present(from: gvc, animated: true, completion: nil)
+      }else{
+        print("error assigning gvc or feedback controller")
+      }
+    } else {
+      self.presentGameScene()
     }
   }
   
