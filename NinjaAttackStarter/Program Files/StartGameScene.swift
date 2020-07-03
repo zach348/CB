@@ -61,6 +61,7 @@ class StartGameScene: SKScene {
 //    self.addChild(self.difficultyButton)
     
     if let user = Auth.auth().currentUser, let email = user.email{
+      
       self.loginStatusLabel.text = "You are currently logged in as \(email)"
       self.loginStatusLabel.fontSize = 15
       self.loginStatusLabel.fontColor = SKColor.black
@@ -114,8 +115,11 @@ class StartGameScene: SKScene {
   }
   
   @objc func handleStartButton(){
-    if DataStore.willDeploySurvey {
-      if let gvc =  self.gameViewController, let feedbackController = gvc.feedBackController {
+    if Survey.willDeployPrePostSurvey {
+      if let gvc =  self.gameViewController, let feedbackController = gvc.feedBackController, let preHash = Survey.surveys["activePre"], let preHashString = preHash as? String {
+        print("preparing survey")
+        Survey.feedbackState = "pre"
+        gvc.prepareSurveyViewController(surveyHash: preHashString)
         print("presenting survey...")
         feedbackController.present(from: gvc, animated: true, completion: nil)
       }else{

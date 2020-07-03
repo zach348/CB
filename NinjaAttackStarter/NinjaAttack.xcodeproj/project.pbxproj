@@ -53,6 +53,7 @@
 		EF09503723C7AC5900AEBF81 /* LoginScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF09503623C7AC5900AEBF81 /* LoginScene.swift */; };
 		EF0D2ADD24A919D400663488 /* BridgeTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0D2ADC24A919D400663488 /* BridgeTrigger.m */; };
 		EF4BCBD72404D0B600BD7BE8 /* Robot_blip.wav in Resources */ = {isa = PBXBuildFile; fileRef = EF4BCBD62404D0B600BD7BE8 /* Robot_blip.wav */; };
+		EF999D3524AF8DED00F5944E /* Survey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF999D3424AF8DED00F5944E /* Survey.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +113,7 @@
 		EF0D2ADB24A919D300663488 /* Kalibrate-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Kalibrate-Bridging-Header.h"; sourceTree = "<group>"; };
 		EF0D2ADC24A919D400663488 /* BridgeTrigger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BridgeTrigger.m; sourceTree = "<group>"; };
 		EF4BCBD62404D0B600BD7BE8 /* Robot_blip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Robot_blip.wav; sourceTree = "<group>"; };
+		EF999D3424AF8DED00F5944E /* Survey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Survey.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 		84124FB4229C6322008A1510 /* Program Files */ = {
 			isa = PBXGroup;
 			children = (
+				EF999D3424AF8DED00F5944E /* Survey.swift */,
 				84124FB7229C659B008A1510 /* Ball.swift */,
 				84BD930623134D4F0068E47D /* Assets.xcassets */,
 				84DF3B1322ABFE5C00AAAA8A /* Settings.swift */,
@@ -421,6 +424,7 @@
 				84BD930C231C2EC70068E47D /* HeartRateController.swift in Sources */,
 				84C153922300636700C60973 /* TIle.swift in Sources */,
 				84124FB8229C659B008A1510 /* Ball.swift in Sources */,
+				EF999D3524AF8DED00F5944E /* Survey.swift in Sources */,
 				D2A5F2211F4A96D0005CD714 /* AppDelegate.swift in Sources */,
 				8436334422BF1D1800F4BC97 /* Sensory.swift in Sources */,
 				84CD8ED322A9685100D4B4D2 /* Timer.swift in Sources */,

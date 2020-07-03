@@ -22,8 +22,8 @@ class Game {
   static var respActive:Bool = false {
     didSet {
       if respActive {
-        guard let currentUser = DataStore.currentUser, let userId = currentUser.email else { print("error getting current user (respActive observer)"); return }
-        DataStore.incrementUserCompletedGamesCount(userId: userId)
+        guard let completedGames = DataStore.user["completedGamesCount"] as? Int else { print("error getting current user (respActive observer)"); return }
+        DataStore.user["completedGamesCount"] = completedGames + 1
       }
     }
   }
@@ -63,7 +63,11 @@ class Game {
         timer.lastPhaseShiftTime = timer.elapsedTime
         if Game.currentRespSettings.phase == 8 {
           Sensory.fadeScreen()
-          if DataStore.willDeploySurvey {
+          if Survey.willDeployPrePostSurvey {
+            if let gvc = currentGame.gameScene?.gameViewController, let postHash = Survey.surveys["activePost"], let postHashString = postHash as? String {
+              gvc.prepareSurveyViewController(surveyHash: postHashString)
+              Survey.feedbackState = "post"
+            }
             let wait = SKAction.wait(forDuration: 20)
             let deployPostSurvey = SKAction.run {
                if let gvc =  currentGame.gameScene?.gameViewController, let feedbackController = gvc.feedBackController {

@@ -10,7 +10,6 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
   var startScene:StartGameScene?
   var gameScene:GameScene?
   var feedBackController:SMFeedbackViewController?
-  var feedbackState:String?
 
   
   override func viewDidLoad() {
@@ -31,7 +30,8 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
     
    Auth.auth().addStateDidChangeListener { (auth, user) in
       // ...
-    DataStore.willDeploySurvey = false
+    Survey.willDeployPrePostSurvey = false
+    Survey.willDeployGeneralSurvey = false
       if user != nil && !user!.isEmailVerified{
         let firebaseAuth = Auth.auth()
         do {
@@ -87,19 +87,33 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
   func showAlert(title:String,message:String,params:[String:Bool] = [String:Bool]()) {
       let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
       alertController.addAction(UIAlertAction(title: "Ok", style: .default) { action in
+       
+        
+        
+        
+        
         //handle quit param and game cleanup
         if let quitGame = params["quitGame"], let timer = currentGame.timer {
           if quitGame {
             guard let userId = Auth.auth().currentUser?.email else { print("error getting userId to quit game"); return}
             let skView = self.view as! SKView
             
-            self.feedbackState = "pre"
-            if let preHash = DataStore.surveys["activePre"], let preHashString = preHash as? String {
-              self.prepareSurvey(surveyHash: preHashString)
+            Survey.feedbackState = "pre"
+            if let preHash = Survey.surveys["activePre"], let preHashString = preHash as? String {
+              self.prepareSurveyViewController(surveyHash: preHashString)
             }
             
             self.startScene = StartGameScene(size: (self.view.bounds.size))
             self.startScene?.gameViewController = self
+            if Survey.willDeployGeneralSurvey {
+              if let generalHash = Survey.surveys["general"], let generalHashString = generalHash as? String {
+                self.prepareSurveyViewController(surveyHash: generalHashString)
+                print("general hash: ", generalHashString)
+                Survey.feedbackState = "general"
+//                if let fbController = self.feedBackController { fbController.present(from: self, animated: true, completion: nil) }
+                Survey.presentSurvey(surveyHash: generalHashString, gvc: self)
+              }
+            }
             skView.presentScene(self.startScene)
             self.gameScene?.removeAllActions()
             self.gameScene?.removeAllChildren()
@@ -108,6 +122,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
             timer.stopTimers(timerArray: ["saveTimer"])
             DataStore.updateUser(userId: userId)
             currentGame = Game()
+           
           }
         } else {
           print("handle Ok action...no quitGame param")
@@ -151,28 +166,29 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
   
   //survey monkey
   
-  func prepareSurvey(surveyHash:String){
+
+  
+  func prepareSurveyViewController(surveyHash:String){
     self.feedBackController = SMFeedbackViewController.init(survey: surveyHash)
     self.feedBackController!.delegate = self
   }
   
   func respondentDidEndSurvey(_ respondent: SMRespondent!, error: Error!) {
-    print("respondent did end survey");
+    print("respondent did end survey; feedback state: ", Survey.feedbackState);
     if let error = error {
       print("Survey error:",error,error.localizedDescription)
-      
+    
       //API always returning errors until account is upgraded
-      if self.feedbackState == "pre", let startScene = self.startScene {
+      if Survey.feedbackState == "general" {
+        DataStore.user["completedGeneralSurvey"] = true
+        Survey.feedbackState = ""
+      }else if Survey.feedbackState == "pre", let startScene = self.startScene {
         print("T1 survey completed")
-        
+        Survey.feedbackState = ""
         startScene.presentGameScene()
-        self.feedbackState = "post"
-        if let postHash = DataStore.surveys["activePost"], let postHashString = postHash as? String {
-          self.prepareSurvey(surveyHash: postHashString)
-        }
-        
-      }else if self.feedbackState == "post"{
+      }else if Survey.feedbackState == "post"{
         print("T2 survey completed")
+        Survey.feedbackState = ""
         guard let timer = currentGame.timer, let worldTimer = currentGame.worldTimer else { return }
         Sensory.createHapticEngine()
         Sensory.prepareHaptics()
@@ -180,16 +196,16 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         Game.transitionRespPhase(timer: timer, worldTimer: worldTimer)
       }
     } else if respondent != nil {
-      if self.feedbackState == "pre", let startScene = self.startScene {
+      if Survey.feedbackState == "general" {
+        DataStore.user["completedGeneralSurvey"] = true
+        Survey.feedbackState = ""
+      }else if Survey.feedbackState == "pre", let startScene = self.startScene {
         print("T1 survey completed")
-        
+        Survey.feedbackState = ""
         startScene.presentGameScene()
-        self.feedbackState = "post"
-        if let postHash = DataStore.surveys["activePost"], let postHashString = postHash as? String {
-          self.prepareSurvey(surveyHash: postHashString)
-        }
-      }else if self.feedbackState == "post"{
+      }else if Survey.feedbackState == "post"{
         print("T2 survey completed")
+        Survey.feedbackState = ""
         guard let timer = currentGame.timer, let worldTimer = currentGame.worldTimer else { return }
         Sensory.createHapticEngine()
         Sensory.prepareHaptics()
@@ -197,6 +213,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         Game.transitionRespPhase(timer: timer, worldTimer: worldTimer)
       }
     }
+    Survey.updateSurveyStatus()
   }
   
 }

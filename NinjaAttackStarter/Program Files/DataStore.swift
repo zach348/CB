@@ -8,8 +8,6 @@ struct DataStore {
   static var gameViewController:GameViewController?
   static var currentUser = Auth.auth().currentUser
   static var initialRequest:Bool = true
-  static var surveys:[String:Any] = ["pre": "null", "post": "null"]
-  static var willDeploySurvey:Bool = false
   static var db:Firestore = Firestore.firestore()
   static var metaGameRef:DocumentReference = db.document("meta/gameMetaData")
   static var gameCount = 0
@@ -23,9 +21,13 @@ struct DataStore {
     "diffMod": 0.7,
     "gamesPlayedCount": 0,
     "completedGamesCount": 0,
+    "completedGeneralSurvey": false,
     "lastUpdated": FieldValue.serverTimestamp()
     ] {
     didSet {
+      if let userId = self.currentUser?.email {
+        self.db.collection("users").document(userId).updateData(user)
+      }
       if let diffMod = user["diffMod"] as? CGFloat {
         Settings.diffMod = diffMod
       }
@@ -112,28 +114,7 @@ struct DataStore {
     })
   }
   
-  static func getSurveys(){
-    let collectionRef = db.collection("params")
-    let surveyDocRef = collectionRef.document("surveys")
-    surveyDocRef.getDocument { (document, error) in
-      if let error = error { print("error getting survey document:", error, error.localizedDescription)}
-      if let document = document, document.exists {
-        print("found survey document")
-        guard let surveyData = document.data() else { print("error extracting survey data"); return }
-        self.surveys = surveyData
-        print(self.surveys)
-        //set flag for survey feedback and load T1 Survey
-        if let preHash = DataStore.surveys["activePre"], let preHashString = preHash as? String, let gvc = DataStore.gameViewController{
-          print("preparing survey")
-          gvc.feedbackState = "pre"
-          gvc.prepareSurvey(surveyHash: preHashString)
-        }
-
-      } else {
-        print("no survey document found")
-      }
-    }
-  }
+  
   
   static func getUser(userId:String){
     let collectionRef = db.collection("users")
@@ -145,12 +126,13 @@ struct DataStore {
         print("found user document")
         guard let userData = document.data() else { print("error extracting user data"); return }
         self.user = userData
-        self.updateSurveyStatus()
+        Survey.updateSurveyStatus()
       } else {
         collectionRef.document(userId).setData([
           "diffMod": 0.70,
           "gamesPlayedCount": 0,
           "completedGamesCount":0,
+          "completedGeneralSurvey": false,
           "lastUpdated": FieldValue.serverTimestamp()
         ])
         print("no user found, writing user doc and incrementing...")
@@ -160,18 +142,10 @@ struct DataStore {
     }
   }
   
-  static func updateSurveyStatus(){
-    if let userGames = self.user["gamesPlayedCount"] as? Int, let completedGames = self.user["completedGamesCount"] as? Int {
-      if userGames >= 3 && completedGames >= 1 { self.willDeploySurvey = true }
-    }
-  }
+
   
   static func incrementUserGameCount(userId:String){
     self.db.collection("users").document(userId).updateData(["gamesPlayedCount": FieldValue.increment(Int64(1))])
-  }
-  
-  static func incrementUserCompletedGamesCount(userId:String){
-    self.db.collection("users").document(userId).updateData(["completedGamesCount": FieldValue.increment(Int64(1))])
   }
   
   static func incrementGlobalGameCount(){
@@ -211,9 +185,9 @@ struct DataStore {
   }
   
   static func initiateGame(){
-    guard let currentUser = self.currentUser, let userId = currentUser.email else { print("error retrieving current user from DataStore"); return}
+    guard let currentUser = self.currentUser, let userId = currentUser.email, let gamesPlayedCount = self.user["gamesPlayedCount"] as? Int else { print("error retrieving current user from DataStore"); return}
     self.incrementGlobalGameCount()
-    self.incrementUserGameCount(userId: userId)
+    self.user["gamesPlayedCount"] = gamesPlayedCount + 1
     self.metaGameRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
       guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
       guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
