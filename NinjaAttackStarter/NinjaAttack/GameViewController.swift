@@ -195,7 +195,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         Sensory.applyFrequency()
         Game.transitionRespPhase(timer: timer, worldTimer: worldTimer)
       }
-    } else if respondent != nil {
+    } else if let respondent = respondent {
       if Survey.feedbackState == "general" {
         DataStore.user["completedGeneralSurvey"] = true
         Survey.feedbackState = ""
