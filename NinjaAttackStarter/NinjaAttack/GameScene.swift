@@ -26,6 +26,7 @@ class GameScene: SKScene {
 //    for node in currentGame.statusBalls {
 //      guard let texture = node.texture else {print("no texture"); return}
 //      print(texture.description)
+    print(DataStore.user.description)
 //    }
   }
   

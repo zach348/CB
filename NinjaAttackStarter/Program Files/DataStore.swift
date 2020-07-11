@@ -9,7 +9,7 @@ struct DataStore {
   static var currentUser = Auth.auth().currentUser
   static var initialRequest:Bool = true
   static var db:Firestore = Firestore.firestore()
-  static var metaGameRef:DocumentReference = db.document("meta/gameMetaData")
+  static var metaGameRef:DocumentReference = db.document("meta/gameMeta")
   static var gameCount = 0
   static var records = [[String:Any]]()
   static var eventMarkers:[String:Any] = [
@@ -21,6 +21,7 @@ struct DataStore {
     "diffMod": 0.7,
     "gamesPlayedCount": 0,
     "completedGamesCount": 0,
+    "completedBackgroundSurvey": false,
     "completedGeneralSurvey": false,
     "lastUpdated": FieldValue.serverTimestamp()
     ] {
@@ -107,7 +108,7 @@ struct DataStore {
     if !self.initialRequest { return } else { self.initialRequest = false }
     self.metaGameRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
       guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
-      guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
+      guard let gameCount:Any = document.get("gameCount") else { print("Games count not found"); return }
       
       print("gameCount, dummy request:", gameCount)
       
@@ -133,6 +134,7 @@ struct DataStore {
           "gamesPlayedCount": 0,
           "completedGamesCount":0,
           "completedGeneralSurvey": false,
+          "completedBackgroundSurvey": false,
           "lastUpdated": FieldValue.serverTimestamp()
         ])
         print("no user found, writing user doc and incrementing...")
@@ -149,14 +151,7 @@ struct DataStore {
   }
   
   static func incrementGlobalGameCount(){
-    self.metaGameRef.updateData(["count": FieldValue.increment(Int64(1))])
-  }
-  
-  static func updateUser(userId:String){
-    print("updating user")
-    let userDocRef = db.collection("users").document(userId)
-    let userData:[String:Any] = ["diffMod": Settings.diffMod, "lastUpdated": FieldValue.serverTimestamp()]
-    userDocRef.updateData(userData)
+    self.metaGameRef.updateData(["gameCount": FieldValue.increment(Int64(1)), "lastUpdated": FieldValue.serverTimestamp()])
   }
   
   static func saveTimePoint(tpRecord:[String:Any], gameCount:Any, tpCount:Int){
@@ -190,7 +185,7 @@ struct DataStore {
     self.user["gamesPlayedCount"] = gamesPlayedCount + 1
     self.metaGameRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
       guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
-      guard let gameCount:Any = document.get("count") else { print("Games count not found"); return }
+      guard let gameCount:Any = document.get("gameCount") else { print("Games count not found"); return }
       self.gameCount = gameCount as! Int
       self.db.collection("games").document("\(gameCount)").setData([
         "lastUpdated": FieldValue.serverTimestamp(),

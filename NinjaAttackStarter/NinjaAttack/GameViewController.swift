@@ -9,7 +9,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
   var loginScene:LoginScene?
   var startScene:StartGameScene?
   var gameScene:GameScene?
-  var feedBackController:SMFeedbackViewController?
+  var surveyController:SMFeedbackViewController?
 
   
   override func viewDidLoad() {
@@ -54,6 +54,8 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         //present start scene and cleanup loginScene
         skView.presentScene(self.startScene)
         self.loginScene = nil
+        
+        //testing
       }else{
         print("logged out")
         self.loginScene = LoginScene(size: self.view.bounds.size)
@@ -120,7 +122,6 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
             self.gameScene = nil
 //            DataStore.saveGame()
             timer.stopTimers(timerArray: ["saveTimer"])
-            DataStore.updateUser(userId: userId)
             currentGame = Game()
            
           }
@@ -169,18 +170,20 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
 
   
   func prepareSurveyViewController(surveyHash:String){
-    self.feedBackController = SMFeedbackViewController.init(survey: surveyHash)
-    self.feedBackController!.delegate = self
+    self.surveyController = SMFeedbackViewController.init(survey: surveyHash)
+    self.surveyController!.delegate = self
   }
   
   func respondentDidEndSurvey(_ respondent: SMRespondent!, error: Error!) {
     print("respondent did end survey; feedback state: ", Survey.feedbackState);
     if let error = error {
       print("Survey error:",error,error.localizedDescription)
-    
       //API always returning errors until account is upgraded
       if Survey.feedbackState == "general" {
         DataStore.user["completedGeneralSurvey"] = true
+        Survey.feedbackState = ""
+      }else if Survey.feedbackState == "background" {
+        DataStore.user["completedBackgroundSurvey"] = true
         Survey.feedbackState = ""
       }else if Survey.feedbackState == "pre", let startScene = self.startScene {
         print("T1 survey completed")
@@ -199,6 +202,9 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
       if Survey.feedbackState == "general" {
         DataStore.user["completedGeneralSurvey"] = true
         Survey.feedbackState = ""
+      }else if Survey.feedbackState == "background" {
+        DataStore.user["completedBackgroundSurvey"] = true
+        Survey.feedbackState = ""
       }else if Survey.feedbackState == "pre", let startScene = self.startScene {
         print("T1 survey completed")
         Survey.feedbackState = ""
@@ -209,7 +215,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         guard let timer = currentGame.timer, let worldTimer = currentGame.worldTimer else { return }
         Sensory.createHapticEngine()
         Sensory.prepareHaptics()
-        Sensory.applyFrequency()
+        Sensory.applyFrequency() 
         Game.transitionRespPhase(timer: timer, worldTimer: worldTimer)
       }
     }

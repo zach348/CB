@@ -116,12 +116,10 @@ class StartGameScene: SKScene {
   
   @objc func handleStartButton(){
     if Survey.willDeployPrePostSurvey {
-      if let gvc =  self.gameViewController, let feedbackController = gvc.feedBackController, let preHash = Survey.surveys["activePre"], let preHashString = preHash as? String {
-        print("preparing survey")
+      if let gvc =  self.gameViewController, let preHash = Survey.surveys["activePre"], let preHashString = preHash as? String {
         Survey.feedbackState = "pre"
-        gvc.prepareSurveyViewController(surveyHash: preHashString)
         print("presenting survey...")
-        feedbackController.present(from: gvc, animated: true, completion: nil)
+        Survey.presentSurvey(surveyHash: preHashString, gvc: gvc)
       }else{
         print("error assigning gvc or feedback controller")
       }

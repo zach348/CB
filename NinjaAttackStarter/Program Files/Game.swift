@@ -64,15 +64,11 @@ class Game {
         if Game.currentRespSettings.phase == 8 {
           Sensory.fadeScreen()
           if Survey.willDeployPrePostSurvey {
-            if let gvc = currentGame.gameScene?.gameViewController, let postHash = Survey.surveys["activePost"], let postHashString = postHash as? String {
-              gvc.prepareSurveyViewController(surveyHash: postHashString)
-              Survey.feedbackState = "post"
-            }
             let wait = SKAction.wait(forDuration: 20)
             let deployPostSurvey = SKAction.run {
-               if let gvc =  currentGame.gameScene?.gameViewController, let feedbackController = gvc.feedBackController {
-                  feedbackController.present(from: gvc, animated: true, completion: nil)
-                }
+              if let gvc =  currentGame.gameScene?.gameViewController, let postHash = Survey.surveys["activePost"], let postHashString = postHash as? String {
+                Survey.presentSurvey(surveyHash: postHashString, gvc: gvc)
+              }
              }
             let stopAction = SKAction.run {
                 timer.stopTimers(timerArray: ["breathLoop", "frequencyLoopTimer"])
@@ -207,6 +203,7 @@ class Game {
   var outcomeHistory = [Outcome]() {
     //implement different length histories for upregulation(3) and downregulation(2)
     didSet{
+      
       if self.outcomeHistory.last != Outcome.transition{
         if self.outcomeHistory.count >= 2 {
           let last2Outcomes = self.outcomeHistory[self.outcomeHistory.count - 2..<self.outcomeHistory.count]
@@ -302,7 +299,7 @@ class Game {
 
       masterTimer.startGameTimer()
       Ball.startMovement()
-      self.timer?.startTimerActions()
+      masterTimer.startTimerActions()
       Sensory.applyFrequency()
       self.isRunning = true
       
@@ -330,7 +327,7 @@ class Game {
     DataStore.currentUser = Auth.auth().currentUser
     DataStore.initialRequest = true
     DataStore.db = Firestore.firestore()
-    DataStore.metaGameRef = DataStore.db.document("meta/gameMetaData")
+    DataStore.metaGameRef = DataStore.db.document("meta/gameMeta")
     DataStore.records = [[String:Any]]()
     DataStore.eventMarkers = [
       "didShift": ["flag": false, "delay": -1],
@@ -362,6 +359,8 @@ class Game {
     Sensory.soundResourcesRegistered = false
     Sensory.createHapticEngine()
     Sensory.prepareAudioHaptics(volume: Game.currentTrackSettings.sfxVolume)
+    
+    Survey.updateSurveyStatus()
   }
   
   func pauseGame(){

@@ -41,8 +41,7 @@ struct Settings {
   
   static var diffMod:CGFloat = 1 {
     didSet{
-      guard let userId = Auth.auth().currentUser?.email else { print("error updating user triggered by diffMod update"); return }
-      DataStore.updateUser(userId: userId)
+      DataStore.user["diffMod"] = diffMod
     }
   }
 
