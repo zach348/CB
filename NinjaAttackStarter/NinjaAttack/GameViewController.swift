@@ -179,26 +179,8 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
     if let error = error {
       print("Survey error:",error,error.localizedDescription)
       //API always returning errors until account is upgraded
-      if Survey.feedbackState == "general" {
-        DataStore.user["completedGeneralSurvey"] = true
-        Survey.feedbackState = ""
-      }else if Survey.feedbackState == "background" {
-        DataStore.user["completedBackgroundSurvey"] = true
-        Survey.feedbackState = ""
-      }else if Survey.feedbackState == "pre", let startScene = self.startScene {
-        print("T1 survey completed")
-        Survey.feedbackState = ""
-        startScene.presentGameScene()
-      }else if Survey.feedbackState == "post"{
-        print("T2 survey completed")
-        Survey.feedbackState = ""
-        guard let timer = currentGame.timer, let worldTimer = currentGame.worldTimer else { return }
-        Sensory.createHapticEngine()
-        Sensory.prepareHaptics()
-        Sensory.applyFrequency()
-        Game.transitionRespPhase(timer: timer, worldTimer: worldTimer)
-      }
     } else if let respondent = respondent {
+      print("received respondent/valid response ******************", respondent.description)
       if Survey.feedbackState == "general" {
         DataStore.user["completedGeneralSurvey"] = true
         Survey.feedbackState = ""

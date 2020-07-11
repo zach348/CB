@@ -203,19 +203,19 @@ class Game {
   var outcomeHistory = [Outcome]() {
     //implement different length histories for upregulation(3) and downregulation(2)
     didSet{
-      
+      guard let diffMod = DataStore.user["diffMod"] as? CGFloat else { print("error extracting diffMod in ouctome observer"); return }
       if self.outcomeHistory.last != Outcome.transition{
         if self.outcomeHistory.count >= 2 {
           let last2Outcomes = self.outcomeHistory[self.outcomeHistory.count - 2..<self.outcomeHistory.count]
           if !last2Outcomes.contains(Outcome.success) && !last2Outcomes.contains(Outcome.transition){
-            if Settings.diffMod > 0.5 { Settings.diffMod -= 0.1 }
+            if diffMod > 0.5 { DataStore.user["diffMod"] = diffMod - 0.1 }
             print("downregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
           }
         }
         if self.outcomeHistory.count >= 3 {
           let last3Outcomes = self.outcomeHistory[self.outcomeHistory.count - 3..<self.outcomeHistory.count]
           if !last3Outcomes.contains(Outcome.failure) && !last3Outcomes.contains(Outcome.pass) && !last3Outcomes.contains(Outcome.transition) {
-            if Settings.diffMod < 1.5 { Settings.diffMod += 0.04 }
+            if diffMod < 1.5 { DataStore.user["diffMod"] = diffMod + 0.04 }
             print("upregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
           }
         }

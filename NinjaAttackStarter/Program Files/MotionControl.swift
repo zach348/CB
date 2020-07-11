@@ -60,13 +60,13 @@ struct MotionControl {
       if currentSD < Game.currentTrackSettings.activeSpeedSD {
         if ball.currentSpeed() > Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed {
           ball.modifySpeed(factor: 1.02)
-        }else if ball.currentSpeed() < Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed{
+        }else if ball.currentSpeed() < Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed {
           ball.modifySpeed(factor: 0.98)
         }
-      }else if currentSD > Game.currentTrackSettings.activeSpeedSD{
+      }else if currentSD > Game.currentTrackSettings.activeSpeedSD {
         if ball.currentSpeed() > Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() > Game.currentTrackSettings.minSpeed {
           ball.modifySpeed(factor: 0.98)
-        }else if ball.currentSpeed() < Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed{
+        }else if ball.currentSpeed() < Game.currentTrackSettings.activeMeanSpeed && ball.currentSpeed() < Game.currentTrackSettings.maxSpeed {
           ball.modifySpeed(factor: 1.02)
         }
       }
@@ -75,8 +75,8 @@ struct MotionControl {
   
   private static func correctSpeedRange(){
     for ball in Ball.members {
-      if ball.currentSpeed() < Game.currentTrackSettings.minSpeed {ball.modifySpeed(factor: 1.01)}
-      else if ball.currentSpeed() > Game.currentTrackSettings.maxSpeed {ball.modifySpeed(factor: 0.99)}
+      if ball.currentSpeed() < Game.currentTrackSettings.minSpeed { ball.modifySpeed(factor: 1.01)}
+      else if ball.currentSpeed() > Game.currentTrackSettings.maxSpeed { ball.modifySpeed(factor: 0.99)}
     }
   }
   

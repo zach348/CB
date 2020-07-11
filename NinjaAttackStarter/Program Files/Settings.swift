@@ -39,13 +39,6 @@ struct Settings {
     ]
   ]
   
-  static var diffMod:CGFloat = 1 {
-    didSet{
-      DataStore.user["diffMod"] = diffMod
-    }
-  }
-
-  
   let difficulty:DiffSetting
   let phase:Int
   let missesAllowed:Int
@@ -59,13 +52,21 @@ struct Settings {
   let targetMeanSpeed:CGFloat
   var activeMeanSpeed:CGFloat {
     get {
-      return self.targetMeanSpeed * Settings.diffMod
+      if let diffMod = DataStore.user["diffMod"] as? CGFloat {
+        return self.targetMeanSpeed * diffMod
+      } else {
+        return self.targetMeanSpeed
+      }
     }
   }
   let targetSpeedSD:CGFloat
   var activeSpeedSD:CGFloat {
     get {
-      return self.targetSpeedSD * Settings.diffMod
+      if let diffMod = DataStore.user["diffMod"] as? CGFloat {
+        return self.targetSpeedSD * diffMod
+      } else {
+        return self.targetSpeedSD
+      }
     }
   }
   let shiftDelay:Double

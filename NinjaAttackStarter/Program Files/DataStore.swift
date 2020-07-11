@@ -29,9 +29,6 @@ struct DataStore {
       if let userId = self.currentUser?.email {
         self.db.collection("users").document(userId).updateData(user)
       }
-      if let diffMod = user["diffMod"] as? CGFloat {
-        Settings.diffMod = diffMod
-      }
     }
   }
   
@@ -51,7 +48,7 @@ struct DataStore {
         "meanSpeed": Ball.mean(),
         "speedSD": Ball.standardDev(),
         "phase": Game.currentTrackSettings.phase,
-        "diffMod": Settings.diffMod,
+        "diffMod": self.user["diffMod"],
         "requiredStreak": Game.currentTrackSettings.requiredStreak,
         "stagePoints": currentGame.stagePoints,
         "pauseDelay": Game.currentTrackSettings.pauseDelay,
