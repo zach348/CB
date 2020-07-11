@@ -9,6 +9,7 @@ struct Survey {
   static var willDeployBackgroundSurvey:Bool = false
   static var feedbackState:String = ""
   static var surveys:[String:Any] = ["activePre": "", "activePost": "", "general": "", "background": ""]
+  static var SMCustomVars = [String:Any]()
 
   static func getSurveys(){
     let collectionRef = DataStore.db.collection("params")

@@ -170,7 +170,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
 
   
   func prepareSurveyViewController(surveyHash:String){
-    self.surveyController = SMFeedbackViewController.init(survey: surveyHash)
+    self.surveyController = SMFeedbackViewController.init(survey: surveyHash, andCustomVariables: Survey.SMCustomVars)
     self.surveyController!.delegate = self
   }
   
@@ -180,7 +180,6 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
       print("Survey error:",error,error.localizedDescription)
       //API always returning errors until account is upgraded
     } else if let respondent = respondent {
-      print("received respondent/valid response ******************", respondent.description)
       if Survey.feedbackState == "general" {
         DataStore.user["completedGeneralSurvey"] = true
         Survey.feedbackState = ""

@@ -125,6 +125,7 @@ struct DataStore {
         guard let userData = document.data() else { print("error extracting user data"); return }
         self.user = userData
         Survey.updateSurveyStatus()
+        Survey.SMCustomVars["user"] = userId
       } else {
         collectionRef.document(userId).setData([
           "diffMod": 0.70,
@@ -184,6 +185,7 @@ struct DataStore {
       guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
       guard let gameCount:Any = document.get("gameCount") else { print("Games count not found"); return }
       self.gameCount = gameCount as! Int
+      Survey.SMCustomVars["gameId"] = self.gameCount
       self.db.collection("games").document("\(gameCount)").setData([
         "lastUpdated": FieldValue.serverTimestamp(),
         "userEmail": userId
