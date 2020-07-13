@@ -177,24 +177,38 @@ struct DataStore {
     }
   }
   
+  static func getGameCount(){
+    self.metaGameRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
+      if let error = error {
+        print("getGameCount error: ", error, error.localizedDescription)
+      }else if let document = document, document.exists {
+        guard let gameCount = document.get("gameCount") as? Int else { print("game count not found on returned document"); return }
+        self.gameCount = gameCount
+      }
+    })
+  }
+  
   static func initiateGame(){
     guard let currentUser = self.currentUser, let userId = currentUser.email, let gamesPlayedCount = self.user["gamesPlayedCount"] as? Int else { print("error retrieving current user from DataStore"); return}
     self.incrementGlobalGameCount()
     self.user["gamesPlayedCount"] = gamesPlayedCount + 1
     self.metaGameRef.getDocument(source: FirestoreSource.server, completion: { (document,error) in
-      guard let document = document else { print("Games metadoc not found: \(error?.localizedDescription ?? "No error returned")"); return }
-      guard let gameCount:Any = document.get("gameCount") else { print("Games count not found"); return }
-      self.gameCount = gameCount as! Int
-      Survey.SMCustomVars["gameId"] = self.gameCount
-      self.db.collection("games").document("\(gameCount)").setData([
-        "lastUpdated": FieldValue.serverTimestamp(),
-        "userEmail": userId
-      ]) { error in
-        if let error = error {
-          print("error writing game document:", error, error.localizedDescription)
-        } else {
-          print("game document written")
-        }
+      if let error = error {
+        print("error getting game meta doc________initiateGame()", error, error.localizedDescription)
+      }else if let document = document, document.exists {
+        guard let gameCount = document.get("gameCount") as? Int else { print("Errpr: gameCount not found on meta doc_______initiateGame()"); return }
+        self.gameCount = gameCount
+        Survey.SMCustomVars["gameId"] = self.gameCount
+        self.db.collection("games").document("\(gameCount)").setData([
+          "lastUpdated": FieldValue.serverTimestamp(),
+          "userEmail": userId
+        ]) { error in
+         if let error = error {
+           print("error writing game document:", error, error.localizedDescription)
+         } else {
+           print("game document written")
+         }
+       }
       }
     })
     Game.didSaveGame = true

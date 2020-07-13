@@ -67,6 +67,7 @@ class Game {
             let wait = SKAction.wait(forDuration: 20)
             let deployPostSurvey = SKAction.run {
               if let gvc =  currentGame.gameScene?.gameViewController, let postHash = Survey.surveys["activePost"], let postHashString = postHash as? String {
+                Survey.feedbackState = "post"
                 Survey.presentSurvey(surveyHash: postHashString, gvc: gvc)
               }
              }

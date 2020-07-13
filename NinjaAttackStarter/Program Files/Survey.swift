@@ -27,7 +27,7 @@ struct Survey {
             Survey.presentSurvey(surveyHash: backgroundHashString, gvc: gvc)
           }
         }else{
-          print("error preparing background vars")
+          print("surveys received - not deploying background survey")
         }
       } else {
         print("no survey document found")
@@ -44,7 +44,8 @@ struct Survey {
   }
   
   static func presentSurvey(surveyHash:String, gvc:GameViewController){
-    gvc.prepareSurveyViewController(surveyHash: surveyHash)
+    gvc.surveyController = SMFeedbackViewController.init(survey: surveyHash, andCustomVariables: Survey.SMCustomVars)
+    gvc.surveyController!.delegate = gvc
     if let surveyController = gvc.surveyController  { surveyController.present(from: gvc, animated: true, completion: nil ) }
   }
 }

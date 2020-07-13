@@ -32,6 +32,8 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
       // ...
     Survey.willDeployPrePostSurvey = false
     Survey.willDeployGeneralSurvey = false
+    Survey.willDeployBackgroundSurvey = false
+    
       if user != nil && !user!.isEmailVerified{
         let firebaseAuth = Auth.auth()
         do {
@@ -45,6 +47,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         DataStore.dummyRequest()
         print("getting user... ")
         DataStore.getUser(userId: userId)
+        DataStore.getGameCount()
         
         //Prepare start screen
         self.startScene = StartGameScene(size: (self.view.bounds.size))
@@ -97,22 +100,14 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
         //handle quit param and game cleanup
         if let quitGame = params["quitGame"], let timer = currentGame.timer {
           if quitGame {
-            guard let userId = Auth.auth().currentUser?.email else { print("error getting userId to quit game"); return}
             let skView = self.view as! SKView
-            
-            Survey.feedbackState = "pre"
-            if let preHash = Survey.surveys["activePre"], let preHashString = preHash as? String {
-              self.prepareSurveyViewController(surveyHash: preHashString)
-            }
-            
             self.startScene = StartGameScene(size: (self.view.bounds.size))
             self.startScene?.gameViewController = self
+            
             if Survey.willDeployGeneralSurvey {
               if let generalHash = Survey.surveys["general"], let generalHashString = generalHash as? String {
-                self.prepareSurveyViewController(surveyHash: generalHashString)
                 print("general hash: ", generalHashString)
                 Survey.feedbackState = "general"
-//                if let fbController = self.feedBackController { fbController.present(from: self, animated: true, completion: nil) }
                 Survey.presentSurvey(surveyHash: generalHashString, gvc: self)
               }
             }
@@ -167,19 +162,12 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
   
   //survey monkey
   
-
-  
-  func prepareSurveyViewController(surveyHash:String){
-    self.surveyController = SMFeedbackViewController.init(survey: surveyHash, andCustomVariables: Survey.SMCustomVars)
-    self.surveyController!.delegate = self
-  }
-  
   func respondentDidEndSurvey(_ respondent: SMRespondent!, error: Error!) {
     print("respondent did end survey; feedback state: ", Survey.feedbackState);
     if let error = error {
       print("Survey error:",error,error.localizedDescription)
       //API always returning errors until account is upgraded
-    } else if let respondent = respondent {
+    } else if let _ = respondent {
       if Survey.feedbackState == "general" {
         DataStore.user["completedGeneralSurvey"] = true
         Survey.feedbackState = ""

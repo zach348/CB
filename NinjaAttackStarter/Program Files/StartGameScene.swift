@@ -17,6 +17,8 @@ class StartGameScene: SKScene {
   var background = SKSpriteNode(imageNamed: "sphere-gray")
   
   override func didMove(to view: SKView) {
+    DataStore.getGameCount()
+    
     background.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
     background.size = CGSize(width: self.frame.width/2, height: self.frame.height/2)
     addChild(background)
@@ -118,10 +120,11 @@ class StartGameScene: SKScene {
     if Survey.willDeployPrePostSurvey {
       if let gvc =  self.gameViewController, let preHash = Survey.surveys["activePre"], let preHashString = preHash as? String {
         Survey.feedbackState = "pre"
+        Survey.SMCustomVars["gameId"] = DataStore.gameCount + 1
         print("presenting survey...")
         Survey.presentSurvey(surveyHash: preHashString, gvc: gvc)
       }else{
-        print("error assigning gvc or feedback controller")
+        print("error assigning gvc or feedback controller___handleStartButton()")
       }
     } else {
       self.presentGameScene()
