@@ -18,6 +18,7 @@ class StartGameScene: SKScene {
   
   override func didMove(to view: SKView) {
     DataStore.getGameCount()
+    Survey.updateSurveyStatus()
     
     background.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
     background.size = CGSize(width: self.frame.width/2, height: self.frame.height/2)
