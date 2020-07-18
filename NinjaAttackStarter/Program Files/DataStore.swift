@@ -27,6 +27,7 @@ struct DataStore {
     ] {
     didSet {
       if let userId = self.currentUser?.email {
+        user["lastUpdated"] = FieldValue.serverTimestamp()
         self.db.collection("users").document(userId).updateData(user)
       }
     }
