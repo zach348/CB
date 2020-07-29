@@ -89,39 +89,11 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
       }
   }
   
-  func showAlert(title:String,message:String,params:[String:Bool] = [String:Bool]()) {
+  func showAlert(title:String,message:String,completion:(() -> Void)? = nil) {
       let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
       alertController.addAction(UIAlertAction(title: "Ok", style: .default) { action in
-       
-        
-        
-        
-        
-        //handle quit param and game cleanup
-        if let quitGame = params["quitGame"], let timer = currentGame.timer {
-          if quitGame {
-            let skView = self.view as! SKView
-            self.startScene = StartGameScene(size: (self.view.bounds.size))
-            self.startScene?.gameViewController = self
-            
-            if Survey.willDeployGeneralSurvey {
-              if let generalHash = Survey.surveys["general"], let generalHashString = generalHash as? String {
-                print("general hash: ", generalHashString)
-                Survey.feedbackState = "general"
-                Survey.presentSurvey(surveyHash: generalHashString, gvc: self)
-              }
-            }
-            skView.presentScene(self.startScene)
-            self.gameScene?.removeAllActions()
-            self.gameScene?.removeAllChildren()
-            self.gameScene = nil
-//            DataStore.saveGame()
-            timer.stopTimers(timerArray: ["saveTimer"])
-            currentGame = Game()
-           
-          }
-        } else {
-          print("handle Ok action...no quitGame param")
+        if let completion = completion {
+          completion()
         }
       })
       alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
