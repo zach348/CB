@@ -120,7 +120,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
   
   func handleCreateBtn(username:String,password:String){
     self.showAlert(title: "Terms and Conditions", message: "By Clicking Sign Up, You Are Agreeing to Our Terms of Service", button1Title: "Show Me The Terms", button2Title: "Sign Up", handler1: {
-      if let url = URL(string: "https://www.kalibrategame.com") {
+      if let url = URL(string: "https://www.kalibrategame.com/terms-of-service") {
         if UIApplication.shared.canOpenURL(url){
           UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
