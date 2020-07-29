@@ -2,7 +2,7 @@ import SpriteKit
 import UIKit
 import Firebase
 protocol TransitionDelegate: SKSceneDelegate {
-  func showAlert(title:String,message:String,completion:(() -> Void)?)
+  func showAlert(title:String,message:String,button1Title:String,button2Title:String,handler1:(() -> Void)?, handler2:(() -> Void)?)
     func handleLoginBtn(username:String,password:String)
     func handleCreateBtn(username:String,password:String)
 }
@@ -145,7 +145,7 @@ class LoginScene: SKScene,UITextFieldDelegate {
             if !result {
                 self.run(SKAction.wait(forDuration: 0.01),completion:{[unowned self] in
                     guard let delegate = self.delegate else { return }
-                  (delegate as! TransitionDelegate).showAlert(title:title,message: message,completion: nil)
+                  (delegate as! TransitionDelegate).showAlert(title:title,message: message,button1Title:"Cancel",button2Title: "Ok",handler1: nil,handler2: nil)
                 })
             }
         }

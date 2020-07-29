@@ -89,16 +89,21 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
       }
   }
   
-  func showAlert(title:String,message:String,completion:(() -> Void)? = nil) {
-      let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-      alertController.addAction(UIAlertAction(title: "Ok", style: .default) { action in
-        if let completion = completion {
-          completion()
-        }
-      })
-      alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
-      self.present(alertController, animated: true)
+  func showAlert(title:String,message:String,button1Title:String = "Cancel",button2Title:String = "Ok",handler1:(() -> Void)? = nil, handler2:(() -> Void)? = nil) {
+    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    alertController.addAction(UIAlertAction(title: button2Title, style: .default) { action in
+      if let handler2 = handler2 {
+        handler2()
+      }
+    })
+    alertController.addAction(UIAlertAction(title: button1Title, style: UIAlertAction.Style.cancel) { action in
+      if let handler1 = handler1 {
+        handler1()
+      }
+    })
+    self.present(alertController, animated: true)
   }
+  
   func handleLoginBtn(username:String,password:String) {
     Auth.auth().signIn(withEmail: username, password: password) { [weak self] authResult, error in
       guard let strongSelf = self else { return }
@@ -112,26 +117,34 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
       }
     }
   }
-  func handleCreateBtn(username:String,password:String){
-    Auth.auth().createUser(withEmail: username, password: password) { authResult, error in
-      if let error = error {
-        self.showAlert(title: "Account Creation Error", message: error.localizedDescription)
-      }else if let authResult = authResult, let email = authResult.user.email {
-        let skView = self.view as! SKView
-        self.startScene = StartGameScene(size: self.view.bounds.size)
-        self.startScene?.gameViewController = self
-        skView.presentScene(self.startScene)
-        self.loginScene = nil
-        self.showAlert(title: "Account Creation Successful", message: "An email verification link has been sent to \(email)")
-        authResult.user.sendEmailVerification(completion: { error in
-          if let error = error {
-            print("email verification send error: \(error.localizedDescription)")
-          }
-        })
-      }
-    }
-  }
   
+  func handleCreateBtn(username:String,password:String){
+    self.showAlert(title: "Terms and Conditions", message: "By Clicking Sign Up, You Are Agreeing to Our Terms of Service", button1Title: "Show Me The Terms", button2Title: "Sign Up", handler1: {
+      if let url = URL(string: "https://www.kalibrategame.com") {
+        if UIApplication.shared.canOpenURL(url){
+          UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+      }
+    }, handler2: {
+      Auth.auth().createUser(withEmail: username, password: password) { authResult, error in
+        if let error = error {
+          self.showAlert(title: "Account Creation Error", message: error.localizedDescription)
+        }else if let authResult = authResult, let email = authResult.user.email {
+          let skView = self.view as! SKView
+          self.startScene = StartGameScene(size: self.view.bounds.size)
+          self.startScene?.gameViewController = self
+          skView.presentScene(self.startScene)
+          self.loginScene = nil
+          self.showAlert(title: "Account Creation Successful", message: "An email verification link has been sent to \(email)")
+          authResult.user.sendEmailVerification(completion: { error in
+            if let error = error {
+              print("email verification send error: \(error.localizedDescription)")
+            }
+          })
+        }
+      }
+      })
+    }
   //survey monkey
   
   func respondentDidEndSurvey(_ respondent: SMRespondent!, error: Error!) {
