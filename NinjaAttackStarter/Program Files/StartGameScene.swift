@@ -17,6 +17,9 @@ class StartGameScene: SKScene {
   var background = SKSpriteNode(imageNamed: "sphere-gray")
   
   override func didMove(to view: SKView) {
+    DataStore.getGameCount()
+    Survey.updateSurveyStatus()
+    
     background.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
     background.size = CGSize(width: self.frame.width/2, height: self.frame.height/2)
     addChild(background)
@@ -26,7 +29,7 @@ class StartGameScene: SKScene {
     let buttonTextureSelected:SKTexture! = SKTexture(imageNamed: "buttonSelected.png")
     
     self.startButton = Button(normalTexture: buttonTexture, selectedTexture: buttonTextureSelected, disabledTexture: buttonTexture)
-    self.startButton.setButtonAction(target: self, triggerEvent: .TouchUpInside, action: #selector(StartGameScene.startGame))
+    self.startButton.setButtonAction(target: self, triggerEvent: .TouchUpInside, action: #selector(StartGameScene.handleStartButton))
     self.startButton.setButtonLabel(title: "Start Game", font: "Arial", fontSize: 20)
     if self.view!.frame.width < 670 {
       self.startButton.size = CGSize(width: 150, height: 30)
@@ -61,6 +64,7 @@ class StartGameScene: SKScene {
 //    self.addChild(self.difficultyButton)
     
     if let user = Auth.auth().currentUser, let email = user.email{
+      
       self.loginStatusLabel.text = "You are currently logged in as \(email)"
       self.loginStatusLabel.fontSize = 15
       self.loginStatusLabel.fontColor = SKColor.black
@@ -79,7 +83,6 @@ class StartGameScene: SKScene {
     
     
     
-    //commented out for testflight
     
     
     
@@ -99,9 +102,9 @@ class StartGameScene: SKScene {
   }
   
 
-  @objc func startGame(){
+  @objc func presentGameScene(){
     run(SKAction.sequence([
-      SKAction.wait(forDuration: 1.0),
+      SKAction.wait(forDuration: 0.25),
       SKAction.run() { [weak self] in
         // 5
         guard let `self` = self, let gameViewController = self.gameViewController else { return }
@@ -112,6 +115,21 @@ class StartGameScene: SKScene {
         self.gameViewController?.startScene = nil
       }
       ]))
+  }
+  
+  @objc func handleStartButton(){
+    if Survey.willDeployPrePostSurvey {
+      if let gvc =  self.gameViewController, let preHash = Survey.surveys["activePre"], let preHashString = preHash as? String {
+        Survey.feedbackState = "pre"
+        Survey.SMCustomVars["gameId"] = DataStore.gameCount + 1
+        print("presenting survey...")
+        Survey.presentSurvey(surveyHash: preHashString, gvc: gvc)
+      }else{
+        print("error assigning gvc or feedback controller___handleStartButton()")
+      }
+    } else {
+      self.presentGameScene()
+    }
   }
   
   @objc func changeDifficulty(){

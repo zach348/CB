@@ -193,6 +193,7 @@ PODS:
   - SDWebImage (5.2.5):
     - SDWebImage/Core (= 5.2.5)
   - SDWebImage/Core (5.2.5)
+  - surveymonkey-ios-sdk (2.0.6)
 
 DEPENDENCIES:
   - Firebase/Auth
@@ -200,6 +201,7 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/Firestore
   - FirebaseUI
+  - surveymonkey-ios-sdk (~> 2.0)
 
 SPEC REPOS:
   trunk:
@@ -232,6 +234,7 @@ SPEC REPOS:
     - nanopb
     - Protobuf
     - SDWebImage
+    - surveymonkey-ios-sdk
 
 SPEC CHECKSUMS:
   AppAuth: bce82c76043657c99d91e7882e8a9e1a93650cd4
@@ -263,7 +266,8 @@ SPEC CHECKSUMS:
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
   SDWebImage: 4eabf2fa6695c95c47724214417a9c036c965e4a
+  surveymonkey-ios-sdk: ffb3de59b9950ef945e19c3b3ceae6930fbd8deb
 
-PODFILE CHECKSUM: ead2beacebbd72c78d2b4aded3e5c65af9292eb5
+PODFILE CHECKSUM: 8fd282063648fe03ba45b9cbc7da736a2bdeeec7
 
 COCOAPODS: 1.8.4

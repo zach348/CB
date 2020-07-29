@@ -376,10 +376,8 @@ struct Sensory {
   }
   
   static func prepareAudioHaptics(volume:Float = 0.5){
-    if !soundResourcesRegistered{
-      self.registerAudioResources()
-      self.soundResourcesRegistered = true
-    }
+    self.registerAudioResources()
+    self.soundResourcesRegistered = true
     do {
       let robotEvent = CHHapticEvent(audioResourceID: self.soundResources["robot_blip"]!, parameters: [CHHapticEventParameter(parameterID: .audioVolume, value: volume)], relativeTime: 0)
       let robotPattern = try CHHapticPattern(events: [robotEvent], parameterCurves: [])

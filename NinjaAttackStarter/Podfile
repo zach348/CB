@@ -11,4 +11,7 @@ target 'Kalibrate' do
   pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
   pod 'FirebaseUI'
+  
+  #survey monkey
+  pod 'surveymonkey-ios-sdk', '~> 2.0'
 end

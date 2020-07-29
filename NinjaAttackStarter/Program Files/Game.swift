@@ -19,7 +19,14 @@ class Game {
   ]
   static var willSaveGame:Bool = false
   static var didSaveGame:Bool = false
-  static var respActive:Bool = false
+  static var respActive:Bool = false {
+    didSet {
+      if respActive {
+        guard let completedGames = DataStore.user["completedGamesCount"] as? Int else { print("error getting current user (respActive observer)"); return }
+        DataStore.user["completedGamesCount"] = completedGames + 1
+      }
+    }
+  }
   static var initialRespTransition = true
   ///STARTING POINTS
   static var currentRespSettings:RespSettings = respSettingsArr[0] {
@@ -54,7 +61,24 @@ class Game {
         guard let respIndex = self.respSettingsArr.firstIndex(where: { respSetting in respSetting.phase == self.currentRespSettings.phase + 1 }) else { return }
         self.currentRespSettings = self.respSettingsArr[respIndex]
         timer.lastPhaseShiftTime = timer.elapsedTime
-        if Game.currentRespSettings.phase == 8 { Sensory.fadeScreen() }
+        if Game.currentRespSettings.phase == 8 {
+          Sensory.fadeScreen()
+          if Survey.willDeployPrePostSurvey {
+            let wait = SKAction.wait(forDuration: 20)
+            let deployPostSurvey = SKAction.run {
+              if let gvc =  currentGame.gameScene?.gameViewController, let postHash = Survey.surveys["activePost"], let postHashString = postHash as? String {
+                Survey.feedbackState = "post"
+                Survey.presentSurvey(surveyHash: postHashString, gvc: gvc)
+              }
+             }
+            let stopAction = SKAction.run {
+                timer.stopTimers(timerArray: ["breathLoop", "frequencyLoopTimer"])
+                Sensory.hapticEngine = nil
+            }
+            let sequence = SKAction.sequence([wait,stopAction,deployPostSurvey])
+            if let gameScene = currentGame.gameScene { gameScene.run(sequence)}
+          }
+        }
         print("Advanced resp phase")
       }
     
@@ -180,18 +204,19 @@ class Game {
   var outcomeHistory = [Outcome]() {
     //implement different length histories for upregulation(3) and downregulation(2)
     didSet{
+      guard let diffMod = DataStore.user["diffMod"] as? CGFloat else { print("error extracting diffMod in ouctome observer"); return }
       if self.outcomeHistory.last != Outcome.transition{
         if self.outcomeHistory.count >= 2 {
           let last2Outcomes = self.outcomeHistory[self.outcomeHistory.count - 2..<self.outcomeHistory.count]
           if !last2Outcomes.contains(Outcome.success) && !last2Outcomes.contains(Outcome.transition){
-            if Settings.diffMod > 0.5 { Settings.diffMod -= 0.1 }
+            if diffMod > 0.5 { DataStore.user["diffMod"] = diffMod - 0.1 }
             print("downregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
           }
         }
         if self.outcomeHistory.count >= 3 {
           let last3Outcomes = self.outcomeHistory[self.outcomeHistory.count - 3..<self.outcomeHistory.count]
           if !last3Outcomes.contains(Outcome.failure) && !last3Outcomes.contains(Outcome.pass) && !last3Outcomes.contains(Outcome.transition) {
-            if Settings.diffMod < 1.5 { Settings.diffMod += 0.04 }
+            if diffMod < 1.5 { DataStore.user["diffMod"] = diffMod + 0.04 }
             print("upregulated - targetSpeed: \(Game.currentTrackSettings.targetMeanSpeed) - activeSpeed: \(Game.currentTrackSettings.activeMeanSpeed)")
           }
         }
@@ -275,7 +300,7 @@ class Game {
 
       masterTimer.startGameTimer()
       Ball.startMovement()
-      self.timer?.startTimerActions()
+      masterTimer.startTimerActions()
       Sensory.applyFrequency()
       self.isRunning = true
       
@@ -293,8 +318,6 @@ class Game {
     Ball.pendingPause = false
     Ball.pendingShift = false
     Ball.assignedBlinkAudio = false
-//    leftover from nonpersistent diffMods
-//    Settings.diffMod = 1
     Game.willSaveGame = false
     Game.didSaveGame = false
     Game.respActive = false
@@ -305,7 +328,7 @@ class Game {
     DataStore.currentUser = Auth.auth().currentUser
     DataStore.initialRequest = true
     DataStore.db = Firestore.firestore()
-    DataStore.metaRef = DataStore.db.document("meta/gameMetaData")
+    DataStore.metaGameRef = DataStore.db.document("meta/gameMeta")
     DataStore.records = [[String:Any]]()
     DataStore.eventMarkers = [
       "didShift": ["flag": false, "delay": -1],
@@ -337,6 +360,8 @@ class Game {
     Sensory.soundResourcesRegistered = false
     Sensory.createHapticEngine()
     Sensory.prepareAudioHaptics(volume: Game.currentTrackSettings.sfxVolume)
+    
+    Survey.updateSurveyStatus()
   }
   
   func pauseGame(){

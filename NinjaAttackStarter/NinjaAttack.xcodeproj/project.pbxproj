@@ -51,7 +51,9 @@
 		D2A5F20B1F4A9144005CD714 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2A5F20A1F4A9144005CD714 /* Assets.xcassets */; };
 		D2A5F2211F4A96D0005CD714 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A5F2201F4A96D0005CD714 /* AppDelegate.swift */; };
 		EF09503723C7AC5900AEBF81 /* LoginScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF09503623C7AC5900AEBF81 /* LoginScene.swift */; };
+		EF0D2ADD24A919D400663488 /* BridgeTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0D2ADC24A919D400663488 /* BridgeTrigger.m */; };
 		EF4BCBD72404D0B600BD7BE8 /* Robot_blip.wav in Resources */ = {isa = PBXBuildFile; fileRef = EF4BCBD62404D0B600BD7BE8 /* Robot_blip.wav */; };
+		EF999D3524AF8DED00F5944E /* Survey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF999D3424AF8DED00F5944E /* Survey.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,7 +110,10 @@
 		D2A5F20F1F4A9144005CD714 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = NinjaAttack/Info.plist; sourceTree = "<group>"; };
 		D2A5F2201F4A96D0005CD714 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = NinjaAttack/AppDelegate.swift; sourceTree = "<group>"; };
 		EF09503623C7AC5900AEBF81 /* LoginScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScene.swift; sourceTree = "<group>"; };
+		EF0D2ADB24A919D300663488 /* Kalibrate-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Kalibrate-Bridging-Header.h"; sourceTree = "<group>"; };
+		EF0D2ADC24A919D400663488 /* BridgeTrigger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BridgeTrigger.m; sourceTree = "<group>"; };
 		EF4BCBD62404D0B600BD7BE8 /* Robot_blip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Robot_blip.wav; sourceTree = "<group>"; };
+		EF999D3424AF8DED00F5944E /* Survey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Survey.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +139,7 @@
 		84124FB4229C6322008A1510 /* Program Files */ = {
 			isa = PBXGroup;
 			children = (
+				EF999D3424AF8DED00F5944E /* Survey.swift */,
 				84124FB7229C659B008A1510 /* Ball.swift */,
 				84BD930623134D4F0068E47D /* Assets.xcassets */,
 				84DF3B1322ABFE5C00AAAA8A /* Settings.swift */,
@@ -193,11 +199,13 @@
 		D2A5F1F71F4A9143005CD714 = {
 			isa = PBXGroup;
 			children = (
+				EF0D2ADC24A919D400663488 /* BridgeTrigger.m */,
 				8457E0DA23678714000C8B14 /* Kalibrate.entitlements */,
 				D2A5F2021F4A9144005CD714 /* NinjaAttack */,
 				D2A5F2011F4A9144005CD714 /* Products */,
 				E3D0BEA2D2BB1BC6BBC2B0BF /* Pods */,
 				4A168296DBA6211982407530 /* Frameworks */,
+				EF0D2ADB24A919D300663488 /* Kalibrate-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -278,7 +286,7 @@
 				TargetAttributes = {
 					D2A5F1FF1F4A9144005CD714 = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1150;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -411,10 +419,12 @@
 				849432AC22A0A57800CCD6CD /* Game.swift in Sources */,
 				849432AE22A1CB9100CCD6CD /* MotionControl.swift in Sources */,
 				84F7EDAA23393D7600ED432F /* StartGameScene.swift in Sources */,
+				EF0D2ADD24A919D400663488 /* BridgeTrigger.m in Sources */,
 				84BD930E231C4E450068E47D /* DataStore.swift in Sources */,
 				84BD930C231C2EC70068E47D /* HeartRateController.swift in Sources */,
 				84C153922300636700C60973 /* TIle.swift in Sources */,
 				84124FB8229C659B008A1510 /* Ball.swift in Sources */,
+				EF999D3524AF8DED00F5944E /* Survey.swift in Sources */,
 				D2A5F2211F4A96D0005CD714 /* AppDelegate.swift in Sources */,
 				8436334422BF1D1800F4BC97 /* Sensory.swift in Sources */,
 				84CD8ED322A9685100D4B4D2 /* Timer.swift in Sources */,
@@ -568,6 +578,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.kalibrate;
 				PRODUCT_NAME = Kalibrate;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Kalibrate-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -593,6 +604,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.kalibrate;
 				PRODUCT_NAME = Kalibrate;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Kalibrate-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
