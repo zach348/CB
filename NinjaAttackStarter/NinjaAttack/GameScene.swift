@@ -56,8 +56,8 @@ class GameScene: SKScene {
                                                     currentGame = Game()
                                                   }
                                                 
-                                            }],
-                                            ["Cancel": {}]
+                                            },
+                                            "Cancel": {}]
       )
     }
   }

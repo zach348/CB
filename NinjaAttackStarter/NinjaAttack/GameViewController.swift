@@ -89,14 +89,13 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
       }
   }
   
-  func showAlert(title:String,message:String,handlers:[String:() -> Void]...) {
+  func showAlert(title:String,message:String,handlers:[String: () -> Void]) {
     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-    for handler in handlers{
-      for (buttonTitle,handler) in handler{
-        alertController.addAction(UIAlertAction(title: buttonTitle, style: .default) { action in
-          handler()
-        })
-      }
+      
+    for (buttonTitle,handler) in handlers{
+      alertController.addAction(UIAlertAction(title: buttonTitle, style: .default) { action in
+        handler()
+      })
     }
     self.present(alertController, animated: true)
   }
@@ -125,8 +124,8 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
                           UIApplication.shared.open(url, options: [:], completionHandler: nil)
                          }
                        }
-                     }],
-                     ["Sign Up": {
+                     },
+                     "Sign Up": {
                        Auth.auth().createUser(withEmail: username, password: password) { authResult, error in
                          if let error = error {
                           self.showAlert(title: "Account Creation Error", message: error.localizedDescription, handlers: ["Ok": {}])
@@ -143,10 +142,11 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
                              }
                            })
                          }
+                        }
                        }
-                   }])
+                      ]
+                )
     }
-  //survey monkey
   
   func respondentDidEndSurvey(_ respondent: SMRespondent!, error: Error!) {
     print("respondent did end survey; feedback state: ", Survey.feedbackState);

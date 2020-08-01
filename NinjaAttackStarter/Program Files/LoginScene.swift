@@ -2,7 +2,7 @@ import SpriteKit
 import UIKit
 import Firebase
 protocol TransitionDelegate: SKSceneDelegate {
-  func showAlert(title:String,message:String,handlers:[String:() -> Void]...)
+  func showAlert(title:String,message:String,handlers:[String:() -> Void])
   func handleLoginBtn(username:String,password:String)
   func handleCreateBtn(username:String,password:String)
 }
