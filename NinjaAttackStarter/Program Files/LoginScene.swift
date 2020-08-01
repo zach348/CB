@@ -2,9 +2,9 @@ import SpriteKit
 import UIKit
 import Firebase
 protocol TransitionDelegate: SKSceneDelegate {
-  func showAlert(title:String,message:String,button1Title:String,button2Title:String,handler1:(() -> Void)?, handler2:(() -> Void)?)
-    func handleLoginBtn(username:String,password:String)
-    func handleCreateBtn(username:String,password:String)
+  func showAlert(title:String,message:String,handlers:[String:() -> Void]...)
+  func handleLoginBtn(username:String,password:String)
+  func handleCreateBtn(username:String,password:String)
 }
 class LoginScene: SKScene,UITextFieldDelegate {
     weak var gameViewController:GameViewController?
@@ -116,13 +116,13 @@ class LoginScene: SKScene,UITextFieldDelegate {
                   if emailValid {
                     Auth.auth().sendPasswordReset(withEmail: self.usernameTextField.text!, completion: { error in
                       if let error = error {
-                        gameViewController.showAlert(title: "Password Reset Error", message: error.localizedDescription)
+                        gameViewController.showAlert(title: "Password Reset Error", message: error.localizedDescription,handlers:["Ok": {}])
                       }else{
-                        gameViewController.showAlert(title: "Password Reset Sent", message: "If an account exists, a password reset link has been sent to \(self.usernameTextField.text!)")
+                        gameViewController.showAlert(title: "Password Reset Sent", message: "If an account exists, a password reset link has been sent to \(self.usernameTextField.text!)",handlers: ["Ok": {}])
                       }
                     })
                   }else{
-                    gameViewController.showAlert(title: "Invalid Email", message: "Please enter a valid email in username field and try again")
+                    gameViewController.showAlert(title: "Invalid Email", message: "Please enter a valid email in username field and try again", handlers: ["Ok": {}])
                   }
               
                 default:break
@@ -145,7 +145,7 @@ class LoginScene: SKScene,UITextFieldDelegate {
             if !result {
                 self.run(SKAction.wait(forDuration: 0.01),completion:{[unowned self] in
                     guard let delegate = self.delegate else { return }
-                  (delegate as! TransitionDelegate).showAlert(title:title,message: message,button1Title:"Cancel",button2Title: "Ok",handler1: nil,handler2: nil)
+                  (delegate as! TransitionDelegate).showAlert(title:title,message: message,handlers: ["Ok": {}])
                 })
             }
         }
