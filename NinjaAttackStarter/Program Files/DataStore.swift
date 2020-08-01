@@ -127,6 +127,7 @@ struct DataStore {
         self.user = userData
         Survey.updateSurveyStatus()
         Survey.SMCustomVars["user"] = userId
+        Survey.getSurveys()
       } else {
         collectionRef.document(userId).setData([
           "diffMod": 0.70,
