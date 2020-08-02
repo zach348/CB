@@ -89,7 +89,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
       }
   }
   
-  func showAlert(title:String,message:String,handlers:[String: () -> Void]) {
+  func showAlert(title:String,message:String,handlers:[String: () -> Void] = ["Ok": {}]) {
     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
       
     for (buttonTitle,handler) in handlers{
@@ -104,11 +104,11 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
     Auth.auth().signIn(withEmail: username, password: password) { [weak self] authResult, error in
       guard let strongSelf = self else { return }
       if let error = error {
-        strongSelf.showAlert(title: "Login Error", message: error.localizedDescription, handlers: ["Ok": {}])
+        strongSelf.showAlert(title: "Login Error", message: error.localizedDescription)
       }
       if let authResult = authResult {
         if !authResult.user.isEmailVerified {
-          strongSelf.showAlert(title: "Login Error", message: "Please verify your email before logging in", handlers: ["Ok": {}])
+          strongSelf.showAlert(title: "Login Error", message: "Please verify your email before logging in")
         }
       }
     }
@@ -117,34 +117,34 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
   func handleCreateBtn(username:String,password:String){
     self.showAlert(title: "Terms and Conditions",
                    message: "By Clicking Sign Up, You Are Agreeing to Our Terms of Service",
-                   handlers:
-                     ["Show Me The Terms": {
-                       if let url = URL(string: "https://www.kalibrategame.com/terms-of-service") {
-                         if UIApplication.shared.canOpenURL(url){
-                          UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                         }
-                       }
-                     },
-                     "Sign Up": {
-                       Auth.auth().createUser(withEmail: username, password: password) { authResult, error in
-                         if let error = error {
-                          self.showAlert(title: "Account Creation Error", message: error.localizedDescription, handlers: ["Ok": {}])
-                         }else if let authResult = authResult, let email = authResult.user.email {
-                           let skView = self.view as! SKView
-                           self.startScene = StartGameScene(size: self.view.bounds.size)
-                           self.startScene?.gameViewController = self
-                           skView.presentScene(self.startScene)
-                           self.loginScene = nil
-                          self.showAlert(title: "Account Creation Successful", message: "An email verification link has been sent to \(email)", handlers: ["Ok": {}])
-                           authResult.user.sendEmailVerification(completion: { error in
-                             if let error = error {
-                               print("email verification send error: \(error.localizedDescription)")
-                             }
-                           })
-                         }
-                        }
-                       }
-                      ]
+                   handlers: [
+                             "Show Me The Terms": {
+                               if let url = URL(string: "https://www.kalibrategame.com/terms-of-service") {
+                                 if UIApplication.shared.canOpenURL(url){
+                                  UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                 }
+                               }
+                             },
+                             "Sign Up": {
+                               Auth.auth().createUser(withEmail: username, password: password) { authResult, error in
+                                 if let error = error {
+                                  self.showAlert(title: "Account Creation Error", message: error.localizedDescription)
+                                 }else if let authResult = authResult, let email = authResult.user.email {
+                                   let skView = self.view as! SKView
+                                   self.startScene = StartGameScene(size: self.view.bounds.size)
+                                   self.startScene?.gameViewController = self
+                                   skView.presentScene(self.startScene)
+                                   self.loginScene = nil
+                                   self.showAlert(title: "Account Creation Successful", message: "An email verification link has been sent to \(email)")
+                                   authResult.user.sendEmailVerification(completion: { error in
+                                     if let error = error {
+                                       print("email verification send error: \(error.localizedDescription)")
+                                     }
+                                   })
+                                 }
+                                }
+                               }
+                              ]
                 )
     }
   

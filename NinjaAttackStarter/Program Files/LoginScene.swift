@@ -116,13 +116,13 @@ class LoginScene: SKScene,UITextFieldDelegate {
                   if emailValid {
                     Auth.auth().sendPasswordReset(withEmail: self.usernameTextField.text!, completion: { error in
                       if let error = error {
-                        gameViewController.showAlert(title: "Password Reset Error", message: error.localizedDescription,handlers:["Ok": {}])
+                        gameViewController.showAlert(title: "Password Reset Error", message: error.localizedDescription)
                       }else{
-                        gameViewController.showAlert(title: "Password Reset Sent", message: "If an account exists, a password reset link has been sent to \(self.usernameTextField.text!)",handlers: ["Ok": {}])
+                        gameViewController.showAlert(title: "Password Reset Sent", message: "If an account exists, a password reset link has been sent to \(self.usernameTextField.text!)")
                       }
                     })
                   }else{
-                    gameViewController.showAlert(title: "Invalid Email", message: "Please enter a valid email in username field and try again", handlers: ["Ok": {}])
+                    gameViewController.showAlert(title: "Invalid Email", message: "Please enter a valid email in username field and try again")
                   }
               
                 default:break
