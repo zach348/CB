@@ -92,7 +92,7 @@ class GameViewController: UIViewController, TransitionDelegate, SMFeedbackDelega
   func showAlert(title:String,message:String,handlers:[String: () -> Void] = ["Ok": {}]) {
     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
       
-    for (buttonTitle,handler) in handlers{
+    for (buttonTitle,handler) in handlers {
       alertController.addAction(UIAlertAction(title: buttonTitle, style: .default) { action in
         handler()
       })

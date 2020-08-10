@@ -574,7 +574,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.9;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.kalibrate;
 				PRODUCT_NAME = Kalibrate;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -600,7 +600,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.9;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.trainingstate.kalibrate;
 				PRODUCT_NAME = Kalibrate;
 				PROVISIONING_PROFILE_SPECIFIER = "";

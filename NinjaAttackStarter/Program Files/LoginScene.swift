@@ -125,7 +125,8 @@ class LoginScene: SKScene,UITextFieldDelegate {
                     gameViewController.showAlert(title: "Invalid Email", message: "Please enter a valid email in username field and try again")
                   }
               
-                default:break
+                default:
+                  break
             }
         }
     }

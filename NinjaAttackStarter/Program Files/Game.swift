@@ -295,7 +295,7 @@ class Game {
   }
   
   func startGame(){
-    if let masterTimer = currentGame.timer {
+    if let masterTimer = currentGame.timer, let gvc = currentGame.gameScene?.gameViewController, let completedGeneralSurvey = DataStore.user["completedGeneralSurvey"] as? Bool  {
       DataStore.initiateGame()
 
       masterTimer.startGameTimer()
@@ -303,7 +303,7 @@ class Game {
       masterTimer.startTimerActions()
       Sensory.applyFrequency()
       self.isRunning = true
-      
+      if !completedGeneralSurvey { gvc.showAlert(title: "Shake to Quit", message: "When you're done playing, shake the device to quit.")}
       print(Game.currentTrackSettings.phase)
     }
   }
