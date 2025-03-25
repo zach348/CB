@@ -4,3 +4,21 @@ NinjaAttackStarter/NinjaAttack.xcworkspace/xcuserdata/zacharycutler.xcuserdatad/
 settingsBackupText.txt
 node_modules/
 package-lock.json
+
+# Xcode
+*.pbxuser
+*.mode*
+xcuserdata/
+*.perspective*
+build/
+DerivedData/
+
+# Temporary files
+*.moved-aside
+*~
+*.nib*
+*.xib*
+
+# Other
+*.log
+*.swift
